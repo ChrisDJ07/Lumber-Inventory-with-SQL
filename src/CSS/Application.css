@@ -1,0 +1,54 @@
+/*General Style*/
+.button{
+    -fx-background-color: rgb(64, 58, 53);
+    -fx-font-family:"Railway";
+    -fx-text-fill: white;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 0em;
+
+
+}
+
+.text-field{
+    -fx-border-color:rgb(64, 58, 53);
+    -fx-border-width: 1px;
+    -fx-focus-color: transparent;
+}
+
+.choice-box {
+    -fx-background-color: transparent;
+    -fx-border-color:rgb(64, 58, 53);
+    -fx-border-width: 1px;
+    -fx-focus-color: transparent;
+}
+
+
+
+/*Specific Buttons*/
+.button:hover{
+    -fx-background-color: white;
+    -fx-text-fill: rgb(64, 58, 53);
+    -fx-border-color:rgb(64, 58, 53);
+    -fx-border-width: 1px;
+}
+
+#dashBoard_button{
+        -fx-font-size: 14px;
+        -fx-padding: 0 0 0 30px;
+        -fx-border-width: 0px;
+}
+#cut_button{
+        -fx-font-size: 14px;
+        -fx-padding: 0 0 0 30px;
+        -fx-border-width: 0px;
+}
+#raw_button{
+        -fx-font-size: 14px;
+        -fx-padding: 0 0 0 30px;
+        -fx-border-width: 0px;
+}
+#history_button{
+        -fx-font-size: 14px;
+        -fx-padding: 0 0 0 30px;
+        -fx-border-width: 0px;
+}
