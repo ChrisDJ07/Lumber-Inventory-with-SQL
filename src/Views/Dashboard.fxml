@@ -18,7 +18,7 @@
             <Button fx:id="cut_button" alignment="BASELINE_LEFT" layoutY="151.0" mnemonicParsing="false" onAction="#goToCut" prefHeight="43.0" prefWidth="180.0" text="Cut Lumber" />
             <Button fx:id="raw_button" alignment="BASELINE_LEFT" layoutY="194.0" mnemonicParsing="false" onAction="#goToRaw" prefHeight="43.0" prefWidth="180.0" text="Raw Lumber" />
             <Button fx:id="history_button" alignment="BASELINE_LEFT" layoutY="237.0" mnemonicParsing="false" onAction="#goToHistory" prefHeight="43.0" prefWidth="180.0" text="History" />
-            <ImageView fitHeight="150.0" fitWidth="156.0" layoutX="9.0" layoutY="-20.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="81.0" fitWidth="75.0" layoutX="53.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../logo.png" />
                </image>
