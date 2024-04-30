@@ -62,6 +62,8 @@ CREATE TABLE if NOT EXISTS supplied_by
 CREATE TABLE if NOT EXISTS process_info
 (
 	process_date			CHAR (10) NOT NULL ,
+	process_input_quantity			INT NOT NULL ,
+	process_output_quantity			INT NOT NULL ,
 	process_input			INT (4) NOT NULL ,
 	CONSTRAINT fk_process_input_receipt FOREIGN KEY (process_input) REFERENCES rawlumber (rawlumber_ID),
 	process_output			INT (4) NOT NULL ,

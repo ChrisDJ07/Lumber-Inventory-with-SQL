@@ -1,6 +1,6 @@
 # Fixing JavaFX Module Issue in IntelliJ
 
-If you encounter a problem where IntelliJ doesn't detect JavaFX modules, you can follow these steps to resolve it:
+If you encounter a problem where IntelliJ doesn't detect JavaFX Modules, you can follow these steps to resolve it:
 
 ## Steps:
 

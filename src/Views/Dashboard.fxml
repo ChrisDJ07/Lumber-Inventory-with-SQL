@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.dashBoard_controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DashboardController">
    <children>
       <AnchorPane layoutX="603.0" layoutY="105.0" prefHeight="226.0" prefWidth="372.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;" />
       <AnchorPane layoutX="216.0" layoutY="105.0" prefHeight="226.0" prefWidth="372.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;" />
       <AnchorPane layoutX="216.0" layoutY="346.0" prefHeight="226.0" prefWidth="758.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;" />
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>
-            <Button fx:id="dashBoard_button" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#goToDashBoard" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="Dashboard" />
+            <Button fx:id="dashBoard_button" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="Dashboard" />
             <Button fx:id="cut_button" alignment="BASELINE_LEFT" layoutY="151.0" mnemonicParsing="false" onAction="#goToCut" prefHeight="43.0" prefWidth="180.0" text="Cut Lumber" />
             <Button fx:id="raw_button" alignment="BASELINE_LEFT" layoutY="194.0" mnemonicParsing="false" onAction="#goToRaw" prefHeight="43.0" prefWidth="180.0" text="Raw Lumber" />
             <Button fx:id="history_button" alignment="BASELINE_LEFT" layoutY="237.0" mnemonicParsing="false" onAction="#goToHistory" prefHeight="43.0" prefWidth="180.0" text="History" />

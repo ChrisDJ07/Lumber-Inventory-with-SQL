@@ -16,6 +16,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    // Create a separate stage for the dashboard, gets rid of the centering issue
+    private static Stage inventoryStage;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -26,7 +29,7 @@ public class Main extends Application {
         String css = this.getClass().getResource("/CSS/Application.css").toExternalForm();
 
         // Load the login form
-        Parent loginRoot = FXMLLoader.load(getClass().getResource("/Views/LoginForm.fxml"));
+        Parent loginRoot = FXMLLoader.load(getClass().getResource("/Views/pop_ups/LoginForm.fxml"));
         Scene loginScene = new Scene(loginRoot);
         loginScene.getStylesheets().add(css);
 
@@ -38,16 +41,21 @@ public class Main extends Application {
     }
 
     // Method to show the dashboard after successful login
-    public static void showDashboard(Stage stage) throws Exception {
-        // Load the dashboard
-        Parent root = FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"));
-        Scene scene = new Scene(root);
+    public static void showDashboard() throws Exception {
+        inventoryStage = new Stage();
 
+        // Load the dashboard
+        loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"))));
+    }
+
+    // Method to load scenes
+    public static void loadScene(Scene scene){
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        stage.setTitle("Lumber Inventory");
-        stage.setScene(scene);
-        stage.show();
+        inventoryStage.setTitle("Lumber Inventory");
+        inventoryStage.getIcons().add(new Image("/icon.png"));
+        inventoryStage.setScene(scene);
+        inventoryStage.show();
     }
 }

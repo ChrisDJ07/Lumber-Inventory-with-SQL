@@ -1,7 +1,7 @@
 # Wood Dynamics Inventory Management System
 
 ## ✨Overview✨
-Wood Dynamics Inventory Management System is a Java application designed to manage inventory, suppliers, customers, and transactions for a wood-based business. This system provides functionalities for adding, updating, and deleting records for customers, suppliers, raw lumbers, cut lumbers, and more.
+Wood Dynamics Inventory Management System is a Java Application designed to manage inventory, suppliers, customers, and transactions for a wood-based business. This system provides functionalities for adding, updating, and deleting records for customers, suppliers, raw lumbers, cut lumbers, and more.
 
 ## 🚨Features🚨
 - **User Authentication**: Allows users to log in with their username and password.
@@ -23,15 +23,15 @@ Wood Dynamics Inventory Management System is a Java application designed to mana
 2. Open the project in your Java IDE.
 3. Set up the MySQL database by executing the provided SQL script to create the necessary tables.
 4. Update the database connection details in the DatabaseManager.java file.
-5. Build and run the application.
+5. Build and run the Application.
 
 ## 💻Usage💻
-1. Launch the application
+1. Launch the Application
 2. Log in with your username and password given by your manager
 3. Use the menu options to navigate through different functionalities such as managing customers, suppliers, and inventory.
 
 ## ⚙️Support⚙️
-- If you have any errors, see [FAQ](./FIX.md) to try to fix the application
+- If you have any errors, see [FAQ](./FIX.md) to try to fix the Application
 - For any issues or inquiries, please contact [Chriscent Pingol](https://www.facebook.com/ChriscentProduction).
 
 ## 📑Contributors📑

@@ -9,41 +9,45 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.raw_controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CutController">
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
-            <TableView layoutX="35.0" layoutY="129.0" prefHeight="322.0" prefWidth="725.0">
+            <TableView fx:id="cutTable" layoutX="35.0" layoutY="129.0" prefHeight="322.0" prefWidth="725.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Item ID" />
-                <TableColumn prefWidth="75.0" text="Type" />
-                  <TableColumn prefWidth="75.0" text="Quantity" />
+                <TableColumn prefWidth="75.0" text="ITEM ID" />
+                <TableColumn prefWidth="75.0" text="TYPE" />
+                  <TableColumn prefWidth="75.0" text="SIZE" />
+                  <TableColumn prefWidth="75.0" text="UNIT PRICE" />
+                  <TableColumn prefWidth="75.0" text="QUANTITY" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="662.0" layoutY="76.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="98.0" text="BUY" />
+            <Button fx:id="sell_button" layoutX="662.0" layoutY="76.0" mnemonicParsing="false" onAction="#openSellWindow" prefHeight="37.0" prefWidth="98.0" text="SELL" />
             <TextField layoutX="35.0" layoutY="82.0" prefHeight="26.0" prefWidth="206.0" />
             <ChoiceBox layoutX="270.0" layoutY="82.0" prefHeight="26.0" prefWidth="74.0" />
             <ChoiceBox layoutX="360.0" layoutY="82.0" prefHeight="26.0" prefWidth="74.0" />
-            <Label layoutX="35.0" layoutY="14.0" prefHeight="62.0" prefWidth="218.0" text="Raw Lumber">
+            <Label layoutX="35.0" layoutY="14.0" prefHeight="62.0" prefWidth="218.0" text="Cut Lumber">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <Button layoutX="35.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="NEW" />
-            <Button layoutX="520.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Add" />
-            <Button layoutX="604.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Edit" />
+            <Button fx:id="sizes_button" layoutX="35.0" layoutY="476.0" mnemonicParsing="false" onAction="#openSizes" prefHeight="40.0" prefWidth="75.0" text="SIZES" />
+            <Button fx:id="add_cut_button" layoutX="516.0" layoutY="476.0" mnemonicParsing="false" onAction="#openAddWindow" prefHeight="40.0" prefWidth="75.0" text="Add" />
             <Button layoutX="685.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Delete" />
+            <Button fx:id="edit_cut_button" layoutX="601.0" layoutY="476.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="75.0" text="Edit" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="43.0" layoutX="-14.0" layoutY="139.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="28.0" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>
             <Button fx:id="dashBoard_button" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#goToDashBoard" prefHeight="43.0" prefWidth="180.0" text="Dashboard" />
-            <Button fx:id="cut_button" alignment="BASELINE_LEFT" layoutY="151.0" mnemonicParsing="false" onAction="#goToCut" prefHeight="43.0" prefWidth="180.0" text="Cut Lumber" />
-            <Button fx:id="raw_button" alignment="BASELINE_LEFT" layoutY="194.0" mnemonicParsing="false" onAction="#goToRaw" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="Raw Lumber" />
+            <Button fx:id="cut_button" alignment="BASELINE_LEFT" layoutY="151.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="Cut Lumber" />
+            <Button fx:id="raw_button" alignment="BASELINE_LEFT" layoutY="194.0" mnemonicParsing="false" onAction="#goToRaw" prefHeight="43.0" prefWidth="180.0" text="Raw Lumber" />
             <Button fx:id="history_button" alignment="BASELINE_LEFT" layoutY="237.0" mnemonicParsing="false" onAction="#goToHistory" prefHeight="43.0" prefWidth="180.0" text="History" />
             <ImageView fitHeight="81.0" fitWidth="75.0" layoutX="53.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>

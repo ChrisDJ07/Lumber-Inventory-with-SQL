@@ -8,9 +8,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.history_controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HistoryController">
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
@@ -38,7 +39,7 @@
             <Button fx:id="dashBoard_button" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#goToDashBoard" prefHeight="43.0" prefWidth="180.0" text="Dashboard" />
             <Button fx:id="cut_button" alignment="BASELINE_LEFT" layoutY="151.0" mnemonicParsing="false" onAction="#goToCut" prefHeight="43.0" prefWidth="180.0" text="Cut Lumber" />
             <Button fx:id="raw_button" alignment="BASELINE_LEFT" layoutY="194.0" mnemonicParsing="false" onAction="#goToRaw" prefHeight="43.0" prefWidth="180.0" text="Raw Lumber" />
-            <Button fx:id="history_button" alignment="BASELINE_LEFT" layoutY="237.0" mnemonicParsing="false" onAction="#goToHistory" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="History" />
+            <Button fx:id="history_button" alignment="BASELINE_LEFT" layoutY="237.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="180.0" style="-fx-background-color: white; -fx-text-fill: rgb(64, 58, 53); -fx-background-radius: 0em; -fx-border-radius: 0em; -fx-font-family: &quot;Railway&quot;; -fx-border-width: 0px;" text="History" />
             <ImageView fitHeight="81.0" fitWidth="75.0" layoutX="53.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../logo.png" />
@@ -46,5 +47,6 @@
             </ImageView>
          </children>
       </AnchorPane>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="43.0" layoutX="178.0" layoutY="238.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="28.0" />
    </children>
 </AnchorPane>

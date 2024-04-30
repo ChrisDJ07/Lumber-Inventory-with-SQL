@@ -4,7 +4,6 @@ import Application.DatabaseManager;
 import Application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -12,7 +11,7 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.List;
 
-public class LoginForm_controller {
+public class LoginController {
     @FXML
     private TextField usernameTF;
 
@@ -24,21 +23,29 @@ public class LoginForm_controller {
         String username = usernameTF.getText();
         String password = passwordTF.getText();
 
-        // Validate credentials (replace this with your actual validation logic)
-        if (isValidCredentials(username, password)) {
-            try {
-                Main.showDashboard((Stage) usernameTF.getScene().getWindow());
-            } catch (Exception error) {
-                error.printStackTrace();
-            }
-        } else {
-            // Show error message if credentials are invalid
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Failed");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid username or password.");
-            alert.showAndWait();
+        try {
+            Main.showDashboard();
+            ((Stage) usernameTF.getScene().getWindow()).close();
+        } catch (Exception error) {
+            error.printStackTrace();
         }
+
+
+//            // Validate credentials (replace this with your actual validation logic)
+//        if (isValidCredentials(username, password)) {
+//            try {
+//                Main.showDashboard((Stage) usernameTF.getScene().getWindow());
+//            } catch (Exception error) {
+//                error.printStackTrace();
+//            }
+//        } else {
+//            // Show error message if credentials are invalid
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Login Failed");
+//            alert.setHeaderText(null);
+//            alert.setContentText("Invalid username or password.");
+//            alert.showAndWait();
+//        }
     }
 
     @FXML

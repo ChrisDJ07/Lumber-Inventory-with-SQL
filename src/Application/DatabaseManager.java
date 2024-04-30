@@ -16,9 +16,9 @@ public class DatabaseManager {
 
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/wooddynamics";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -110,56 +110,56 @@ public class DatabaseManager {
 //        }
 //    }
 
-    // TODO: Update and modify for CREATE, UPDTATE, and DELETE actions
-
-    // Update operation
-    public static void updateStudentRecord(String id, String newName, String newId, String newYearLevel, String newGender, String newCourse) throws SQLException {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE student SET StudentName = ?, ID = ?, YearLevel = ?, Gender = ?, CourseID = ? WHERE ID = ?")) {
-            stmt.setString(1, newName);
-            stmt.setString(2, newId);
-            stmt.setString(3, newYearLevel);
-            stmt.setString(4, newGender);
-            stmt.setString(5, newCourse);
-            stmt.setString(6, id);
-            stmt.executeUpdate();
-        }
-    }
-    public static void updateCourseRecord(String id, String newName, String newId) throws SQLException {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE course SET CourseName = ?, ID = ? WHERE ID = ?")) {
-            stmt.setString(1, newName);
-            stmt.setString(2, newId);
-            stmt.setString(3, id);
-            stmt.executeUpdate();
-        }
-    }
-
-
-
-    // Delete operation
-    public static void deleteStudentRecord(String id) throws SQLException {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM student WHERE ID = ?")) {
-            stmt.setString(1, id);
-            stmt.executeUpdate();
-        }
-    }
-    public static void deleteCourseRecord(String id) throws SQLException {
-        try (Connection conn = getConnection()) {
-            // Step 1: Update CourseID in student table to null
-            try (PreparedStatement stmtUpdate = conn.prepareStatement("UPDATE student SET CourseID = NULL WHERE CourseID = ?")) {
-                stmtUpdate.setString(1, id);
-                stmtUpdate.executeUpdate();
-            }
-
-            // Step 2: Delete the record from the course table
-            try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM course WHERE ID = ?")) {
-                stmtDelete.setString(1, id);
-                stmtDelete.executeUpdate();
-            }
-        }
-    }
+//    // TODO: Update and modify for CREATE, UPDTATE, and DELETE actions
+//
+//    // Update operation
+//    public static void updateStudentRecord(String id, String newName, String newId, String newYearLevel, String newGender, String newCourse) throws SQLException {
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement("UPDATE student SET StudentName = ?, ID = ?, YearLevel = ?, Gender = ?, CourseID = ? WHERE ID = ?")) {
+//            stmt.setString(1, newName);
+//            stmt.setString(2, newId);
+//            stmt.setString(3, newYearLevel);
+//            stmt.setString(4, newGender);
+//            stmt.setString(5, newCourse);
+//            stmt.setString(6, id);
+//            stmt.executeUpdate();
+//        }
+//    }
+//    public static void updateCourseRecord(String id, String newName, String newId) throws SQLException {
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement("UPDATE course SET CourseName = ?, ID = ? WHERE ID = ?")) {
+//            stmt.setString(1, newName);
+//            stmt.setString(2, newId);
+//            stmt.setString(3, id);
+//            stmt.executeUpdate();
+//        }
+//    }
+//
+//
+//
+//    // Delete operation
+//    public static void deleteStudentRecord(String id) throws SQLException {
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement("DELETE FROM student WHERE ID = ?")) {
+//            stmt.setString(1, id);
+//            stmt.executeUpdate();
+//        }
+//    }
+//    public static void deleteCourseRecord(String id) throws SQLException {
+//        try (Connection conn = getConnection()) {
+//            // Step 1: Update CourseID in student table to null
+//            try (PreparedStatement stmtUpdate = conn.prepareStatement("UPDATE student SET CourseID = NULL WHERE CourseID = ?")) {
+//                stmtUpdate.setString(1, id);
+//                stmtUpdate.executeUpdate();
+//            }
+//
+//            // Step 2: Delete the record from the course table
+//            try (PreparedStatement stmtDelete = conn.prepareStatement("DELETE FROM course WHERE ID = ?")) {
+//                stmtDelete.setString(1, id);
+//                stmtDelete.executeUpdate();
+//            }
+//        }
+//    }
 
     public static List<String> getUsersList() {return usersList;}
     public static List<String> getCustomerList() {return customerList;}

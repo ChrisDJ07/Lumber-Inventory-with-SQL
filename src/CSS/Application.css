@@ -22,7 +22,28 @@
     -fx-focus-color: transparent;
 }
 
-
+.table-view{
+    -fx-background-color: transparent;
+    -fx-border-color: linear-gradient(to top right, rgb(64, 58, 53), rgb(105, 95, 87));
+    -fx-border-radius: 0px;
+    -fx-border-width: 2px;
+    -fx-padding: 0px;
+}
+.table-view .table-column{
+    -fx-alignment: CENTER;
+}
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to top right, rgb(64, 58, 53), rgb(105, 95, 87));
+    -fx-background-insets: 0,0,0,0;
+}
+.table-view .column-header, .filter{
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+}
+.table-view .column-header .label{
+    -fx-text-fill: white;
+    -fx-font-family:"Railway";
+}
 
 /*Specific Buttons*/
 .button:hover{
@@ -52,3 +73,44 @@
         -fx-padding: 0 0 0 30px;
         -fx-border-width: 0px;
 }
+
+/*log-in components*/
+#loginButton{
+    -fx-background-color: rgb(64, 58, 53);
+    -fx-font-family:"Railway";
+    -fx-text-fill: white;
+    -fx-border-color:white;
+    -fx-border-width: 1px;
+}
+#loginButton: hover{
+    -fx-background-color: white;
+    -fx-font-family:"Railway";
+    -fx-text-fill: rgb(64, 58, 53);
+}
+
+#delete_size{
+    -fx-background-color: rgb(64, 58, 53);
+    -fx-font-family:"Railway";
+    -fx-text-fill: white;
+    -fx-border-color:white;
+    -fx-border-width: 1px;
+}
+#delete_size: hover{
+    -fx-background-color: white;
+    -fx-font-family:"Railway";
+    -fx-text-fill: rgb(64, 58, 53);
+}
+
+#new_size{
+    -fx-background-color: rgb(64, 58, 53);
+    -fx-font-family:"Railway";
+    -fx-text-fill: white;
+    -fx-border-color:white;
+    -fx-border-width: 1px;
+}
+#new_size: hover{
+    -fx-background-color: white;
+    -fx-font-family:"Railway";
+    -fx-text-fill: rgb(64, 58, 53);
+}
+
