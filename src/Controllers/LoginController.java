@@ -4,6 +4,7 @@ import Application.DatabaseManager;
 import Application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -34,7 +35,7 @@ public class LoginController {
 //            // Validate credentials (replace this with your actual validation logic)
 //        if (isValidCredentials(username, password)) {
 //            try {
-//                Main.showDashboard((Stage) usernameTF.getScene().getWindow());
+//                Main.showDashboard();
 //            } catch (Exception error) {
 //                error.printStackTrace();
 //            }
@@ -46,7 +47,7 @@ public class LoginController {
 //            alert.setContentText("Invalid username or password.");
 //            alert.showAndWait();
 //        }
-    }
+}
 
     @FXML
     void up(ActionEvent event) {

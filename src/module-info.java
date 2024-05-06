@@ -8,4 +8,7 @@ module Lumber.Inventory {
     opens Application;
     opens Views;
     opens Controllers;
+
+    exports Controllers.pop_ups;
+    opens Controllers.pop_ups to javafx.fxml;
 }

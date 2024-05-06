@@ -2,9 +2,13 @@ package Application;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseManager {
     public static List<String> usersList;
@@ -40,46 +44,55 @@ public class DatabaseManager {
     }
 
     // Read data from the database and store it in lists
-    private static List<String[]> readData(String tableName, int columnCount) throws SQLException {
-        String query = "SELECT * FROM " + tableName;
+    private static List<String[]> readData(String query, int columnCount) throws SQLException {
         List<String[]> dataList = new ArrayList<>();
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
                 String[] rowData = new String[columnCount];
                 for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = rs.getString(i + 1);
+                    rowData[i] = result.getString(i+1);
                 }
                 dataList.add(rowData);
             }
         }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
         return dataList;
     }
+
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
-        return readData("application_users", 2);
+        String query = "SELECT * FROM application_users";
+        return readData(query, 2);
     }
     // Read customers from the database
     public static List<String[]> readCustomers() throws SQLException {
         return readData("customer", 3);
     }
-
     // Read raw lumbers from the database
     public static List<String[]> readRawLumbers() throws SQLException {
-        return readData("rawlumber", 3);
+        String query = "SELECT * FROM rawLumber";
+        return readData(query, 3);
     }
-
     // Read cut lumbers from the database
     public static List<String[]> readCutLumbers() throws SQLException {
-        return readData("cutlumber", 5);
+        String query =  "SELECT cutLumber_ID, rawLumber_type, size_dimension, unit_price, quantity\n" +
+                        "FROM cutLumber\n" +
+                        "LEFT JOIN rawLumber\n" +
+                        "ON cutLumber.cutLumber_type = rawLumber.rawLumber_ID\n" +
+                        "LEFT JOIN size\n" +
+                        "ON cutLumber.size_ID = size.size_ID";
+        return readData(query, 5);
     }
-
     // Read sizes from the database
     public static List<String[]> readSizes() throws SQLException {
-        return readData("size", 2);
+        String query = "SELECT * FROM size";
+        return readData(query, 2);
     }
-
     // Read suppliers from the database
     public static List<String[]> readSuppliers() throws SQLException {
         return readData("supplier", 3);

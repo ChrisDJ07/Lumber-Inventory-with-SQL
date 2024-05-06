@@ -15,14 +15,12 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-
     // Create a separate stage for the dashboard, gets rid of the centering issue
     private static Stage inventoryStage;
 
     public static void main(String[] args) {
         launch(args);
     }
-
     @Override
     public void start(Stage stage) throws Exception {
         // Design Files
@@ -43,7 +41,6 @@ public class Main extends Application {
     // Method to show the dashboard after successful login
     public static void showDashboard() throws Exception {
         inventoryStage = new Stage();
-
         // Load the dashboard
         loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"))));
     }
@@ -52,10 +49,14 @@ public class Main extends Application {
     public static void loadScene(Scene scene){
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
-
         inventoryStage.setTitle("Lumber Inventory");
         inventoryStage.getIcons().add(new Image("/icon.png"));
         inventoryStage.setScene(scene);
         inventoryStage.show();
+    }
+
+    // Returns the Stage instance of Main
+    public static Stage getStage(){
+        return inventoryStage;
     }
 }
