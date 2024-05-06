@@ -2,6 +2,7 @@ package Controllers;
 
 import Application.DatabaseManager;
 import Application.Main;
+import Controllers.pop_ups.EditController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,9 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -34,6 +37,8 @@ public class CutController implements Initializable {
     TableColumn<String[], String> priceColumn ;
     @FXML
     TableColumn<String[], String> quantityColumn;
+    @FXML
+    Button edit_cut_button;
 
     ObservableList<String[]> dataList;
     
@@ -49,6 +54,15 @@ public class CutController implements Initializable {
             sizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             priceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+
+            // Add listener to enable/disable edit button based on selection
+            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+                if (newSelection != null) {
+                    edit_cut_button.setDisable(false); // Enable the "Edit" button
+                } else {
+                    edit_cut_button.setDisable(true); // Disable the "Edit" button
+                }
+            });
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -108,19 +122,27 @@ public class CutController implements Initializable {
 
     @FXML
     void openEditWindow(ActionEvent event) throws IOException{
-        Stage edit = new Stage();
-        edit.initOwner(Main.getStage());
-        edit.initModality(Modality.WINDOW_MODAL);
-        
-        Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/EditCut.fxml"));
-        Scene scene = new Scene(root);
+        // Ensure this method is triggered only when a row is selected
+        String[] rowData = cutTable.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            Stage edit = new Stage();
+            edit.initOwner(Main.getStage());
+            edit.initModality(Modality.WINDOW_MODAL);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
-        scene.getStylesheets().add(css);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditCut.fxml"));
+            Parent root = loader.load();
+            EditController editController = loader.getController();
+            editController.setData(rowData);
 
-        edit.setTitle("Edit Cut Lumber");
-        edit.setScene(scene);
-        edit.show();
+            Scene scene = new Scene(root);
+
+            String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+            scene.getStylesheets().add(css);
+
+            edit.setTitle("Edit Cut Lumber");
+            edit.setScene(scene);
+            edit.show();
+        }
     }
 
     @FXML
