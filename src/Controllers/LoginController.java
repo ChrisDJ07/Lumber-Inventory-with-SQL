@@ -4,7 +4,6 @@ import Application.DatabaseManager;
 import Application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,6 +23,7 @@ public class LoginController {
         String username = usernameTF.getText();
         String password = passwordTF.getText();
 
+        /* FOR TESTING */
         try {
             Main.showDashboard();
             ((Stage) usernameTF.getScene().getWindow()).close();
@@ -31,7 +31,7 @@ public class LoginController {
             error.printStackTrace();
         }
 
-
+        /* THIS IS THE FINAL LOGIN CHECKER */
 //            // Validate credentials (replace this with your actual validation logic)
 //        if (isValidCredentials(username, password)) {
 //            try {

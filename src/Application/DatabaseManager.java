@@ -61,6 +61,21 @@ public class DatabaseManager {
         }
         return dataList;
     }
+    private static List<String> readSingleColumnData(String query) throws SQLException {
+        List<String> dataList = new ArrayList<>();
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                dataList.add(result.getString(1));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return dataList;
+    }
 
     // Read column data from the database and store it in a list
     private static List<String> getColumn_Janiola(String query) throws SQLException {
@@ -111,6 +126,10 @@ public class DatabaseManager {
         String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber";
         return readData(query, 2);
     }
+    public static List<String> readRawLumberTypes() throws SQLException {
+        String query = "SELECT rawLumber_type FROM rawLumber";
+        return readSingleColumnData(query);
+    }
     // Read cut lumbers from the database
     public static List<String[]> readCutLumbers() throws SQLException {
         String query =  "SELECT cutLumber_ID, rawLumber_type, size_dimension, unit_price, quantity\n" +
@@ -125,6 +144,10 @@ public class DatabaseManager {
     public static List<String[]> readSizes() throws SQLException {
         String query = "SELECT * FROM size";
         return readData(query, 2);
+    }
+    public static List<String> readSizeTypes() throws SQLException {
+        String query = "SELECT size_dimension FROM size";
+        return readSingleColumnData(query);
     }
     // Read suppliers from the database
     public static List<String[]> readSuppliers() throws SQLException {
