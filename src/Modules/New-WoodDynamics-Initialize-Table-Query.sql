@@ -65,10 +65,8 @@ CREATE TABLE if NOT EXISTS process_info
 	process_date			        VARCHAR (35) NOT NULL,
 	process_input_quantity			INT NOT NULL,
 	process_output_quantity			INT NOT NULL,
-	process_input_type			        INT NOT NULL,
-	process_output_size			        INT NOT NULL,
-	CONSTRAINT fk_process_input_type FOREIGN KEY (process_input_type) REFERENCES rawlumber (rawlumber_ID),
-	CONSTRAINT fk_process_output_size FOREIGN KEY (process_output_size) REFERENCES size (size_ID)
+	process_input_type			        VARCHAR (25) NOT NULL,
+	process_output_size			        VARCHAR (25) NOT NULL,
 );
 
 CREATE TABLE if NOT EXISTS sold_to

@@ -39,7 +39,7 @@
             </Label>
             <Button fx:id="sizes_button" layoutX="35.0" layoutY="476.0" mnemonicParsing="false" onAction="#openSizes" prefHeight="40.0" prefWidth="75.0" text="SIZES" />
             <Button fx:id="add_cut_button" layoutX="516.0" layoutY="476.0" mnemonicParsing="false" onAction="#openAddWindow" prefHeight="40.0" prefWidth="75.0" text="Add" />
-            <Button layoutX="685.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Delete" />
+            <Button fx:id="delete_button" layoutX="685.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Delete" />
             <Button fx:id="edit_cut_button" layoutX="601.0" layoutY="476.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="75.0" text="Edit" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="43.0" layoutX="-14.0" layoutY="139.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="28.0" />
          </children></AnchorPane>

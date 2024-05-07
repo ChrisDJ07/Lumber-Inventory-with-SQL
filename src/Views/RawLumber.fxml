@@ -35,8 +35,9 @@
                </font>
             </Label>
             <Button fx:id="raw_new_button" layoutX="35.0" layoutY="476.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="75.0" text="NEW" />
-            <Button layoutX="684.0" layoutY="476.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="Delete" />
+            <Button fx:id="delete_button" layoutX="684.0" layoutY="476.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="75.0" text="Delete" />
             <Button fx:id="raw_edit_button" layoutX="600.0" layoutY="476.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="75.0" text="Edit" />
+            <Button fx:id="supply_button" layoutX="574.0" layoutY="76.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

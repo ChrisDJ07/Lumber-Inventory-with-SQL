@@ -17,16 +17,16 @@ INSERT INTO rawlumber (rawlumber_ID, rawlumber_type, rawlumber_quantity) VALUES
 (3, 'Cedar', 50);
 
 -- Sample data for size table
-INSERT INTO size (size_ID, size_dimension) VALUES
-(1, '2x4'),
-(2, '4x4'),
-(3, '2x6');
+INSERT INTO size ( size_dimension) VALUES
+('2x4'),
+('4x4'),
+('2x6');
 
 -- Sample data for cutlumber table
-INSERT INTO cutlumber (cutlumber_ID, cutlumber_type, unit_price, quantity, size_ID) VALUES
-(1, 1, 10, 50, 1),
-(2, 2, 15, 30, 2),
-(3, 3, 20, 20, 3);
+INSERT INTO cutlumber (cutlumber_type, unit_price, quantity, size_ID) VALUES
+( 4, 10, 50, 1),
+( 5, 15, 30, 2),
+( 6, 20, 20, 3);
 
 -- Sample data for customer table
 INSERT INTO customer (customer_ID, customer_name, customer_info) VALUES

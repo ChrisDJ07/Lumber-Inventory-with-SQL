@@ -26,6 +26,17 @@ import javafx.scene.control.TableView;
 
 public class CutController implements Initializable {
     @FXML
+    private Button add_cut_button;
+    @FXML
+    private Button delete_button;
+    @FXML
+    private Button edit_cut_button;
+    @FXML
+    private Button sell_button;
+    @FXML
+    private Button sizes_button;
+
+    @FXML
     TableView<String[]> cutTable = new TableView<>();
     @FXML
     TableColumn<String[], String> idColumn;
@@ -37,8 +48,6 @@ public class CutController implements Initializable {
     TableColumn<String[], String> priceColumn ;
     @FXML
     TableColumn<String[], String> quantityColumn;
-    @FXML
-    Button edit_cut_button;
 
     ObservableList<String[]> dataList;
     
