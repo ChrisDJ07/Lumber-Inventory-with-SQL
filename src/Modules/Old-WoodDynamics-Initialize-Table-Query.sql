@@ -26,7 +26,7 @@ CREATE TABLE if NOT EXISTS rawlumber
 CREATE TABLE if NOT EXISTS size
 (
 	size_ID					INT (4) NOT NULL PRIMARY KEY ,
-	size_dimension			VARCHAR (29) NOT NULL 	
+	size_dimension			VARCHAR (29) NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS cutlumber
@@ -46,7 +46,7 @@ CREATE TABLE if NOT EXISTS customer
 	customer_name			VARCHAR (199) NOT NULL ,
 	customer_info			VARCHAR (299) NULL
 );
- 
+
 CREATE TABLE if NOT EXISTS supplied_by
 (
 	supplier_ID				CHAR (9) NOT NULL ,
@@ -55,8 +55,8 @@ CREATE TABLE if NOT EXISTS supplied_by
 	CONSTRAINT fk_supplied_lumber FOREIGN KEY (supplied_lumber) REFERENCES rawlumber (rawlumber_ID),
 	supplied_date			CHAR (10) NOT NULL ,
 	quantity					INT NULL ,
-	price						INT NULL 
-	
+	price						INT NULL
+
 );
 
 CREATE TABLE if NOT EXISTS process_info
@@ -81,4 +81,3 @@ CREATE TABLE if NOT EXISTS sold_to
 );
 
 -- Note: You can optionally add PRIMARY KEY or UNIQUE constraints to the columns if needed.
-

@@ -1,14 +1,12 @@
 package Application;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DatabaseManager {
     public static List<String> usersList;
@@ -20,7 +18,7 @@ public class DatabaseManager {
 
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/lumberstore";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
@@ -43,7 +41,7 @@ public class DatabaseManager {
         }
     }
 
-    // Read data from the database and store it in lists
+    // Read table data from the database and store it in lists
     private static List<String[]> readData(String query, int columnCount) throws SQLException {
         List<String[]> dataList = new ArrayList<>();
         try {
@@ -59,10 +57,45 @@ public class DatabaseManager {
             }
         }
         catch (SQLException e){
-            e.printStackTrace();
+            throw new SQLException("Error reading data from the database", e);
         }
         return dataList;
     }
+
+    // Read column data from the database and store it in a list
+    private static List<String> getColumn_Janiola(String query) throws SQLException {
+        List<String> column = new ArrayList<>();
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                column.add(result.getString(1));
+            }
+        }
+        catch (SQLException e){
+            throw new SQLException("Error getting column data from the database", e);
+        }
+        return column;
+    }
+
+    // Read cell data from the database and store it in a String
+    private static String getCell_Janiola(String query) throws SQLException {
+        String data = "";
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if (result.next()) {
+                data = result.getString(1);
+            }
+        }
+        catch (SQLException e){
+            throw new SQLException("Error getting cell data from the database", e);
+        }
+        return data;
+    }
+
 
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
@@ -75,8 +108,8 @@ public class DatabaseManager {
     }
     // Read raw lumbers from the database
     public static List<String[]> readRawLumbers() throws SQLException {
-        String query = "SELECT * FROM rawLumber";
-        return readData(query, 3);
+        String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber";
+        return readData(query, 2);
     }
     // Read cut lumbers from the database
     public static List<String[]> readCutLumbers() throws SQLException {
@@ -98,22 +131,88 @@ public class DatabaseManager {
         return readData("supplier", 3);
     }
 
+    /*Get Lists from Database*/
+    public static List<String> getUsersList() {return usersList;}
+    public static List<String> getCustomerList() {return customerList;}
+    public static String[] getRawLumberList_Janiola() throws SQLException{
+        String query = "SELECT rawLumber_type\n" + "FROM rawLumber;";
+        rawLumberList =  getColumn_Janiola(query);
+        return rawLumberList.toArray(new String[0]);
+    }
+    public static List<String> getCutLumberList() {return cutLumberList;}
+    public static String[] getSizeList() throws SQLException{
+        String query = "SELECT size_dimension\n" + "FROM size;";
+        sizeList =  getColumn_Janiola(query);
+        return sizeList.toArray(new String[0]);
+    }
+    public static List<String> getSupplierList() {return supplierList;}
 
+    /*Get Cell Data from Database*/
+    public static String getRawID_Janiola(String type) throws SQLException{
+        String query = "select rawLumber_ID\n" +
+                "from rawLumber\n" +
+                "where rawLumber_type = \""+type+"\";";
+        return getCell_Janiola(query);
+    }
+    public static String getSizeID_Janiola(String size) throws SQLException{
+        String query = "select size_ID\n" +
+                "from size\n" +
+                "where size_dimension = \""+size+"\";";
+        return getCell_Janiola(query);
+    }
 
-    // Create operation
-//    public static void createStudentRecord(String name, String id, String yearLevel, String gender, String course) throws SQLException {
-//        try (Connection conn = getConnection();
-//             PreparedStatement stmt = conn.prepareStatement("INSERT INTO student (StudentName, ID, YearLevel, Gender, CourseID) VALUES (?, ?, ?, ?, ?)")) {
-//            stmt.setString(1, name);
-//            stmt.setString(2, id);
-//            stmt.setString(3, yearLevel);
-//            stmt.setString(4, gender);
-//            stmt.setString(5, course);
-//            stmt.executeUpdate();
-//        } catch (MysqlDataTruncation e) {
-//            showErrorAlert("Input is more or less than the required amount: " + e.getMessage());
-//        }
-//    }
+    // Add cut lumber
+    public static void addCutLumber_Janiola(String type, String unit_price, String quantity, String size) throws SQLException {
+        String cutID = getRawID_Janiola(type)+ getSizeID_Janiola(size);
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO cutLumber VALUES (?, ?, ?, ?, ?)")) {
+            stmt.setString(1, cutID);
+            stmt.setString(2, getRawID_Janiola(type));
+            stmt.setString(3, unit_price);
+            stmt.setString(4, quantity);
+            stmt.setString(5, getSizeID_Janiola(size));
+            stmt.executeUpdate();
+        } catch (MysqlDataTruncation e) {
+            showErrorAlert("Input is more or less than the required amount: " + e.getMessage());
+        }
+    }
+
+    // Add raw lumber
+    public static void addRawLumber_Janiola(String type, String quantity) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                INSERT INTO rawlumber (rawlumber_type, rawlumber_quantity)
+                VALUES ("%s",%s);
+                """;
+            statement.executeUpdate(String.format(query, type, quantity));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+
+    // Check Duplicate instance of a string in a table
+    public static int checkDuplicate_Janiola(String table, String column, String word) throws SQLException {
+        String status = "";
+        String query= """
+                SELECT EXISTS (SELECT 1 FROM %s WHERE %s = "%s");
+                """;
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(String.format(query, table, column, word));
+            if (result.next()) {
+                status = result.getString(1);
+            }
+        }
+        catch (SQLException e){
+            throw new SQLException("Error getting cell data from the database", e);
+        }
+        return Integer.parseInt(status);
+    }
+
 //    public static void createCourseRecord(String name, String id) throws SQLException {
 //        try (Connection conn = getConnection();
 //             PreparedStatement stmt = conn.prepareStatement("INSERT INTO course (CourseName, ID) VALUES (?, ?)")) {
@@ -173,11 +272,4 @@ public class DatabaseManager {
 //            }
 //        }
 //    }
-
-    public static List<String> getUsersList() {return usersList;}
-    public static List<String> getCustomerList() {return customerList;}
-    public static List<String> getRawLumberList() {return rawLumberList;}
-    public static List<String> getCutLumberList() {return cutLumberList;}
-    public static List<String> getSizeList() {return sizeList;}
-    public static List<String> getSupplierList() {return supplierList;}
 }

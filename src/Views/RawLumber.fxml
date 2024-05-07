@@ -18,9 +18,8 @@
          <children>
             <TableView fx:id="rawTable" layoutX="35.0" layoutY="129.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="725.0">
               <columns>
-                <TableColumn fx:id="idColumn" prefWidth="150.0" text="ITEM ID" />
-                <TableColumn fx:id="typeColumn" prefWidth="470.4000244140625" text="TYPE" />
-                  <TableColumn fx:id="quantityColumn" prefWidth="150.0" text="QUANTITY" />
+                <TableColumn fx:id="typeColumn" prefWidth="440.8001251220703" text="TYPE" />
+                  <TableColumn fx:id="quantityColumn" prefWidth="283.99993896484375" text="QUANTITY" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

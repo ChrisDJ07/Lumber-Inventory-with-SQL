@@ -25,13 +25,11 @@ public class RawController implements Initializable {
     @FXML
     TableView<String[]> rawTable = new TableView<>();
     @FXML
-    TableColumn<String[], String> idColumn;
-    @FXML
     TableColumn<String[], String> typeColumn;
     @FXML
     TableColumn<String[], String> quantityColumn;
 
-    ObservableList<String[]> dataList;
+    static ObservableList<String[]> dataList;
 
     // Initialize tables
     @Override
@@ -40,11 +38,22 @@ public class RawController implements Initializable {
             dataList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
             rawTable.setItems(dataList);
 
-            idColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
-            typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    // Method to refresh the TableView with the latest data from the database
+    public static void refreshTable() {
+        try {
+            // Update the ObservableList with the latest data from the database
+            dataList.clear(); // Clear the existing data
+            dataList.addAll(DatabaseManager.readRawLumbers()); // Add the latest data
+        } catch (SQLException e) {
+            // Handle the exception (show error message, log, etc.)
+            e.printStackTrace();
         }
     }
 
