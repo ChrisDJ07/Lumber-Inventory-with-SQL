@@ -21,13 +21,22 @@ public class SupplyRaw implements Initializable {
     private Button addButton;
 
     @FXML
-    private Button clearButton;
+    private Button clearButton1;
 
     @FXML
-    private TextField supplierField;
+    private Button clearButton2;
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private ChoiceBox<String> supplierBox;
 
     @FXML
     private TextField supplier_info_field;
+
+    @FXML
+    private Button supplyButton;
 
     @FXML
     private ChoiceBox<String> typeBox;
@@ -35,44 +44,96 @@ public class SupplyRaw implements Initializable {
     @FXML
     private TextField unitField;
 
+    RawController rawController;
+
+    public void setSupplyController(RawController rawController) {
+        this.rawController = rawController;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        try {
-//            String[] types = DatabaseManager.getRawLumberList_Janiola();
-//            typeBox.getItems().setAll(types);
-//            // Now that typeBox is set up, get the selected type
-//            String selectedType = RawController.getSelectedType();
-//            typeBox.setValue(selectedType);
-//            unitField.setText("0");
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            String[] types = DatabaseManager.getRawLumberList_Janiola();
+            typeBox.getItems().setAll(types);
+            refreshSupplierBox();
+            unitField.setText("0");
+            supplier_info_field.setText("");
+        } catch (SQLException e) {
+            alert("Database Error", "There is an error connecting to the database.");
+        }
     }
 
     @FXML
     void supplyRaw(ActionEvent event) {
         try {
             int quantity = Integer.parseInt(unitField.getText());
-            String supplierName = supplierField.getText();
-            String supplierContactInfo = supplier_info_field.getText();
-            if(supplierName.trim().isEmpty()){
-                throw new RuntimeException("Please enter a supplier name.");
+            if(supplierBox.getValue() == null){
+                throw new RuntimeException("Please choose a supplier.");
             }
-            // to be implemented furtherr
+            if(typeBox.getValue() ==  null){
+                throw new RuntimeException("Please choose a type.");
+            }
+            String supplier = supplierBox.getValue();
+            String type = typeBox.getValue();
+            DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity));
+            RawController.refreshTable();
+
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid integer for units.");
+            alert("Input Error", "Please enter an integer for units.");
         } catch (RuntimeException e){
             alert("Input error", e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @FXML
-    void clearFields(ActionEvent event) {
+    void addSupplier(ActionEvent event) {
+        try{
+            String supplierName = nameField.getText();
+            String supplierContactInfo = supplier_info_field.getText();
+            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_info", supplierContactInfo.trim()) == 1
+                    && !supplierContactInfo.trim().isEmpty()){
+                throw new RuntimeException("Supplier info already exists, please enter a different one.");
+            }
+            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_name", supplierName.trim()) == 1){
+                throw new RuntimeException("Supplier name already exists, please enter a different one.");
+            }
+            if(supplierName.trim().isEmpty()){
+                throw new RuntimeException("Please enter a supplier name.");
+            }
+            DatabaseManager.addSupplier_Janiola(supplierName, supplierContactInfo);
+            refreshSupplierBox();
+            supplierBox.setValue(supplierName);
+        } catch (RuntimeException e){
+            alert("Input error", e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void clearFields1(ActionEvent event) {
         typeBox.setValue(null);
+        supplierBox.setValue(null);
         unitField.setText("0");
-        supplierField.setText("");
+    }
+
+    @FXML
+    void clearFields2(ActionEvent event) {
+        nameField.setText("");
         supplier_info_field.setText("");
+    }
+
+    void refreshSupplierBox() throws SQLException{
+        supplierBox.getItems().clear();
+        try{
+        String[] suppliers = DatabaseManager.getSupplierList();
+        supplierBox.getItems().setAll(suppliers);
+        } catch (SQLException e) {
+            alert("Database Error", "There is an error connecting to the database.");
+        }
     }
 
     public void alert(String title, String content){
@@ -83,3 +144,73 @@ public class SupplyRaw implements Initializable {
         alert.showAndWait();
     }
 }
+
+
+//public class SupplyRaw implements Initializable {
+//
+//    @FXML
+//    private Button addButton;
+//
+//    @FXML
+//    private Button clearButton;
+//
+//    @FXML
+//    private TextField supplierField;
+//
+//    @FXML
+//    private TextField supplier_info_field;
+//
+//    @FXML
+//    private ChoiceBox<String> typeBox;
+//
+//    @FXML
+//    private TextField unitField;
+//
+//    @Override
+//    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        try {
+//            String[] types = DatabaseManager.getRawLumberList_Janiola();
+//            typeBox.getItems().setAll(types);
+//            // Now that typeBox is set up, get the selected type
+//            String selectedType = RawController.getSelectedType();
+//            typeBox.setValue(selectedType);
+//            unitField.setText("0");
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    @FXML
+//    void supplyRaw(ActionEvent event) {
+//        try {
+//            int quantity = Integer.parseInt(unitField.getText());
+//            String supplierName = supplierField.getText();
+//            String supplierContactInfo = supplier_info_field.getText();
+//            if(supplierName.trim().isEmpty()){
+//                throw new RuntimeException("Please enter a supplier name.");
+//            }
+//            // to be implemented furtherr
+//            ((Stage) unitField.getScene().getWindow()).close();
+//        } catch (NumberFormatException e) {
+//            alert("Input Error", "Please enter a valid integer for units.");
+//        } catch (RuntimeException e){
+//            alert("Input error", e.getMessage());
+//        }
+//    }
+//
+//    @FXML
+//    void clearFields(ActionEvent event) {
+//        typeBox.setValue(null);
+//        unitField.setText("0");
+//        supplierField.setText("");
+//        supplier_info_field.setText("");
+//    }
+//
+//    public void alert(String title, String content){
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(content);
+//        alert.showAndWait();
+//    }
+//}

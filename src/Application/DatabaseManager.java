@@ -182,7 +182,11 @@ public class DatabaseManager {
         sizeList =  getColumn_Janiola(query);
         return sizeList.toArray(new String[0]);
     }
-    public static List<String> getSupplierList() {return supplierList;}
+    public static String[] getSupplierList() throws SQLException {
+        String query = "SELECT supplier_name\n" + "FROM supplier;";
+        supplierList =  getColumn_Janiola(query);
+        return supplierList.toArray(new String[0]);
+    }
 
     /*Get Cell Data from Database*/
     public static String getRawID_Janiola(String type) throws SQLException{
@@ -243,7 +247,7 @@ public class DatabaseManager {
         }
     }
 
-    // Add raw lumber
+    // Update raw lumber
     public static void updateRawQuantity(String type, String quantity) throws SQLException {
         try{
             Connection con = getConnection();
@@ -260,7 +264,7 @@ public class DatabaseManager {
         }
     }
 
-    // Add raw lumber
+    // Delete raw lumber
     public static void deleteRawLumber(String type) throws SQLException {
         try{
             Connection con = getConnection();
@@ -304,6 +308,45 @@ public class DatabaseManager {
                     VALUES(NOW(), %s, %s, "%s", "%s");
                     """;
             statement.executeUpdate(String.format(recordProcessInfo, input_quantity, output_quantity, type, size));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+
+    // Process Raw Lumber
+    public static void supplyRawLumber(String supplier, String type, String input_quantity) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String addToRaw = """
+                    UPDATE rawlumber
+                    SET rawlumber_quantity = rawlumber_quantity + %s
+                    WHERE rawlumber_ID = %s;
+                """;
+            statement.executeUpdate(String.format(addToRaw, input_quantity, getRawID_Janiola(type)));
+
+            String recordSupplyInfo = """
+                    INSERT INTO supplied_by
+                    VALUES (NOW(), %s, "%s", "%s");
+                    """;
+            statement.executeUpdate(String.format(recordSupplyInfo, input_quantity, supplier, type));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+
+    // Add supplier
+    public static void addSupplier_Janiola(String name, String info) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                INSERT INTO supplier (supplier_name, supplier_info)
+                VALUES("%s","%s");
+                """;
+            statement.  executeUpdate(String.format(query, name, info));
         }
         catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);
@@ -370,7 +413,7 @@ public class DatabaseManager {
             }
         }
         catch (SQLException e){
-            throw new SQLException("Error getting cell data from the database", e);
+            throw new SQLException("Error getting data from the database", e);
         }
         return Integer.parseInt(status);
     }

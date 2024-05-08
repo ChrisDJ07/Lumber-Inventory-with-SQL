@@ -14,7 +14,7 @@ CREATE TABLE if NOT EXISTS supplier
 (
 	supplier_ID 			INT PRIMARY KEY AUTO_INCREMENT,
 	supplier_name			VARCHAR (50) NOT NULL UNIQUE,
-	supplier_info			VARCHAR (75) NULL UNIQUE
+	supplier_info			VARCHAR (75) NULL
 );
 
 CREATE TABLE if NOT EXISTS rawlumber
@@ -50,13 +50,10 @@ CREATE TABLE if NOT EXISTS customer
  
 CREATE TABLE if NOT EXISTS supplied_by
 (
-	supplier_ID				INT NOT NULL,
-	supplied_lumber		    INT NOT NULL ,
+	supplier_ID				VARCHAR (35) NOT NULL,
+	supplied_lumber		    VARCHAR (35) NOT NULL,
 	supplied_date			VARCHAR (35) NOT NULL,
 	quantity				INT NULL,
-	price					INT NULL,
-	CONSTRAINT fk_supplier_receipt FOREIGN KEY (supplier_ID) REFERENCES supplier (supplier_ID),
-	CONSTRAINT fk_supplied_lumber FOREIGN KEY (supplied_lumber) REFERENCES rawlumber (rawlumber_ID)
 	
 );
 

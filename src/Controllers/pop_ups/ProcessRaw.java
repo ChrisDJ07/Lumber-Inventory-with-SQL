@@ -37,6 +37,23 @@ public class ProcessRaw implements Initializable {
         this.rawController = rawController;
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        type_label.setText(RawController.getSelectedType());
+        String[] sizes = null;
+        try {
+            rawQuantityLimit = DatabaseManager.getRawQuantity(RawController.getSelectedType());
+            quantity_label.setText(Integer.toString(rawQuantityLimit));
+            sizes = DatabaseManager.getSizeList();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        sizeBox.getItems().setAll(sizes);
+
+        input_quantity_field.setText("0");
+        output_quantity_field.setText("0");
+    }
+
     @FXML
     void proceedProcess(ActionEvent event) {
         try {
@@ -63,23 +80,6 @@ public class ProcessRaw implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        type_label.setText(RawController.getSelectedType());
-        String[] sizes = null;
-        try {
-            rawQuantityLimit = DatabaseManager.getRawQuantity(RawController.getSelectedType());
-            quantity_label.setText(Integer.toString(rawQuantityLimit));
-            sizes = DatabaseManager.getSizeList();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        sizeBox.getItems().setAll(sizes);
-
-        input_quantity_field.setText("0");
-        output_quantity_field.setText("0");
     }
 
     @FXML

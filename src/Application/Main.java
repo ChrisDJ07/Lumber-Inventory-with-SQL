@@ -41,6 +41,7 @@ public class Main extends Application {
     // Method to show the dashboard after successful login
     public static void showDashboard() throws Exception {
         inventoryStage = new Stage();
+        inventoryStage.setResizable(false);
         // Load the dashboard
         loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"))));
     }

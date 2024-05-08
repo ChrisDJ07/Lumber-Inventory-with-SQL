@@ -4,9 +4,11 @@ import Application.DatabaseManager;
 import Application.Main;
 import Controllers.pop_ups.EditRaw;
 import Controllers.pop_ups.ProcessRaw;
+import Controllers.pop_ups.SupplyRaw;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +22,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ResourceBundle;
 
 public class RawController implements Initializable {
@@ -30,6 +31,9 @@ public class RawController implements Initializable {
     private Button raw_edit_button;
     @FXML
     private Button delete_button;
+
+    @FXML
+    private TextField searchField;
 
     @FXML
     TableView<String[]> rawTable = new TableView<>();
@@ -50,6 +54,9 @@ public class RawController implements Initializable {
             dataList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
             rawTable.setItems(dataList);
 
+            FilteredList<String[]> filteredList = new FilteredList<>(dataList);
+            rawTable.setItems(filteredList);
+
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
@@ -60,6 +67,23 @@ public class RawController implements Initializable {
                     delete_button.setDisable(false);
                     selectedItem = rawTable.getSelectionModel().getSelectedItem();
                 }
+            });
+
+            searchField.setPromptText("Search...");
+
+            // Add listener to text property to filter data as user types
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
             });
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -95,6 +119,7 @@ public class RawController implements Initializable {
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
+        New.setResizable(false);
         New.setTitle("New Raw Lumber");
         New.setScene(scene);
         New.show();
@@ -116,6 +141,7 @@ public class RawController implements Initializable {
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
+        edit.setResizable(false);
         edit.setTitle("Edit Raw Lumber");
         edit.setScene(scene);
         edit.show();
@@ -137,6 +163,7 @@ public class RawController implements Initializable {
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
+        process.setResizable(false);
         process.setTitle("Process Raw Lumber");
         process.setScene(scene);
         process.show();
@@ -144,19 +171,24 @@ public class RawController implements Initializable {
 
     @FXML
     void openSupplyWindow(ActionEvent event) throws IOException {
-        Stage process = new Stage();
-        process.initOwner(Main.getStage());
-        process.initModality(Modality.WINDOW_MODAL);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/SupplyRaw.fxml"));
+        Parent root = loader.load();
+        SupplyRaw supplyController = loader.getController();
+        supplyController.setSupplyController(this);
 
-        Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/SupplyRaw.fxml"));
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
         Scene scene = new Scene(root);
 
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        process.setTitle("Supply Raw Lumber");
-        process.setScene(scene);
-        process.show();
+        supply.setResizable(false);
+        supply.setTitle("Supply Raw Lumber");
+        supply.setScene(scene);
+        supply.show();
     }
 
     @FXML
@@ -196,5 +228,10 @@ public class RawController implements Initializable {
         process_button.setDisable(true);
         raw_edit_button.setDisable(true);
         delete_button.setDisable(true);
+    }
+
+    @FXML
+    void clearSearch(ActionEvent event) {
+        searchField.clear();
     }
 }

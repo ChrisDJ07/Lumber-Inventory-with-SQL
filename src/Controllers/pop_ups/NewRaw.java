@@ -4,14 +4,17 @@ import Application.DatabaseManager;
 import Controllers.RawController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class NewRaw {
+public class NewRaw implements Initializable {
 
     @FXML
     private Button addButton;
@@ -30,20 +33,22 @@ public class NewRaw {
         String type = typeField.getText();
         try {
             int quantity = Integer.parseInt(unitField.getText());
-            if (DatabaseManager.checkDuplicate_Janiola("rawlumber", "rawlumber_type", type) == 0) {
-                DatabaseManager.addRawLumber_Janiola(type, Integer.toString(quantity));
-                RawController.refreshTable();
-                ((Stage) unitField.getScene().getWindow()).close();
-            } else {
+            if (DatabaseManager.checkDuplicate_Janiola("rawlumber", "rawlumber_type", type) == 1) {
                 throw new IllegalArgumentException("Duplicate");
             }
+            if(type.trim().isEmpty()){
+                throw  new IllegalArgumentException("Others");
+            }
+            DatabaseManager.addRawLumber_Janiola(type, Integer.toString(quantity));
+            RawController.refreshTable();
+            ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid integer for units.");
         } catch (IllegalArgumentException e) {
             if (e.getMessage().equals("Duplicate")) {
-                alert("Input Error", "Type is already taken.");
+                alert("Duplicate type", "Type is already taken.");
             } else {
-                alert("Input Error", "An unexpected error occurred.");
+                alert("No type", "Please enter a type.");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -53,7 +58,7 @@ public class NewRaw {
     @FXML
     void clearFields(ActionEvent event) {
         typeField.setText("");
-        unitField.setText("");
+        unitField.setText("0");
     }
 
     public void alert(String title, String content){
@@ -64,4 +69,9 @@ public class NewRaw {
         alert.showAndWait();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        unitField.setText("0");
+        typeField.setPromptText("Required");
+    }
 }
