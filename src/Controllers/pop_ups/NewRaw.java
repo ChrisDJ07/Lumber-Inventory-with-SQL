@@ -33,6 +33,9 @@ public class NewRaw implements Initializable {
         String type = typeField.getText();
         try {
             int quantity = Integer.parseInt(unitField.getText());
+            if(quantity<0){
+                throw new NumberFormatException();
+            }
             if (DatabaseManager.checkDuplicate_Janiola("rawlumber", "rawlumber_type", type) == 1) {
                 throw new IllegalArgumentException("Duplicate");
             }
@@ -43,7 +46,7 @@ public class NewRaw implements Initializable {
             RawController.refreshTable();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid integer for units.");
+            alert("Input Error", "Please enter a valid positive integer for units.");
         } catch (IllegalArgumentException e) {
             if (e.getMessage().equals("Duplicate")) {
                 alert("Duplicate type", "Type is already taken.");

@@ -53,7 +53,8 @@ CREATE TABLE if NOT EXISTS supplied_by
 	supplier_ID				VARCHAR (35) NOT NULL,
 	supplied_lumber		    VARCHAR (35) NOT NULL,
 	supplied_date			VARCHAR (35) NOT NULL,
-	quantity				INT NULL,
+	quantity				INT NOT NULL,
+	price                   INT NOT NULL
 	
 );
 
@@ -62,8 +63,8 @@ CREATE TABLE if NOT EXISTS process_info
 	process_date			        VARCHAR (35) NOT NULL,
 	process_input_quantity			INT NOT NULL,
 	process_output_quantity			INT NOT NULL,
-	process_input_type			        VARCHAR (25) NOT NULL,
-	process_output_size			        VARCHAR (25) NOT NULL,
+	process_input_type			    VARCHAR (25) NOT NULL,
+	process_output_size			    VARCHAR (25) NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS sold_to

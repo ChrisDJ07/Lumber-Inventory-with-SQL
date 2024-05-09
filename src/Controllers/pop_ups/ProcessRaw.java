@@ -49,9 +49,6 @@ public class ProcessRaw implements Initializable {
             throw new RuntimeException(e);
         }
         sizeBox.getItems().setAll(sizes);
-
-        input_quantity_field.setText("0");
-        output_quantity_field.setText("0");
     }
 
     @FXML
@@ -59,6 +56,12 @@ public class ProcessRaw implements Initializable {
         try {
             int input_quantity = Integer.parseInt(input_quantity_field.getText());
             int output_quantity = Integer.parseInt(output_quantity_field.getText());
+            if(input_quantity<0 || output_quantity<0){
+                throw new NumberFormatException();
+            }
+            if(input_quantity==0 || output_quantity==0){
+                throw new RuntimeException("zeroUnits");
+            }
             if(input_quantity > rawQuantityLimit){
                 throw new RuntimeException("exceedQuantity");
             }
@@ -69,12 +72,14 @@ public class ProcessRaw implements Initializable {
             RawController.refreshTable();
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid integer for units.");
+            alert("Input Error", "Please enter a valid positive integer for units.");
         } catch (RuntimeException e){
             if(e.getMessage().equals("exceedQuantity")){
                 alert("Input Quantity Exceeded", "Enter a value not greater than "+Integer.toString(rawQuantityLimit)+".");
             } else if (e.getMessage().equals("noSize")) {
                 alert("No Size Selected", "Please enter a size.");
+            } else if (e.getMessage().equals("zeroUnits")) {
+                alert("Zero Units", "Units cannot be zero.");
             }
 
         } catch (SQLException e) {
@@ -85,8 +90,8 @@ public class ProcessRaw implements Initializable {
     @FXML
     void clearFields(ActionEvent event) {
         sizeBox.setValue(null);
-        input_quantity_field.setText("0");
-        output_quantity_field.setText("0");
+        input_quantity_field.setText("");
+        output_quantity_field.setText("");
     }
 
     public void alert(String title, String content){

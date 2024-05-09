@@ -44,6 +44,9 @@ public class SupplyRaw implements Initializable {
     @FXML
     private TextField unitField;
 
+    @FXML
+    private TextField priceField;
+
     RawController rawController;
 
     public void setSupplyController(RawController rawController) {
@@ -57,6 +60,7 @@ public class SupplyRaw implements Initializable {
             typeBox.getItems().setAll(types);
             refreshSupplierBox();
             unitField.setText("0");
+            priceField.setText("0");
             supplier_info_field.setText("");
         } catch (SQLException e) {
             alert("Database Error", "There is an error connecting to the database.");
@@ -67,6 +71,10 @@ public class SupplyRaw implements Initializable {
     void supplyRaw(ActionEvent event) {
         try {
             int quantity = Integer.parseInt(unitField.getText());
+            int price = Integer.parseInt(priceField.getText());
+            if (quantity == 0){
+                throw new RuntimeException("Units supplied cannot be zero.");
+            }
             if(supplierBox.getValue() == null){
                 throw new RuntimeException("Please choose a supplier.");
             }
@@ -75,12 +83,12 @@ public class SupplyRaw implements Initializable {
             }
             String supplier = supplierBox.getValue();
             String type = typeBox.getValue();
-            DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity));
+            DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity), Integer.toString(price));
             RawController.refreshTable();
 
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter an integer for units.");
+            alert("Input Error", "Please enter an integer for units and/or price.");
         } catch (RuntimeException e){
             alert("Input error", e.getMessage());
         } catch (SQLException e) {
@@ -118,6 +126,7 @@ public class SupplyRaw implements Initializable {
         typeBox.setValue(null);
         supplierBox.setValue(null);
         unitField.setText("0");
+        priceField.setText("0");
     }
 
     @FXML
@@ -144,73 +153,3 @@ public class SupplyRaw implements Initializable {
         alert.showAndWait();
     }
 }
-
-
-//public class SupplyRaw implements Initializable {
-//
-//    @FXML
-//    private Button addButton;
-//
-//    @FXML
-//    private Button clearButton;
-//
-//    @FXML
-//    private TextField supplierField;
-//
-//    @FXML
-//    private TextField supplier_info_field;
-//
-//    @FXML
-//    private ChoiceBox<String> typeBox;
-//
-//    @FXML
-//    private TextField unitField;
-//
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        try {
-//            String[] types = DatabaseManager.getRawLumberList_Janiola();
-//            typeBox.getItems().setAll(types);
-//            // Now that typeBox is set up, get the selected type
-//            String selectedType = RawController.getSelectedType();
-//            typeBox.setValue(selectedType);
-//            unitField.setText("0");
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    @FXML
-//    void supplyRaw(ActionEvent event) {
-//        try {
-//            int quantity = Integer.parseInt(unitField.getText());
-//            String supplierName = supplierField.getText();
-//            String supplierContactInfo = supplier_info_field.getText();
-//            if(supplierName.trim().isEmpty()){
-//                throw new RuntimeException("Please enter a supplier name.");
-//            }
-//            // to be implemented furtherr
-//            ((Stage) unitField.getScene().getWindow()).close();
-//        } catch (NumberFormatException e) {
-//            alert("Input Error", "Please enter a valid integer for units.");
-//        } catch (RuntimeException e){
-//            alert("Input error", e.getMessage());
-//        }
-//    }
-//
-//    @FXML
-//    void clearFields(ActionEvent event) {
-//        typeBox.setValue(null);
-//        unitField.setText("0");
-//        supplierField.setText("");
-//        supplier_info_field.setText("");
-//    }
-//
-//    public void alert(String title, String content){
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(content);
-//        alert.showAndWait();
-//    }
-//}

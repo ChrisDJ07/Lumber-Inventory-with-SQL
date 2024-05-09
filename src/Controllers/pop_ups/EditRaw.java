@@ -39,12 +39,15 @@ public class EditRaw implements Initializable {
     void editRaw(ActionEvent event) {
         try {
             int quantity = Integer.parseInt(unitField.getText());
+            if(quantity<0){
+                throw new NumberFormatException();
+            }
             DatabaseManager.updateRawQuantity(typeLabel.getText(), Integer.toString(quantity));
             RawController.refreshTable();
             rawController.disableRelevantButtons();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid integer for units.");
+            alert("Input Error", "Please enter a valid positive integer for units.");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
