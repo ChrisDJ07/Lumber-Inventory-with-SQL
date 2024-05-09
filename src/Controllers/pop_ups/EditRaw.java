@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -16,12 +15,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EditRaw implements Initializable {
-
-    @FXML
-    private Button clearButton;
-
-    @FXML
-    private Button editButton;
 
     @FXML
     private Label typeLabel;
@@ -43,7 +36,7 @@ public class EditRaw implements Initializable {
                 throw new NumberFormatException();
             }
             DatabaseManager.updateRawQuantity(typeLabel.getText(), Integer.toString(quantity));
-            RawController.refreshTable();
+            RawController.refreshTables();
             rawController.disableRelevantButtons();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
@@ -69,5 +62,6 @@ public class EditRaw implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         typeLabel.setText(RawController.getSelectedType());
+        unitField.setText(RawController.getSelectedUnits());
     }
 }

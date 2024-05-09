@@ -3,6 +3,7 @@ package Controllers;
 import Application.DatabaseManager;
 import Application.Main;
 import Controllers.pop_ups.EditRaw;
+import Controllers.pop_ups.NewSupplier;
 import Controllers.pop_ups.ProcessRaw;
 import Controllers.pop_ups.SupplyRaw;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,13 +26,13 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class RawController implements Initializable {
+    /*Raw Lumber Section*/
     @FXML
     private Button process_button;
     @FXML
     private Button raw_edit_button;
     @FXML
     private Button delete_button;
-
     @FXML
     private TextField searchField;
 
@@ -41,22 +42,39 @@ public class RawController implements Initializable {
     TableColumn<String[], String> typeColumn;
     @FXML
     TableColumn<String[], String> quantityColumn;
+    static ObservableList<String[]> rawLumberList;
+    static String[] selectedRawLumber;
 
-    static ObservableList<String[]> dataList;
-    static String[] selectedItem;
+    /*Supplier Section*/
+    @FXML
+    private Button delete_supplier_button;
+    @FXML
+    private Button clear_supplier_search_button;
+    @FXML
+    private TextField supplierSearch;
+    @FXML
+    private Button new_supplier_button;
 
-    // Initialize tables
+    @FXML
+    private TableView<String[]> supplierTable = new TableView<>();
+    @FXML
+    TableColumn<String[], String> supplierNameColumn;
+    @FXML
+    TableColumn<String[], String> supplierInfoColumn;
+    static ObservableList<String[]> supplierList;
+    static String[] selectedSupplier;
+
+
+    /* Initialize tables */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             disableRelevantButtons();
 
-            dataList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
-            rawTable.setItems(dataList);
-
-            FilteredList<String[]> filteredList = new FilteredList<>(dataList);
-            rawTable.setItems(filteredList);
-
+            rawLumberList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
+            rawTable.setItems(rawLumberList);
+            FilteredList<String[]> filteredRawList = new FilteredList<>(rawLumberList);
+            rawTable.setItems(filteredRawList);
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
@@ -65,15 +83,45 @@ public class RawController implements Initializable {
                     process_button.setDisable(false);
                     raw_edit_button.setDisable(false);
                     delete_button.setDisable(false);
-                    selectedItem = rawTable.getSelectionModel().getSelectedItem();
+                    selectedRawLumber = rawTable.getSelectionModel().getSelectedItem();
+                }
+            });
+
+            supplierList = FXCollections.observableArrayList(DatabaseManager.readSuppliers());
+            supplierTable.setItems(supplierList);
+            FilteredList<String[]> filteredSupplierList  = new FilteredList<>(supplierList);
+            supplierTable.setItems(filteredSupplierList);
+            supplierNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            supplierInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+
+            supplierTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    delete_supplier_button.setDisable(false);
+                    selectedSupplier = supplierTable.getSelectionModel().getSelectedItem();
                 }
             });
 
             searchField.setPromptText("Search...");
+            supplierSearch.setPromptText("Search...");
 
-            // Add listener to text property to filter data as user types
+            /*Add listener to text property to filter data as user types*/
+            // Raw Lumbers
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredList.setPredicate(item -> {
+                filteredRawList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            });
+            // Suppliers
+            supplierSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredSupplierList.setPredicate(item -> {
                     if (newValue == null || newValue.isEmpty()) {
                         return true; // Show all items if the filter is empty
                     }
@@ -90,7 +138,7 @@ public class RawController implements Initializable {
         }
     }
 
-    // Navigate scenes
+    /* Navigate scenes */
     @FXML
     private void goToDashBoard(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/Dashboard.fxml"))));
@@ -106,7 +154,7 @@ public class RawController implements Initializable {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/History.fxml"))));
     }
 
-    // Open Pop-ups
+    /*Open Pop-ups*/
     @FXML
     void openNewWindow(ActionEvent event) throws IOException{
         Stage New = new Stage();
@@ -124,7 +172,6 @@ public class RawController implements Initializable {
         New.setScene(scene);
         New.show();
     }
-
     @FXML
     void openEditWindow(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditRaw.fxml"));
@@ -146,7 +193,6 @@ public class RawController implements Initializable {
         edit.setScene(scene);
         edit.show();
     }
-
     @FXML
     void openProcessWindow(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/ProcessRaw.fxml"));
@@ -168,7 +214,6 @@ public class RawController implements Initializable {
         process.setScene(scene);
         process.show();
     }
-
     @FXML
     void openSupplyWindow(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/SupplyRaw.fxml"));
@@ -190,7 +235,29 @@ public class RawController implements Initializable {
         supply.setScene(scene);
         supply.show();
     }
+    @FXML
+    void openNewSupplierWindow(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/NewSupplier.fxml"));
+        Parent root = loader.load();
+        NewSupplier supplierController = loader.getController();
+        supplierController.setSupplierController(this);
 
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
+        Scene scene = new Scene(root);
+
+        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        supply.setResizable(false);
+        supply.setTitle("Add Supplier");
+        supply.setScene(scene);
+        supply.show();
+    }
+
+    /* Delete Functions */
     @FXML
     void delete_rawLumber(ActionEvent event) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -200,38 +267,60 @@ public class RawController implements Initializable {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.showAndWait();
 
-        // Delete if ok
         if(alert.getResult() == ButtonType.OK){
             DatabaseManager.deleteRawLumber(getSelectedType());
-            refreshTable();
+            refreshTables();
+        }
+        disableRelevantButtons();
+    }
+    @FXML
+    void deleteSupplier(ActionEvent event) throws SQLException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Supplier Detetion");
+        alert.setHeaderText("Are you sure you want to delete this Supplier?");
+        alert.setContentText("Deleting this will completely remove it from the database.");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.OK){
+            DatabaseManager.deleteSupplier(getSelectedSupplier());
+            refreshTables();
         }
         disableRelevantButtons();
     }
 
-    // Method to refresh the TableView with the latest data from the database
-    public static void refreshTable() {
+    /* Other Functions */
+    public static void refreshTables() {
         try {
-            // Update the ObservableList with the latest data from the database
-            dataList.clear(); // Clear the existing data
-            dataList.addAll(DatabaseManager.readRawLumbers()); // Add the latest data
+            rawLumberList.clear();
+            rawLumberList.addAll(DatabaseManager.readRawLumbers());
+            supplierList.clear();
+            supplierList.addAll(DatabaseManager.readSuppliers());
         } catch (SQLException e) {
-            // Handle the exception (show error message, log, etc.)
             e.printStackTrace();
         }
     }
-
     public static String getSelectedType(){
-        return selectedItem[0];
+        return selectedRawLumber[0];
     }
-
+    public static String getSelectedUnits(){
+        return selectedRawLumber[1];
+    }
+    public static String getSelectedSupplier(){
+        return selectedSupplier[0];
+    }
     public void disableRelevantButtons(){
         process_button.setDisable(true);
         raw_edit_button.setDisable(true);
         delete_button.setDisable(true);
+        delete_supplier_button.setDisable(true);
     }
-
     @FXML
     void clearSearch(ActionEvent event) {
         searchField.clear();
+    }
+    @FXML
+    void clearSupplierSearch(ActionEvent event) {
+        supplierSearch.clear();
     }
 }

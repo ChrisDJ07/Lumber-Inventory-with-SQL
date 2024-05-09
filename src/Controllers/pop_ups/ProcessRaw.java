@@ -69,7 +69,7 @@ public class ProcessRaw implements Initializable {
                 throw new RuntimeException("noSize");
             }
             DatabaseManager.processRawLumber(RawController.getSelectedType(), sizeBox.getValue(), Integer.toString(input_quantity), Integer.toString(output_quantity));
-            RawController.refreshTable();
+            RawController.refreshTables();
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");

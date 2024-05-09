@@ -43,7 +43,7 @@ public class NewRaw implements Initializable {
                 throw  new IllegalArgumentException("Others");
             }
             DatabaseManager.addRawLumber_Janiola(type, Integer.toString(quantity));
-            RawController.refreshTable();
+            RawController.refreshTables();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");

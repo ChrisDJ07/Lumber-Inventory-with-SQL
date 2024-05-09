@@ -204,7 +204,8 @@ public class DatabaseManager {
     }
     // Read suppliers from the database
     public static List<String[]> readSuppliers() throws SQLException {
-        return readData("supplier", 3);
+        String query = "SELECT supplier_name, supplier_info\n" + "FROM supplier;";
+        return readData(query, 2);
     }
 
     /*Get Lists from Database*/
@@ -238,12 +239,6 @@ public class DatabaseManager {
                 "where rawLumber_type = \"" + type + "\";";
         return getCell_Janiola(query);
     }
-    public static String getSizeID_Janiola(String size) throws SQLException{
-        String query = "select size_ID\n" +
-                "from size\n" +
-                "where size_dimension = \""+size+"\";";
-        return getCell_Janiola(query);
-    }
     public static String getCutID_Janiola(String type, String size) throws SQLException{
         String query = """
                 SELECT cutlumber_ID
@@ -251,6 +246,18 @@ public class DatabaseManager {
                 WHERE cutlumber_type = %s AND size_ID = %s;
                 """;
         return getCell_Janiola(String.format(query, getRawID_Janiola(type), getSizeID_Janiola(size)));
+    }
+    public static String getSizeID_Janiola(String size) throws SQLException{
+        String query = "select size_ID\n" +
+                "from size\n" +
+                "where size_dimension = \""+size+"\";";
+        return getCell_Janiola(query);
+    }
+    public static String getSupplierID_Janiola(String name) throws SQLException{
+        String query = "SELECT supplier_ID\n" +
+                "FROM supplier\n" +
+                "WHERE supplier_name = \""+name+"\";";
+        return getCell_Janiola(query);
     }
 
 
@@ -311,7 +318,21 @@ public class DatabaseManager {
             throw new SQLException("Error deleting data from the database", e);
         }
     }
-
+    // Delete Supplier
+    public static void deleteSupplier(String name) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    DELETE FROM supplier
+                    WHERE supplier_ID = %s;
+                """;
+            statement.executeUpdate(String.format(query, getSupplierID_Janiola(name)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
 
 

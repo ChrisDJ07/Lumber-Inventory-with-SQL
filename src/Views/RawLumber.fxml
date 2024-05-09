@@ -8,6 +8,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -15,7 +16,7 @@
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
-            <TableView fx:id="rawTable" layoutX="35.0" layoutY="129.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="322.0" prefWidth="725.0">
+            <TableView fx:id="rawTable" layoutX="16.0" layoutY="96.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="420.0">
               <columns>
                 <TableColumn fx:id="typeColumn" prefWidth="440.8001251220703" text="TYPE" />
                   <TableColumn fx:id="quantityColumn" prefWidth="283.99993896484375" text="QUANTITY" />
@@ -24,18 +25,34 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button fx:id="process_button" layoutX="662.0" layoutY="76.0" mnemonicParsing="false" onAction="#openProcessWindow" prefHeight="37.0" prefWidth="98.0" text="PROCESS" />
-            <TextField fx:id="searchField" layoutX="35.0" layoutY="82.0" prefHeight="26.0" prefWidth="206.0" />
-            <Label layoutX="35.0" layoutY="14.0" prefHeight="62.0" prefWidth="218.0" text="Raw Lumber">
+            <Button fx:id="process_button" layoutX="337.0" layoutY="509.0" mnemonicParsing="false" onAction="#openProcessWindow" prefHeight="43.0" prefWidth="98.0" text="PROCESS" />
+            <TextField fx:id="searchField" layoutX="16.0" layoutY="59.0" prefHeight="26.0" prefWidth="206.0" />
+            <Label layoutX="16.0" layoutY="5.0" prefHeight="43.0" prefWidth="218.0" text="Raw Lumber">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <Button fx:id="raw_new_button" layoutX="35.0" layoutY="476.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="75.0" text="NEW" />
-            <Button fx:id="delete_button" layoutX="684.0" layoutY="476.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="75.0" text="Delete" />
-            <Button fx:id="raw_edit_button" layoutX="600.0" layoutY="476.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="75.0" text="Edit" />
-            <Button fx:id="supply_button" layoutX="574.0" layoutY="76.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
-            <Button fx:id="clear_search_button" layoutX="249.0" layoutY="82.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
+            <Button fx:id="raw_new_button" layoutX="258.0" layoutY="509.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="64.0" text="NEW" />
+            <Button fx:id="delete_button" layoutX="82.0" layoutY="509.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="57.0" text="Delete" />
+            <Button fx:id="raw_edit_button" layoutX="16.0" layoutY="509.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="50.0" text="Edit" />
+            <Button fx:id="supply_button" layoutX="360.0" layoutY="45.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
+            <Button fx:id="clear_search_button" layoutX="230.0" layoutY="59.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
+            <Line endX="-100.0" endY="538.2000122070312" layoutX="555.0" layoutY="21.0" startX="-100.0" stroke="#c7c6c6" />
+            <Label layoutX="471.0" layoutY="17.0" prefHeight="43.0" prefWidth="124.0" text="Suppliers">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <TableView fx:id="supplierTable" layoutX="471.0" layoutY="96.0" prefHeight="242.0" prefWidth="311.0">
+              <columns>
+                <TableColumn fx:id="supplierNameColumn" prefWidth="146.400146484375" text="Name" />
+                <TableColumn fx:id="supplierInfoColumn" prefWidth="165.59996337890624" text="Contact Info" />
+              </columns>
+            </TableView>
+            <TextField fx:id="supplierSearch" layoutX="471.0" layoutY="59.0" prefHeight="26.0" prefWidth="140.0" />
+            <Button fx:id="clear_supplier_search_button" layoutX="620.0" layoutY="59.0" mnemonicParsing="false" onAction="#clearSupplierSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
+            <Button fx:id="delete_supplier_button" layoutX="723.0" layoutY="348.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="30.0" prefWidth="58.0" text="Delete" />
+            <Button fx:id="new_supplier_button" layoutX="471.0" layoutY="348.0" mnemonicParsing="false" onAction="#openNewSupplierWindow" prefHeight="30.0" prefWidth="58.0" text="NEW" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

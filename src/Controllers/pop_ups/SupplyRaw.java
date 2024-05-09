@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -18,25 +17,7 @@ import java.util.ResourceBundle;
 public class SupplyRaw implements Initializable {
 
     @FXML
-    private Button addButton;
-
-    @FXML
-    private Button clearButton1;
-
-    @FXML
-    private Button clearButton2;
-
-    @FXML
-    private TextField nameField;
-
-    @FXML
     private ChoiceBox<String> supplierBox;
-
-    @FXML
-    private TextField supplier_info_field;
-
-    @FXML
-    private Button supplyButton;
 
     @FXML
     private ChoiceBox<String> typeBox;
@@ -58,10 +39,10 @@ public class SupplyRaw implements Initializable {
         try {
             String[] types = DatabaseManager.getRawLumberList_Janiola();
             typeBox.getItems().setAll(types);
-            refreshSupplierBox();
+            String[] suppliers = DatabaseManager.getSupplierList();
+            supplierBox.getItems().setAll(suppliers);
             unitField.setText("0");
             priceField.setText("0");
-            supplier_info_field.setText("");
         } catch (SQLException e) {
             alert("Database Error", "There is an error connecting to the database.");
         }
@@ -75,6 +56,9 @@ public class SupplyRaw implements Initializable {
             if (quantity == 0){
                 throw new RuntimeException("Units supplied cannot be zero.");
             }
+            if(quantity<0 || price<0){
+                throw new RuntimeException("Please enter a positive value for units and/or price.");
+            }
             if(supplierBox.getValue() == null){
                 throw new RuntimeException("Please choose a supplier.");
             }
@@ -84,7 +68,7 @@ public class SupplyRaw implements Initializable {
             String supplier = supplierBox.getValue();
             String type = typeBox.getValue();
             DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity), Integer.toString(price));
-            RawController.refreshTable();
+            RawController.refreshTables();
 
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
@@ -97,52 +81,11 @@ public class SupplyRaw implements Initializable {
     }
 
     @FXML
-    void addSupplier(ActionEvent event) {
-        try{
-            String supplierName = nameField.getText();
-            String supplierContactInfo = supplier_info_field.getText();
-            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_info", supplierContactInfo.trim()) == 1
-                    && !supplierContactInfo.trim().isEmpty()){
-                throw new RuntimeException("Supplier info already exists, please enter a different one.");
-            }
-            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_name", supplierName.trim()) == 1){
-                throw new RuntimeException("Supplier name already exists, please enter a different one.");
-            }
-            if(supplierName.trim().isEmpty()){
-                throw new RuntimeException("Please enter a supplier name.");
-            }
-            DatabaseManager.addSupplier_Janiola(supplierName, supplierContactInfo);
-            refreshSupplierBox();
-            supplierBox.setValue(supplierName);
-        } catch (RuntimeException e){
-            alert("Input error", e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    void clearFields1(ActionEvent event) {
+    void clearFields(ActionEvent event) {
         typeBox.setValue(null);
         supplierBox.setValue(null);
         unitField.setText("0");
         priceField.setText("0");
-    }
-
-    @FXML
-    void clearFields2(ActionEvent event) {
-        nameField.setText("");
-        supplier_info_field.setText("");
-    }
-
-    void refreshSupplierBox() throws SQLException{
-        supplierBox.getItems().clear();
-        try{
-        String[] suppliers = DatabaseManager.getSupplierList();
-        supplierBox.getItems().setAll(suppliers);
-        } catch (SQLException e) {
-            alert("Database Error", "There is an error connecting to the database.");
-        }
     }
 
     public void alert(String title, String content){
