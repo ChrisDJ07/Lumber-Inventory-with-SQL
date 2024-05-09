@@ -155,6 +155,26 @@ public class CutController implements Initializable {
     }
 
     @FXML
+    void openDeleteConfirmationWindow(ActionEvent event) throws IOException {
+        // TODO: There will be a confirmation window (Soon) so far wala pa...
+        // Get the selected item
+        String[] selectedItem = cutTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            // Remove the selected item from the dataList
+            dataList.remove(selectedItem);
+            // Optionally, you can also delete the selected item from the database using DatabaseManager
+            try {
+                DatabaseManager.deleteCutLumber(selectedItem[0]); // Assuming the first column is the ID
+            } catch (SQLException e) {
+                // Handle SQL exception
+                e.printStackTrace();
+            }
+            cutTable.refresh(); // Refresh the TableView
+        }
+    }
+
+
+    @FXML
     void openSellWindow(ActionEvent event) throws IOException{
         Stage sell = new Stage();
         sell.initOwner(Main.getStage());

@@ -18,9 +18,9 @@ public class DatabaseManager {
 
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/lumberstore";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -43,8 +43,61 @@ public class DatabaseManager {
 
 
 
-    /*Read functions*/
+    /**
+     * Create functions
+     * Create functions
+     * Create functions
+     **/
+    public static void addCutLumber_Janiola(String type, String unit_price, String quantity, String size) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    INSERT INTO cutlumber (cutlumber_type, unit_price, quantity, size_ID)
+                    VALUES (%s, %s, %s, %s);
+                """;
+            statement.executeUpdate(String.format(query, getRawID_Janiola(type), unit_price, quantity, getSizeID_Janiola(size)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void addRawLumber_Janiola(String type, String quantity) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                INSERT INTO rawlumber (rawlumber_type, rawlumber_quantity)
+                VALUES ("%s",%s);
+                """;
+            statement.executeUpdate(String.format(query, type, quantity));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void addSupplier_Janiola(String name, String info) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                INSERT INTO supplier (supplier_name, supplier_info)
+                VALUES("%s","%s");
+                """;
+            statement.  executeUpdate(String.format(query, name, info));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
+
+
+    /**
+     * Read functions
+     * Read functions
+     * Read functions
+     **/
     // Read table data from the database and store it in lists
     private static List<String[]> readData(String query, int columnCount) throws SQLException {
         List<String[]> dataList = new ArrayList<>();
@@ -81,8 +134,6 @@ public class DatabaseManager {
         }
         return dataList;
     }
-
-
     // Read column data from the database and store it in a list
     private static List<String> getColumn_Janiola(String query) throws SQLException {
         List<String> column = new ArrayList<>();
@@ -99,7 +150,6 @@ public class DatabaseManager {
         }
         return column;
     }
-
     // Read cell data from the database and store it in a String
     private static String getCell_Janiola(String query) throws SQLException {
         String data = "";
@@ -116,12 +166,6 @@ public class DatabaseManager {
         }
         return data;
     }
-
-
-
-
-    /*Read Tables from database*/
-
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
         String query = "SELECT * FROM application_users";
@@ -164,11 +208,9 @@ public class DatabaseManager {
         return readData("supplier", 3);
     }
 
-
-
-
     /*Get Lists from Database*/
-
+    /*Get Lists from Database*/
+    /*Get Lists from Database*/
     public static List<String> getUsersList() {return usersList;}
     public static List<String> getCustomerList() {return customerList;}
     public static String[] getRawLumberList_Janiola() throws SQLException{
@@ -189,10 +231,12 @@ public class DatabaseManager {
     }
 
     /*Get Cell Data from Database*/
-    public static String getRawID_Janiola(String type) throws SQLException{
+    /*Get Cell Data from Database*/
+    /*Get Cell Data from Database*/
+    public static String getRawID_Janiola(String type) throws SQLException {
         String query = "select rawLumber_ID\n" +
                 "from rawLumber\n" +
-                "where rawLumber_type = \""+type+"\";";
+                "where rawLumber_type = \"" + type + "\";";
         return getCell_Janiola(query);
     }
     public static String getSizeID_Janiola(String size) throws SQLException{
@@ -212,41 +256,11 @@ public class DatabaseManager {
 
 
 
-
-    /*Update database functions*/
-
-    // Add cut lumber
-    public static void addCutLumber_Janiola(String type, String unit_price, String quantity, String size) throws SQLException {
-        try{
-            Connection con = getConnection();
-            Statement statement = con.createStatement();
-            String query = """
-                    INSERT INTO cutlumber (cutlumber_type, unit_price, quantity, size_ID)
-                    VALUES (%s, %s, %s, %s);
-                """;
-            statement.executeUpdate(String.format(query, getRawID_Janiola(type), unit_price, quantity, getSizeID_Janiola(size)));
-        }
-        catch (SQLException e){
-            throw new SQLException("Error adding data to the database", e);
-        }
-    }
-
-    // Add raw lumber
-    public static void addRawLumber_Janiola(String type, String quantity) throws SQLException {
-        try{
-            Connection con = getConnection();
-            Statement statement = con.createStatement();
-            String query = """
-                INSERT INTO rawlumber (rawlumber_type, rawlumber_quantity)
-                VALUES ("%s",%s);
-                """;
-            statement.executeUpdate(String.format(query, type, quantity));
-        }
-        catch (SQLException e){
-            throw new SQLException("Error adding data to the database", e);
-        }
-    }
-
+    /**
+     * Update functions
+     * Update functions
+     * Update functions
+     **/
     // Update raw lumber
     public static void updateRawQuantity(String type, String quantity) throws SQLException {
         try{
@@ -264,6 +278,13 @@ public class DatabaseManager {
         }
     }
 
+
+
+    /**
+     * Delete functions
+     * Delete functions
+     * Delete functions
+     **/
     // Delete raw lumber
     public static void deleteRawLumber(String type) throws SQLException {
         try{
@@ -279,41 +300,116 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
+    // Delete raw lumber
+    public static void deleteCutLumber(String delete_ID) throws SQLException {
+        try {
+            Connection con = getConnection();
+            String query = "DELETE FROM cutlumber WHERE cutlumber_ID = ?";
+            PreparedStatement statement = con.prepareStatement(query);
+            statement.setString(1, delete_ID);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error deleting data from the database", e);
+        }
+    }
 
-    // Process Raw Lumber
+    //TODO: ERASED/COMMENTED OUT - (type did not query as ID, the same for size)
+//    public static void processRawLumber(String type, String size, String input_quantity, String output_quantity) throws SQLException {
+//        try{
+//            Connection con = getConnection();
+//            Statement statement = con.createStatement();
+//            String subtractFromRaw = """
+//                    UPDATE rawlumber
+//                    SET rawlumber_quantity = rawlumber_quantity - %s
+//                    WHERE rawlumber_ID = %s;
+//                """;
+//            statement.executeUpdate(String.format(subtractFromRaw, input_quantity, getRawID_Janiola(type)));
+//            if(checkCutDuplicate_Janiola(type, size) == 1){
+//                System.out.println("Cut lumber exist");
+//                String addToCut = """
+//                        UPDATE cutlumber
+//                        SET quantity = quantity + %s
+//                        WHERE cutlumber_ID = %s;
+//                        """;
+//                statement.executeUpdate(String.format(addToCut, output_quantity, getCutID_Janiola(type,size)));
+//            }
+//            else{
+//                addCutLumber_Janiola(type, "null", output_quantity, size);
+//            }
+//            String recordProcessInfo = """
+//                    INSERT INTO process_info
+//                    VALUES(NOW(), %s, %s, "%s", "%s");
+//                    """;
+//            statement.executeUpdate(String.format(recordProcessInfo, input_quantity, output_quantity, type, size));
+//        }
+//        catch (SQLException e){
+//            throw new SQLException("Error adding data to the database", e);
+//        }
+//    }
+
+
+
+    /*Other functions*/
+    /*Other functions*/
+    /*Other functions*/
     public static void processRawLumber(String type, String size, String input_quantity, String output_quantity) throws SQLException {
         try{
             Connection con = getConnection();
             Statement statement = con.createStatement();
-            String subtractFromRaw = """
-                    UPDATE rawlumber
-                    SET rawlumber_quantity = rawlumber_quantity - %s
-                    WHERE rawlumber_ID = %s;
-                """;
-            statement.executeUpdate(String.format(subtractFromRaw, input_quantity, getRawID_Janiola(type)));
-            if(checkCutDuplicate_Janiola(type, size) == 1){
-                System.out.println("Cut lumber exist");
-                String addToCut = """
-                        UPDATE cutlumber
-                        SET quantity = quantity + %s
-                        WHERE cutlumber_ID = %s;
-                        """;
-                statement.executeUpdate(String.format(addToCut, output_quantity, getCutID_Janiola(type,size)));
+
+            // Query to get rawlumber_ID for the given type
+            String getRawlumberIDQuery = "SELECT rawlumber_ID FROM rawlumber WHERE rawlumber_Type = '" + type + "'";
+            ResultSet rawlumberResult = statement.executeQuery(getRawlumberIDQuery);
+            int rawlumberID = 0;
+            if (rawlumberResult.next()) {
+                rawlumberID = rawlumberResult.getInt("rawlumber_ID");
+            } else {
+                // Handle if type is not found
+                throw new SQLException("Raw lumber type not found");
             }
-            else{
+
+            // Query to get size_ID for the given size
+            String getSizeIDQuery = "SELECT size_ID FROM size WHERE size_dimension = '" + size + "'";
+            ResultSet sizeResult = statement.executeQuery(getSizeIDQuery);
+            int sizeID = 0;
+            if (sizeResult.next()) {
+                sizeID = sizeResult.getInt("size_ID");
+            } else {
+                // Handle if size is not found
+                throw new SQLException("Size not found");
+            }
+
+            // Update rawlumber_quantity
+            String subtractFromRaw = """
+                UPDATE rawlumber
+                SET rawlumber_quantity = rawlumber_quantity - %s
+                WHERE rawlumber_ID = %d;
+            """;
+            statement.executeUpdate(String.format(subtractFromRaw, input_quantity, rawlumberID));
+
+            // Check if cut lumber exists
+            if (checkCutDuplicate_Janiola(type, size) == 1){
+                System.out.println("Cut lumber exist"); //TODO: Remove in final output
+                String addToCut = """
+                    UPDATE cutlumber
+                    SET quantity = quantity + %s
+                    WHERE cutlumber_ID = %s;
+                    """;
+                statement.executeUpdate(String.format(addToCut, output_quantity, getCutID_Janiola(type,size)));
+            } else {
                 addCutLumber_Janiola(type, "null", output_quantity, size);
             }
+
+            // Record process information
             String recordProcessInfo = """
-                    INSERT INTO process_info
-                    VALUES(NOW(), %s, %s, "%s", "%s");
-                    """;
-            statement.executeUpdate(String.format(recordProcessInfo, input_quantity, output_quantity, type, size));
-        }
-        catch (SQLException e){
+                INSERT INTO process_info
+                VALUES(NOW(), %s, %s, "%s", "%s");
+                """;
+            statement.executeUpdate(String.format(recordProcessInfo, input_quantity, output_quantity, rawlumberID, sizeID));
+        } catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);
         }
     }
-
     // Process Raw Lumber
     public static void supplyRawLumber(String supplier, String type, String input_quantity) throws SQLException {
         try{
@@ -336,26 +432,6 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
-
-    // Add supplier
-    public static void addSupplier_Janiola(String name, String info) throws SQLException {
-        try{
-            Connection con = getConnection();
-            Statement statement = con.createStatement();
-            String query = """
-                INSERT INTO supplier (supplier_name, supplier_info)
-                VALUES("%s","%s");
-                """;
-            statement.  executeUpdate(String.format(query, name, info));
-        }
-        catch (SQLException e){
-            throw new SQLException("Error adding data to the database", e);
-        }
-    }
-
-
-    /*Other functions*/
-
     // Check Duplicate instance of a string in a table
     public static int checkDuplicate_Janiola(String table, String column, String word) throws SQLException {
         String status = "";
@@ -375,7 +451,6 @@ public class DatabaseManager {
         }
         return Integer.parseInt(status);
     }
-
     // Check Raw lumber quantity limit
     public static int getRawQuantity(String type) throws SQLException {
         String quantity = "";
@@ -397,7 +472,6 @@ public class DatabaseManager {
         }
         return Integer.parseInt(quantity);
     }
-
     // Check Duplicate instance in a Cut Lumber
     public static int checkCutDuplicate_Janiola(String type, String size) throws SQLException {
         String status = "";

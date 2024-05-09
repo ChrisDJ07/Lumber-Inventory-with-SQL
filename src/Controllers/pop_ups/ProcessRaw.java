@@ -65,7 +65,7 @@ public class ProcessRaw implements Initializable {
             if(sizeBox.getValue()==null){
                 throw new RuntimeException("noSize");
             }
-            DatabaseManager.processRawLumber(RawController.getSelectedType(), sizeBox.getValue(),Integer.toString(input_quantity), Integer.toString(output_quantity));
+            DatabaseManager.processRawLumber(RawController.getSelectedType(), sizeBox.getValue(), Integer.toString(input_quantity), Integer.toString(output_quantity));
             RawController.refreshTable();
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
