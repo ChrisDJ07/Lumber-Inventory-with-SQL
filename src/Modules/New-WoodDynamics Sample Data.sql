@@ -1,14 +1,14 @@
 -- Sample data for application_users table
-INSERT INTO application_users (employee_ID, employee_Password) VALUES
+INSERT INTO application_users (employee_userName, employee_Password) VALUES
 ('emp001', 'password123'),
 ('emp002', 'securePassword'),
 ('emp003', 'qwerty');
 
 -- Sample data for supplier table
-INSERT INTO supplier (supplier_ID, supplier_name, supplier_info) VALUES
-('S001', 'Wood Supplier Inc.', 'Specializes in high-quality wood materials'),
-('S002', 'Lumber Emporium', 'Offers a wide range of lumber products'),
-('S003', 'Timberland Enterprises', 'Supplier of timber products for construction');
+INSERT INTO supplier (supplier_name, supplier_info) VALUES
+('Wood Supplier Inc.', 'Specializes in high-quality wood materials'),
+('Lumber Emporium', 'Offers a wide range of lumber products'),
+('Timberland Enterprises', 'Supplier of timber products for construction');
 
 -- Sample data for rawlumber table
 INSERT INTO rawlumber (rawlumber_ID, rawlumber_type, rawlumber_quantity) VALUES
