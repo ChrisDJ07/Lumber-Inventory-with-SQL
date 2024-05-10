@@ -17,9 +17,9 @@ public class DatabaseManager {
 
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/lumberstore";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -79,13 +79,36 @@ public class DatabaseManager {
         try{
             Connection con = getConnection();
             Statement statement = con.createStatement();
-            String query = """
+            String query = String.format("""
                 INSERT INTO supplier (supplier_name, supplier_info)
                 VALUES("%s","%s");
-                """;
-            statement.  executeUpdate(String.format(query, name, info));
+                """, name, info);
+            statement.executeUpdate(query);
         }
         catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void addSold_To(int ID, int soldQuantity, String costumer_name, String sold_lumber, int currentQuantity) throws SQLException {
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String insertToSold_To = String.format("""
+                INSERT INTO sold_to (sold_date, sold_quantity, customer_name, sold_lumber)
+                VALUES(NOW(), %d, '%s', '%s');
+                """, soldQuantity, costumer_name, sold_lumber);
+            statement.executeUpdate(insertToSold_To);
+
+            currentQuantity -= soldQuantity;
+
+            String updateSpecificLumberQuantity = String.format("""
+                UPDATE cutlumber
+                SET quantity = %d
+                WHERE cutlumber_id = %d
+                """, currentQuantity, ID);
+            statement.executeUpdate(updateSpecificLumberQuantity);
+
+        } catch (SQLException e) {
             throw new SQLException("Error adding data to the database", e);
         }
     }
@@ -200,6 +223,10 @@ public class DatabaseManager {
     }
     public static List<String> readSizeTypes() throws SQLException {
         String query = "SELECT size_dimension FROM size";
+        return readSingleColumnData(query);
+    }
+    public static List<String> readAllCostumers() throws SQLException {
+        String query = "SELECT customer_name FROM customer";
         return readSingleColumnData(query);
     }
     // Read suppliers from the database

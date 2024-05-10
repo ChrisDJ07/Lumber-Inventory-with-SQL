@@ -24,9 +24,9 @@ INSERT INTO size ( size_dimension) VALUES
 
 -- Sample data for cutlumber table
 INSERT INTO cutlumber (cutlumber_type, unit_price, quantity, size_ID) VALUES
-( 4, 10, 50, 1),
-( 5, 15, 30, 2),
-( 6, 20, 20, 3);
+( 1, 10, 50, 1),
+( 2, 15, 30, 2),
+( 3, 20, 20, 3);
 
 -- Sample data for customer table
 INSERT INTO customer (customer_ID, customer_name, customer_info) VALUES
