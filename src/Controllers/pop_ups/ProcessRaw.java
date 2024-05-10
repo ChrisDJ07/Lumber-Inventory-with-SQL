@@ -4,10 +4,13 @@ import Application.DatabaseManager;
 import Controllers.RawController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -70,6 +73,8 @@ public class ProcessRaw implements Initializable {
             }
             DatabaseManager.processRawLumber(RawController.getSelectedType(), sizeBox.getValue(), Integer.toString(input_quantity), Integer.toString(output_quantity));
             RawController.refreshTables();
+            rawController.setProcessText(DatabaseManager.getLastProcess());
+
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");

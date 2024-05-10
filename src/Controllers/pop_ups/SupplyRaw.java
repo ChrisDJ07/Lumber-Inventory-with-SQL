@@ -69,6 +69,7 @@ public class SupplyRaw implements Initializable {
             String type = typeBox.getValue();
             DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity), Integer.toString(price));
             RawController.refreshTables();
+            rawController.setSupplyText(DatabaseManager.getLastSupply());
 
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {

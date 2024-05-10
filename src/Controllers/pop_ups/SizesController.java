@@ -17,8 +17,6 @@ public class SizesController implements Initializable{
     @FXML
     TableView<String[]> sizeTable = new TableView<>();
     @FXML
-    TableColumn<String[], String> idColumn;
-    @FXML
     TableColumn<String[], String> dimensionColumn;
 
     ObservableList<String[]> dataList;
@@ -29,7 +27,6 @@ public class SizesController implements Initializable{
             dataList = FXCollections.observableArrayList(DatabaseManager.readSizes());
             sizeTable.setItems(dataList);
 
-            idColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             dimensionColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
         } catch (SQLException e) {
             throw new RuntimeException(e);
