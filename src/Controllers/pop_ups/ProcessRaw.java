@@ -19,21 +19,16 @@ public class ProcessRaw implements Initializable {
 
     @FXML
     private TextField input_quantity_field;
-
     @FXML
     private TextField output_quantity_field;
-
     @FXML
     private ChoiceBox<String> sizeBox;
-
     @FXML
     private Label type_label;
-
     @FXML
     private Label quantity_label;
 
     int rawQuantityLimit;
-
     RawController rawController;
 
     public void setProcessController(RawController rawController) {

@@ -3,6 +3,7 @@ package Controllers;
 import Application.DatabaseManager;
 import Application.Main;
 import Controllers.pop_ups.EditController;
+import Controllers.pop_ups.SellController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Modality;
@@ -155,7 +157,7 @@ public class CutController implements Initializable {
     }
 
     @FXML
-    void openDeleteConfirmationWindow(ActionEvent event) throws IOException {
+    void openDeleteConfirmationWindow(ActionEvent event) {
         // TODO: There will be a confirmation window (Soon) so far wala pa...
         // Get the selected item
         String[] selectedItem = cutTable.getSelectionModel().getSelectedItem();
@@ -176,18 +178,42 @@ public class CutController implements Initializable {
 
     @FXML
     void openSellWindow(ActionEvent event) throws IOException{
-        Stage sell = new Stage();
-        sell.initOwner(Main.getStage());
-        sell.initModality(Modality.WINDOW_MODAL);
-        
-        Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/SellCut.fxml"));
-        Scene scene = new Scene(root);
+        String[] rowData = cutTable.getSelectionModel().getSelectedItem();
+        if (rowData[3] == null) {
+            // Show an alert
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Empty Field");
+            alert.setHeaderText(null);
+            alert.setContentText("Unit price is not set. Please fill it before proceeding.");
+            alert.showAndWait();
+        } else {
+            Stage sell = new Stage();
+            sell.initOwner(Main.getStage());
+            sell.initModality(Modality.WINDOW_MODAL);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
-        scene.getStylesheets().add(css);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/SellCut.fxml"));
+            Parent root = loader.load();
+            SellController sellController = loader.getController();
+            sellController.setData(cutTable, rowData);
+            sellController.setCutController(this);
 
-        sell.setTitle("Sell Cut Lumber");
-        sell.setScene(scene);
-        sell.show();
+            Scene scene = new Scene(root);
+
+            String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+            scene.getStylesheets().add(css);
+
+            sell.setTitle("Sell Cut Lumber");
+            sell.setScene(scene);
+            sell.show();
+        }
+    }
+
+    @FXML
+    public void refreshCutTable() throws SQLException {
+        // Clear the existing data
+        dataList.clear();
+        // Reload data from the database
+        dataList.addAll(DatabaseManager.readCutLumbers());
+        cutTable.refresh();
     }
 }
