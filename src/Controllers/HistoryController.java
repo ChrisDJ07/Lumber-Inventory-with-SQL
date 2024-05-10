@@ -1,14 +1,86 @@
 package Controllers;
 
+import Application.DatabaseManager;
 import Application.Main;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class HistoryController {
+public class HistoryController implements Initializable {
+    @FXML
+    TableView<String[]> processTable;
+    @FXML
+    TableColumn<String[], String> processDateColumn;
+    @FXML
+    TableColumn<String[], String> processInputQuantityColumn;
+    @FXML
+    TableColumn<String[], String> processOutputQuantityColumn;
+    @FXML
+    TableColumn<String[], String> processWoodTypeColumn;
+    @FXML
+    TableColumn<String[], String> processSizeColumn;
+    @FXML
+    TableView<String[]> soldTable;
+    @FXML
+    TableColumn<String[], String> soldDateColumn;
+    @FXML
+    TableColumn<String[], String> soldQuantityColumn;
+    @FXML
+    TableColumn<String[], String> soldCustomerColumn;
+    @FXML
+    TableColumn<String[], String> soldLumberColumn;
+
+    ObservableList<String[]> processedList;
+    ObservableList<String[]> soldList;
+
+    // Initialize tables
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            // Initialize table - Processed
+            processedList = FXCollections.observableArrayList(DatabaseManager.readProcessedInfo());
+            processTable.setItems(processedList);
+
+            processDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            processInputQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            processOutputQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            processWoodTypeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            processSizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+
+            // Initialize table - Sold
+            soldList = FXCollections.observableArrayList(DatabaseManager.readSoldTo());
+            soldTable.setItems(soldList);
+
+            soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+
+//            // Add listener to enable/disable edit button based on selection
+//            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//                if (newSelection != null) {
+//                    edit_cut_button.setDisable(false); // Enable the "Edit" button
+//                } else {
+//                    edit_cut_button.setDisable(true); // Disable the "Edit" button
+//                }
+//            });
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     private void goToRaw(ActionEvent event) throws IOException {

@@ -216,6 +216,14 @@ public class DatabaseManager {
                         "ON cutLumber.size_ID = size.size_ID";
         return readData(query, 5);
     }
+    public static List<String[]> readProcessedInfo() throws SQLException {
+        String query = "SELECT * FROM process_info";
+        return readData(query, 5);
+    }
+    public static List<String[]> readSoldTo() throws SQLException {
+        String query = "SELECT * FROM sold_to";
+        return readData(query, 4);
+    }
     // Read sizes from the database
     public static List<String[]> readSizes() throws SQLException {
         String query = "SELECT * FROM size";
