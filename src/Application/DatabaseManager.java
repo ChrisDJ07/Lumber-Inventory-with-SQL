@@ -490,6 +490,16 @@ public class DatabaseManager {
     // Get Last Process in History
     public static String getLastProcess() throws SQLException {
         String[] lastProcess = null;
+        String processText = """
+                    TYPE:   %s
+                    
+                    SIZE:   %s
+                    
+                    INPUT:   %s
+                    
+                    OUTPUT:   %s
+                    
+                    """;
         String query= """
                 SELECT * FROM process_info
                 ORDER BY process_date DESC
@@ -504,26 +514,29 @@ public class DatabaseManager {
                 for (int i = 0; i < 5; i++) {
                     lastProcess[i] = result.getString(i+1);
                 }
+                return String.format(processText, lastProcess[3], lastProcess[4], lastProcess[1], lastProcess[2]);
+            }
+            else{
+                return String.format(processText, "..", "..", "..", "..");
             }
         }
         catch (SQLException e){
             throw new SQLException("Error getting quantity data from the database", e);
         }
-        String processText = """
-                    TYPE:   %s
-                    
-                    SIZE:   %s
-                    
-                    INPUT:   %s
-                    
-                    OUTPUT:   %s
-                    
-                    """;
-        return String.format(processText, lastProcess[3], lastProcess[4], lastProcess[1], lastProcess[2]);
     }
     // Get Last Supply in History
     public static String getLastSupply() throws SQLException {
         String[] lastSupply = null;
+        String supplyText = """
+                    SUPPLIER:   %s
+                    
+                    TYPE:   %s
+                    
+                    QUANTITY:   %s
+                    
+                    PRICE:   %s
+                    
+                    """;
         String query= """
                 SELECT * FROM supplied_by
                 ORDER BY supplied_date DESC
@@ -538,21 +551,14 @@ public class DatabaseManager {
                 for (int i = 0; i < 5; i++) {
                     lastSupply[i] = result.getString(i+1);
                 }
+                return String.format(supplyText, lastSupply[2], lastSupply[3], lastSupply[1], lastSupply[4]);
+            }
+            else{
+                return String.format(supplyText, "..", "..", "..", "..");
             }
         }
         catch (SQLException e){
             throw new SQLException("Error getting quantity data from the database", e);
         }
-        String supplyText = """
-                    SUPPLIER:   %s
-                    
-                    TYPE:   %s
-                    
-                    QUANTITY:   %s
-                    
-                    PRICE:   %s
-                    
-                    """;
-        return String.format(supplyText, lastSupply[2], lastSupply[3], lastSupply[1], lastSupply[4]);
     }
 }
