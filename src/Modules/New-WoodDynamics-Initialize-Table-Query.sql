@@ -55,7 +55,6 @@ CREATE TABLE if NOT EXISTS supplied_by
 	supplied_date			VARCHAR (35) NOT NULL,
 	quantity				INT NOT NULL,
 	price                   INT NOT NULL
-	
 );
 
 CREATE TABLE if NOT EXISTS process_info

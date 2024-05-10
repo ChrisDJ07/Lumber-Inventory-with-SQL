@@ -208,9 +208,12 @@ public class CutController implements Initializable {
         }
     }
 
-    public void updateQuantityColumn(int rowIndex, String newValue) {
-        if (rowIndex >= 0 && rowIndex < dataList.size()) {
-            dataList.get(rowIndex)[4] = newValue;
-        }
+    @FXML
+    public void refreshCutTable() throws SQLException {
+        // Clear the existing data
+        dataList.clear();
+        // Reload data from the database
+        dataList.addAll(DatabaseManager.readCutLumbers());
+        cutTable.refresh();
     }
 }

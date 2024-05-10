@@ -50,16 +50,20 @@ public class SellController implements Initializable  {
     }
 
     public void proceedSelling() throws SQLException {
+        if (clientCB.getValue() == null) {
+            // Show an alert to prompt the user to select a client
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Client Not Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a client.");
+            alert.showAndWait();
+            return; // Exit the method if no client is selected
+        }
+
         DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity);
 
-        // Set the selected row
-        String[] selectedItem = cutTable.getSelectionModel().getSelectedItem();
-        int rowIndex = cutTable.getSelectionModel().getSelectedIndex();
-        if (selectedItem != null && rowIndex != -1) {
-            // Update the 5th column with the new quantity
-            selectedItem[4] = String.valueOf(quantity - unitsSellSpinner.getValue());
-            cutController.updateQuantityColumn(rowIndex, String.valueOf(quantity));
-        }
+        // Refresh the data table
+        cutController.refreshCutTable();
 
         // Close the FXML window
         Stage stage = (Stage) clientCB.getScene().getWindow();
