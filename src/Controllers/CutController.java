@@ -57,6 +57,8 @@ public class CutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            disableRelevantButtons();
+
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
 
@@ -66,12 +68,12 @@ public class CutController implements Initializable {
             priceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
-            // Add listener to enable/disable edit button based on selection
-            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    edit_cut_button.setDisable(false); // Enable the "Edit" button
-                } else {
-                    edit_cut_button.setDisable(true); // Disable the "Edit" button
+            // Add listener to enable/disable relevant buttons based on selection
+            cutTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    sell_button.setDisable(false);
+                    edit_cut_button.setDisable(false);
+                    delete_button.setDisable(false);
                 }
             });
 
@@ -135,7 +137,6 @@ public class CutController implements Initializable {
     void openEditWindow(ActionEvent event) throws IOException{
         // Ensure this method is triggered only when a row is selected
         String[] rowData = cutTable.getSelectionModel().getSelectedItem();
-        if (rowData != null) {
             Stage edit = new Stage();
             edit.initOwner(Main.getStage());
             edit.initModality(Modality.WINDOW_MODAL);
@@ -153,7 +154,6 @@ public class CutController implements Initializable {
             edit.setTitle("Edit Cut Lumber");
             edit.setScene(scene);
             edit.show();
-        }
     }
 
     @FXML
@@ -161,7 +161,6 @@ public class CutController implements Initializable {
         // TODO: There will be a confirmation window (Soon) so far wala pa...
         // Get the selected item
         String[] selectedItem = cutTable.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
             // Remove the selected item from the dataList
             dataList.remove(selectedItem);
             // Optionally, you can also delete the selected item from the database using DatabaseManager
@@ -172,7 +171,7 @@ public class CutController implements Initializable {
                 e.printStackTrace();
             }
             cutTable.refresh(); // Refresh the TableView
-        }
+            disableRelevantButtons();
     }
 
 
@@ -206,6 +205,12 @@ public class CutController implements Initializable {
             sell.setScene(scene);
             sell.show();
         }
+    }
+
+    public void disableRelevantButtons(){
+        sell_button.setDisable(true);
+        edit_cut_button.setDisable(true);
+        delete_button.setDisable(true);
     }
 
     @FXML

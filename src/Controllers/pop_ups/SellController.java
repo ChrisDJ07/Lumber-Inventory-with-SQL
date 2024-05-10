@@ -64,6 +64,7 @@ public class SellController implements Initializable  {
 
         // Refresh the data table
         cutController.refreshCutTable();
+        cutController.disableRelevantButtons();
 
         // Close the FXML window
         Stage stage = (Stage) clientCB.getScene().getWindow();

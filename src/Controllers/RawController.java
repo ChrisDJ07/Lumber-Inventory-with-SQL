@@ -70,8 +70,8 @@ public class RawController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-//            lastProcessText.setText(DatabaseManager.getLastProcess());
-//            lastSupplyText.setText(DatabaseManager.getLastSupply());
+            lastProcessText.setText(DatabaseManager.getLastProcess());
+            lastSupplyText.setText(DatabaseManager.getLastSupply());
             disableRelevantButtons();
 
             rawLumberList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
