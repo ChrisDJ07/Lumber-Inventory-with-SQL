@@ -25,17 +25,17 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button fx:id="process_button" layoutX="337.0" layoutY="509.0" mnemonicParsing="false" onAction="#openProcessWindow" prefHeight="43.0" prefWidth="98.0" text="PROCESS" />
+            <Button fx:id="process_button" layoutX="16.0" layoutY="509.0" mnemonicParsing="false" onAction="#openProcessWindow" prefHeight="40.0" prefWidth="98.0" text="PROCESS" />
             <TextField fx:id="searchField" layoutX="16.0" layoutY="59.0" prefHeight="26.0" prefWidth="206.0" />
             <Label layoutX="16.0" layoutY="5.0" prefHeight="43.0" prefWidth="218.0" text="Raw Lumber">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <Button fx:id="raw_new_button" layoutX="258.0" layoutY="509.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="64.0" text="NEW" />
-            <Button fx:id="delete_button" layoutX="82.0" layoutY="509.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="57.0" text="Delete" />
-            <Button fx:id="raw_edit_button" layoutX="16.0" layoutY="509.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="50.0" text="Edit" />
-            <Button fx:id="supply_button" layoutX="360.0" layoutY="45.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
+            <Button fx:id="raw_new_button" layoutX="248.0" layoutY="509.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="64.0" text="Add" />
+            <Button fx:id="delete_button" layoutX="379.0" layoutY="509.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="57.0" text="Delete" />
+            <Button fx:id="raw_edit_button" layoutX="319.0" layoutY="509.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="50.0" text="Edit" />
+            <Button fx:id="supply_button" layoutX="360.0" layoutY="47.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
             <Button fx:id="clear_search_button" layoutX="230.0" layoutY="59.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
             <Line endX="-100.0" endY="538.2000122070312" layoutX="555.0" layoutY="21.0" startX="-100.0" stroke="#c7c6c6" />
             <Label layoutX="471.0" layoutY="17.0" prefHeight="43.0" prefWidth="124.0" text="Suppliers">

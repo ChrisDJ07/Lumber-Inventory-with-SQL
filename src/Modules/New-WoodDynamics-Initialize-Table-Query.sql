@@ -70,11 +70,9 @@ CREATE TABLE if NOT EXISTS process_info
 CREATE TABLE if NOT EXISTS sold_to
 (
 	sold_date				VARCHAR (35) NOT NULL,
-	sold_quantity			INT NULL,
-	customer_ID				INT NOT NULL,
-	sold_lumber				INT NOT NULL,
-	CONSTRAINT fk_customer_receipt FOREIGN KEY (customer_ID) REFERENCES customer (customer_ID),
-	CONSTRAINT fk_customer_bought FOREIGN KEY (sold_lumber) REFERENCES cutlumber (cutlumber_ID)
+	sold_quantity			INT NOT NULL,
+	customer_name			VARCHAR (50) NOT NULL,
+	sold_lumber				INT NOT NULL
 );
 
 -- Note: You can optionally add PRIMARY KEY or UNIQUE constraints to the columns if needed.
