@@ -16,6 +16,9 @@
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
+            <Label fx:id="lastSupplyText" layoutX="481.0" layoutY="406.0" prefHeight="150.0" prefWidth="124.0" wrapText="true" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="160.0" layoutX="639.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: transparent;" width="140.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="160.0" layoutX="473.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" style="-fx-fill: transparent;" width="140.0" />
             <TableView fx:id="rawTable" layoutX="16.0" layoutY="96.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="420.0">
               <columns>
                 <TableColumn fx:id="typeColumn" prefWidth="440.8001251220703" text="TYPE" />
@@ -43,7 +46,7 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <TableView fx:id="supplierTable" layoutX="471.0" layoutY="96.0" prefHeight="242.0" prefWidth="311.0">
+            <TableView fx:id="supplierTable" layoutX="471.0" layoutY="96.0" prefHeight="221.0" prefWidth="311.0">
               <columns>
                 <TableColumn fx:id="supplierNameColumn" prefWidth="146.400146484375" text="Name" />
                 <TableColumn fx:id="supplierInfoColumn" prefWidth="165.59996337890624" text="Contact Info" />
@@ -51,8 +54,21 @@
             </TableView>
             <TextField fx:id="supplierSearch" layoutX="471.0" layoutY="59.0" prefHeight="26.0" prefWidth="140.0" />
             <Button fx:id="clear_supplier_search_button" layoutX="620.0" layoutY="59.0" mnemonicParsing="false" onAction="#clearSupplierSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
-            <Button fx:id="delete_supplier_button" layoutX="723.0" layoutY="348.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="30.0" prefWidth="58.0" text="Delete" />
-            <Button fx:id="new_supplier_button" layoutX="471.0" layoutY="348.0" mnemonicParsing="false" onAction="#openNewSupplierWindow" prefHeight="30.0" prefWidth="58.0" text="NEW" />
+            <Button fx:id="delete_supplier_button" layoutX="723.0" layoutY="327.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="30.0" prefWidth="58.0" text="Delete" />
+            <Button fx:id="new_supplier_button" layoutX="471.0" layoutY="327.0" mnemonicParsing="false" onAction="#openNewSupplierWindow" prefHeight="30.0" prefWidth="58.0" text="NEW" />
+            <Line endX="-90.20001220703125" endY="538.2000122070312" layoutX="555.0" layoutY="-173.0" startX="233.79998779296875" startY="538.2000122070312" stroke="#c7c6c6" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="473.0" layoutY="375.0" prefHeight="26.0" prefWidth="140.0" style="-fx-border-color: rgb(64, 58, 53);" text="Last Supply" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="639.0" layoutY="375.0" prefHeight="26.0" prefWidth="140.0" style="-fx-border-color: rgb(64, 58, 53);" text="Last Process" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Line endX="233.79998779296875" endY="722.4000244140625" layoutX="392.0" layoutY="-159.0" startX="233.79998779296875" startY="538.2000122070312" stroke="#c7c6c6" />
+            <Label fx:id="lastProcessText" layoutX="647.0" layoutY="405.0" prefHeight="150.0" prefWidth="124.0" wrapText="true" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

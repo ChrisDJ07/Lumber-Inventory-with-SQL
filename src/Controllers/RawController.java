@@ -49,11 +49,12 @@ public class RawController implements Initializable {
     @FXML
     private Button delete_supplier_button;
     @FXML
-    private Button clear_supplier_search_button;
-    @FXML
     private TextField supplierSearch;
+
     @FXML
-    private Button new_supplier_button;
+    private Label lastProcessText;
+    @FXML
+    private Label lastSupplyText;
 
     @FXML
     private TableView<String[]> supplierTable = new TableView<>();
@@ -69,6 +70,8 @@ public class RawController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
+            lastProcessText.setText(DatabaseManager.getLastProcess());
+            lastSupplyText.setText(DatabaseManager.getLastSupply());
             disableRelevantButtons();
 
             rawLumberList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
@@ -308,6 +311,12 @@ public class RawController implements Initializable {
     }
     public static String getSelectedSupplier(){
         return selectedSupplier[0];
+    }
+    public void setProcessText(String text){
+        lastProcessText.setText(text);
+    }
+    public void setSupplyText(String text){
+        lastSupplyText.setText(text);
     }
     public void disableRelevantButtons(){
         process_button.setDisable(true);
