@@ -1,14 +1,43 @@
 package Controllers;
 
+import Application.DatabaseManager;
 import Application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class DashboardController {
+public class DashboardController implements Initializable {
+    @FXML
+    private Label totalCutCount;
+    @FXML
+    private Label totalCutSold;
+    @FXML
+    private Label totalProfit;
+    @FXML
+    private Label totalRawCount;
+    @FXML
+    private Label totalRawProcessed;
+    @FXML
+    private Label totalRawSupplied;
+    @FXML
+    private Label totalSoldRevenue;
+    @FXML
+    private Label totalSpentRaw;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setLabels();
+    }
 
     @FXML
     private void goToRaw(ActionEvent event) throws IOException {
@@ -23,5 +52,32 @@ public class DashboardController {
     @FXML
     private void goToHistory(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/History.fxml"))));
+    }
+
+    public void setLabels(){
+        try {
+            // Raw Lumber
+            totalRawCount.setText(DatabaseManager.getTotals("rawlumber_quantity","rawlumber"));
+            totalRawSupplied.setText(DatabaseManager.getTotals("quantity", "supplied_by"));
+            totalRawProcessed.setText(DatabaseManager.getTotals("process_input_quantity", "process_info"));
+            // Cut Lumber
+            totalCutCount.setText(DatabaseManager.getTotals("quantity", "cutlumber"));
+            totalCutSold.setText(DatabaseManager.getTotals("sold_quantity", "sold_to"));
+            // Finance
+            totalSpentRaw.setText(DatabaseManager.getTotals("price", "supplied_by"));
+            totalSoldRevenue.setText(DatabaseManager.getTotals("price", "sold_to"));
+            int profit = Integer.parseInt(totalSoldRevenue.getText())-Integer.parseInt(totalSpentRaw.getText());
+            totalProfit.setText(Integer.toString(profit));
+        } catch (SQLException e) {
+            alert("Database Error", "There is an error fetching data from the database.");
+        }
+    }
+
+    public void alert(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

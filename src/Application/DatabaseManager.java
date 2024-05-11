@@ -89,14 +89,14 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
-    public static void addSold_To(int ID, int soldQuantity, String costumer_name, String sold_lumber, int currentQuantity) throws SQLException {
+    public static void addSold_To(int ID, int soldQuantity, String costumer_name, String sold_lumber, int currentQuantity, String price) throws SQLException {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String insertToSold_To = String.format("""
-                INSERT INTO sold_to (sold_date, sold_quantity, customer_name, sold_lumber)
-                VALUES(NOW(), %d, '%s', '%s');
-                """, soldQuantity, costumer_name, sold_lumber);
+                INSERT INTO sold_to (sold_date, sold_quantity, price, customer_name, sold_lumber)
+                VALUES(NOW(), %d, %s,'%s', '%s');
+                """, soldQuantity, price, costumer_name, sold_lumber);
             statement.executeUpdate(insertToSold_To);
 
             currentQuantity -= soldQuantity;
@@ -556,6 +556,28 @@ public class DatabaseManager {
             else{
                 return String.format(supplyText, "..", "..", "..", "..");
             }
+        }
+        catch (SQLException e){
+            throw new SQLException("Error getting quantity data from the database", e);
+        }
+    }
+    // Get table totals
+    public static String getTotals(String column, String table) throws SQLException {
+        String query= """
+                SELECT SUM(%s)
+                FROM %s;
+                """;
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(String.format(query, column, table));
+            if (result.next()) {
+                if(result.getString(1) == null){
+                    return "0";
+                }
+                return result.getString(1);
+            }
+            return "0";
         }
         catch (SQLException e){
             throw new SQLException("Error getting quantity data from the database", e);

@@ -27,6 +27,7 @@ public class SellController implements Initializable  {
     private static int ID;
     private static String sold_lumber;
     private static int quantity;
+    private static String price;
 
     // Method to set data received from CutController
     public void setData(TableView<String[]> cutTable, String[] rowData) {
@@ -43,6 +44,7 @@ public class SellController implements Initializable  {
         ID = Integer.parseInt(rowData[0]);
         sold_lumber = rowData[1];
         quantity = Integer.parseInt(rowData[4]);
+        price = rowData[3];
     }
 
     public void setCutController(CutController cutController) {
@@ -60,7 +62,7 @@ public class SellController implements Initializable  {
             return; // Exit the method if no client is selected
         }
 
-        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity);
+        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, price);
 
         // Refresh the data table
         cutController.refreshCutTable();

@@ -70,6 +70,7 @@ CREATE TABLE if NOT EXISTS sold_to
 (
 	sold_date				VARCHAR (35) NOT NULL,
 	sold_quantity			INT NOT NULL,
+	price                   INT NOT NULL,
 	customer_name			VARCHAR (50) NOT NULL,
 	sold_lumber				VARCHAR (39) NOT NULL
 );

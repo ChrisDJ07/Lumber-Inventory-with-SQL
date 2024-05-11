@@ -28,6 +28,8 @@
     -fx-focus-color: transparent;
 }
 
+/*Table styling*/
+/* Default */
 .table-view{
     -fx-background-color: transparent;
     -fx-border-color: linear-gradient(to top right, rgb(64, 58, 53), rgb(105, 95, 87));
