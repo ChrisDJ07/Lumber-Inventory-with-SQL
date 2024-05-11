@@ -561,6 +561,43 @@ public class DatabaseManager {
             throw new SQLException("Error getting quantity data from the database", e);
         }
     }
+    // Get Last Sold in History
+    public static String getLastSold() throws SQLException {
+        String[] lastSupply = null;
+        String supplyText = """
+                    CLIENT:   %s
+                    
+                    TYPE:   %s
+                    
+                    QUANTITY:   %s
+                    
+                    PRICE:   %s
+                    
+                    """;
+        String query= """
+                SELECT * FROM sold_to
+                ORDER BY sold_date DESC
+                LIMIT 1;
+                """;
+        try {
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if (result.next()) {
+                lastSupply = new String[5];
+                for (int i = 0; i < 5; i++) {
+                    lastSupply[i] = result.getString(i+1);
+                }
+                return String.format(supplyText, lastSupply[3], lastSupply[4], lastSupply[1], lastSupply[2]);
+            }
+            else{
+                return String.format(supplyText, "..", "..", "..", "..");
+            }
+        }
+        catch (SQLException e){
+            throw new SQLException("Error getting quantity data from the database", e);
+        }
+    }
     // Get table totals
     public static String getTotals(String column, String table) throws SQLException {
         String query= """

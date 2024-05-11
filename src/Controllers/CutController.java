@@ -13,9 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,9 +22,44 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import javafx.scene.control.TableView;
+public class CutController implements Initializable{
+    // Customer
+    @FXML
+    private TableView<?> customerTable;
+    @FXML
+    private TableColumn<?, ?> customerInfoColumn;
+    @FXML
+    private TableColumn<?, ?> customerNameColumn;
+    @FXML
+    private TextField customerSearch;
+    @FXML
+    private Button delete_customer_button;
+    @FXML
+    private Button new_customer_button;
+    @FXML
+    private Button clear_customer_search_button;
 
-public class CutController implements Initializable {
+    // Cut Lumber
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button clear_search_button;
+    @FXML
+    private ChoiceBox<?> sizeFilter;
+
+    // Navigate
+    @FXML
+    private Button dashBoard_button;
+    @FXML
+    private Button history_button;
+    @FXML
+    private Button raw_button;
+
+    @FXML
+    private Label lastSoldLabel;
+
+
+    // Cut table
     @FXML
     private Button add_cut_button;
     @FXML
@@ -41,8 +74,6 @@ public class CutController implements Initializable {
     @FXML
     TableView<String[]> cutTable = new TableView<>();
     @FXML
-    TableColumn<String[], String> idColumn;
-    @FXML
     TableColumn<String[], String> typeColumn;
     @FXML
     TableColumn<String[], String> sizeColumn;
@@ -52,7 +83,8 @@ public class CutController implements Initializable {
     TableColumn<String[], String> quantityColumn;
 
     ObservableList<String[]> dataList;
-    
+
+
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,7 +94,6 @@ public class CutController implements Initializable {
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
 
-            idColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             sizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             priceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
@@ -81,7 +112,7 @@ public class CutController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    
+
     // Navigate to other scenes
     @FXML
     private void goToRaw(ActionEvent event) throws IOException {
@@ -97,14 +128,14 @@ public class CutController implements Initializable {
     private void goToHistory(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/History.fxml"))));
     }
-    
+
     // Open Pop-up windows
     @FXML
     void openSizes(ActionEvent event) throws IOException {
         Stage sizes = new Stage();
         sizes.initOwner(Main.getStage());
         sizes.initModality(Modality.WINDOW_MODAL);
-        
+
         Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/Sizes.fxml"));
         Scene scene = new Scene(root);
 
@@ -205,6 +236,26 @@ public class CutController implements Initializable {
             sell.setScene(scene);
             sell.show();
         }
+    }
+
+    @FXML
+    void clearCustomerSearch(ActionEvent event) {
+
+    }
+
+    @FXML
+    void deleteCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void openNewCustomerWindow(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clearSearch(ActionEvent event) {
+
     }
 
     public void disableRelevantButtons(){

@@ -34,6 +34,15 @@ public class DashboardController implements Initializable {
     @FXML
     private Label totalSpentRaw;
 
+
+    @FXML
+    private Label lastProcess;
+    @FXML
+    private Label lastSold;
+    @FXML
+    private Label lastSupply;
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setLabels();
@@ -68,6 +77,10 @@ public class DashboardController implements Initializable {
             totalSoldRevenue.setText(DatabaseManager.getTotals("price", "sold_to"));
             int profit = Integer.parseInt(totalSoldRevenue.getText())-Integer.parseInt(totalSpentRaw.getText());
             totalProfit.setText(Integer.toString(profit));
+            // Last history
+            lastProcess.setText(DatabaseManager.getLastProcess());
+            lastSupply.setText(DatabaseManager.getLastSupply());
+            lastSold.setText(DatabaseManager.getLastSold());
         } catch (SQLException e) {
             alert("Database Error", "There is an error fetching data from the database.");
         }
