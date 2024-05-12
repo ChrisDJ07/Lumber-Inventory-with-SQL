@@ -52,9 +52,10 @@
                               <TableView fx:id="soldTable" prefHeight="471.0" prefWidth="726.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TableColumn fx:id="soldDateColumn" prefWidth="75.0" text="Date" />
-                                  <TableColumn fx:id="soldQuantityColumn" prefWidth="75.0" text="Quantity" />
                                     <TableColumn fx:id="soldCustomerColumn" prefWidth="75.0" text="Customer" />
                                     <TableColumn fx:id="soldLumberColumn" prefWidth="75.0" text="Lumber" />
+                                  <TableColumn fx:id="soldQuantityColumn" prefWidth="75.0" text="Quantity" />
+                                    <TableColumn fx:id="soldPriceColumn" prefWidth="75.0" text="Price" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

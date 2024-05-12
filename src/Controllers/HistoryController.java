@@ -41,6 +41,8 @@ public class HistoryController implements Initializable {
     @FXML
     TableColumn<String[], String> soldQuantityColumn;
     @FXML
+    TableColumn<String[], String> soldPriceColumn;
+    @FXML
     TableColumn<String[], String> soldCustomerColumn;
     @FXML
     TableColumn<String[], String> soldLumberColumn;
@@ -91,8 +93,9 @@ public class HistoryController implements Initializable {
 
             soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
-            soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            soldPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
             // Initialize table - Supply
             supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());

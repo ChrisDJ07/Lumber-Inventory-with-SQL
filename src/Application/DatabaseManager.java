@@ -220,7 +220,7 @@ public class DatabaseManager {
     }
     public static List<String[]> readSoldTo() throws SQLException {
         String query = "SELECT * FROM sold_to";
-        return readData(query, 4);
+        return readData(query, 5);
     }
     public static List<String[]> readSuppliedBy() throws SQLException {
         String query = "SELECT * FROM supplied_by";
