@@ -187,7 +187,7 @@ public class DatabaseManager {
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
         String query = "SELECT * FROM application_users";
-        return readData(query, 4);
+        return readData(query, 3);
     }
     // Read customers from the database
     public static List<String[]> readCustomers() throws SQLException {
