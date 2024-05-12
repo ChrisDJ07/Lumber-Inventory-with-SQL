@@ -187,7 +187,7 @@ public class DatabaseManager {
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
         String query = "SELECT * FROM application_users";
-        return readData(query, 2);
+        return readData(query, 4);
     }
     // Read customers from the database
     public static List<String[]> readCustomers() throws SQLException {
@@ -293,6 +293,13 @@ public class DatabaseManager {
         String query = "SELECT supplier_ID\n" +
                 "FROM supplier\n" +
                 "WHERE supplier_name = \""+name+"\";";
+        return getCell_Janiola(query);
+    }
+    // Get the role of current user from the database
+    public static String getCurrentUserRole(String name) throws SQLException {
+        String query = "SELECT employee_role\n" +
+                "FROM application_users\n" +
+                "WHERE employee_userName = \""+name+"\";";
         return getCell_Janiola(query);
     }
 

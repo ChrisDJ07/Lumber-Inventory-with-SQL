@@ -6,6 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
 /**
  * This is the main class for the Application
  * @author Christian Dave J. Janiola
@@ -17,25 +21,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
     // Create a separate stage for the dashboard, gets rid of the centering issue
     private static Stage inventoryStage;
+    private static String user;
+    private static String role;
+    private static Stage logInStage;
 
     public static void main(String[] args) {
         launch(args);
     }
     @Override
     public void start(Stage stage) throws Exception {
-        // Design Files
-        String css = this.getClass().getResource("/CSS/Application.css").toExternalForm();
-
-        // Load the login form
-        Parent loginRoot = FXMLLoader.load(getClass().getResource("/Views/pop_ups/LoginForm.fxml"));
-        Scene loginScene = new Scene(loginRoot);
-        loginScene.getStylesheets().add(css);
-
-        stage.setResizable(false);
-        stage.setTitle("Login - Lumber Inventory");
-        stage.setScene(loginScene);
-        stage.getIcons().add(new Image("/icon.png"));
-        stage.show();
+        logInStage = stage;
+        logIn();
     }
 
     // Method to show the dashboard after successful login
@@ -44,6 +40,22 @@ public class Main extends Application {
         inventoryStage.setResizable(false);
         // Load the dashboard
         loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"))));
+    }
+
+    public static void logIn() throws IOException {
+        // Design Files
+        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+
+        // Load the login form
+        Parent loginRoot = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/LoginForm.fxml"));
+        Scene loginScene = new Scene(loginRoot);
+        loginScene.getStylesheets().add(css);
+
+        logInStage.setResizable(false);
+        logInStage.setTitle("Login - Lumber Inventory");
+        logInStage.setScene(loginScene);
+        logInStage.getIcons().add(new Image("/icon.png"));
+        logInStage.show();
     }
 
     // Method to load scenes
@@ -59,5 +71,18 @@ public class Main extends Application {
     // Returns the Stage instance of Main
     public static Stage getStage(){
         return inventoryStage;
+    }
+
+    public static void setUser(String name) throws SQLException {
+        user = name;
+        role = DatabaseManager.getCurrentUserRole(name);
+    }
+
+    public static String getUser(){
+        return user;
+    }
+
+    public static String getUserRole(){
+        return role;
     }
 }

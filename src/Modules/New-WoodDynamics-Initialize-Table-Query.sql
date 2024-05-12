@@ -7,7 +7,8 @@ CREATE TABLE if NOT EXISTS application_users
 (
     employee_ID             INT PRIMARY KEY AUTO_INCREMENT,
 	employee_userName		CHAR (29) NOT NULL UNIQUE,
-	employee_Password		VARCHAR (199) NOT NULL
+	employee_Password		VARCHAR (199) NOT NULL,
+	employee_Role           VARCHAR (35) NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS supplier
@@ -50,10 +51,10 @@ CREATE TABLE if NOT EXISTS customer
  
 CREATE TABLE if NOT EXISTS supplied_by
 (
-	supplier_ID				VARCHAR (35) NOT NULL,
+    supplied_date			VARCHAR (35) NOT NULL,
+    quantity				INT NOT NULL,
+	supplier				VARCHAR (35) NOT NULL,
 	supplied_lumber		    VARCHAR (35) NOT NULL,
-	supplied_date			VARCHAR (35) NOT NULL,
-	quantity				INT NOT NULL,
 	price                   INT NOT NULL
 );
 
