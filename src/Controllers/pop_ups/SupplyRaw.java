@@ -53,6 +53,7 @@ public class SupplyRaw implements Initializable {
         try {
             int quantity = Integer.parseInt(unitField.getText());
             int price = Integer.parseInt(priceField.getText());
+
             if (quantity == 0){
                 throw new RuntimeException("Units supplied cannot be zero.");
             }
@@ -67,7 +68,7 @@ public class SupplyRaw implements Initializable {
             }
             String supplier = supplierBox.getValue();
             String type = typeBox.getValue();
-            DatabaseManager.supplyRawLumber(supplier, type, Integer.toString(quantity), Integer.toString(price));
+            DatabaseManager.supplyRawLumber(supplier, type, quantity, price);
             RawController.refreshTables();
             rawController.setSupplyText(DatabaseManager.getLastSupply());
 
@@ -75,6 +76,7 @@ public class SupplyRaw implements Initializable {
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter an integer for units and/or price.");
         } catch (RuntimeException e){
+            System.out.println(e.getMessage());
             alert("Input error", e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);

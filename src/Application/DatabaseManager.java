@@ -17,9 +17,9 @@ public class DatabaseManager {
 
 
     // JDBC URL, username, and password
-    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/lumberstore";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -43,8 +43,6 @@ public class DatabaseManager {
 
 
     /**
-     * Create functions
-     * Create functions
      * Create functions
      **/
     public static void addCutLumber_Janiola(String type, String unit_price, String quantity, String size) throws SQLException {
@@ -116,8 +114,6 @@ public class DatabaseManager {
 
 
     /**
-     * Read functions
-     * Read functions
      * Read functions
      **/
     // Read table data from the database and store it in lists
@@ -191,11 +187,12 @@ public class DatabaseManager {
     // Read application_users from the database
     public static List<String[]> readUsers() throws SQLException {
         String query = "SELECT * FROM application_users";
-        return readData(query, 4);
+        return readData(query, 3);
     }
     // Read customers from the database
     public static List<String[]> readCustomers() throws SQLException {
-        return readData("customer", 3);
+        String query = "SELECT * FROM customers";
+        return readData(query, 3);
     }
     // Read raw lumbers from the database
     public static List<String[]> readRawLumbers() throws SQLException {
@@ -208,12 +205,13 @@ public class DatabaseManager {
     }
     // Read cut lumbers from the database
     public static List<String[]> readCutLumbers() throws SQLException {
-        String query =  "SELECT cutLumber_ID, rawLumber_type, size_dimension, unit_price, quantity\n" +
-                        "FROM cutLumber\n" +
-                        "LEFT JOIN rawLumber\n" +
-                        "ON cutLumber.cutLumber_type = rawLumber.rawLumber_ID\n" +
-                        "LEFT JOIN size\n" +
-                        "ON cutLumber.size_ID = size.size_ID";
+        String query = """
+                SELECT cutLumber_ID, rawLumber_type, size_dimension, unit_price, quantity
+                FROM cutLumber
+                LEFT JOIN rawLumber
+                ON cutLumber.cutLumber_type = rawLumber.rawLumber_ID
+                LEFT JOIN size
+                ON cutLumber.size_ID = size.size_ID""";
         return readData(query, 5);
     }
     public static List<String[]> readProcessedInfo() throws SQLException {
@@ -222,7 +220,11 @@ public class DatabaseManager {
     }
     public static List<String[]> readSoldTo() throws SQLException {
         String query = "SELECT * FROM sold_to";
-        return readData(query, 4);
+        return readData(query, 5);
+    }
+    public static List<String[]> readSuppliedBy() throws SQLException {
+        String query = "SELECT * FROM supplied_by";
+        return readData(query, 5);
     }
     // Read sizes from the database
     public static List<String[]> readSizes() throws SQLException {
@@ -234,12 +236,12 @@ public class DatabaseManager {
         return readSingleColumnData(query);
     }
     public static List<String> readAllCostumers() throws SQLException {
-        String query = "SELECT customer_name FROM customer";
+        String query = "SELECT customer_name FROM customers";
         return readSingleColumnData(query);
     }
     // Read suppliers from the database
     public static List<String[]> readSuppliers() throws SQLException {
-        String query = "SELECT supplier_name, supplier_info\n" + "FROM supplier;";
+        String query = "SELECT supplier_name, supplier_info\n" + "FROM suppliers;";
         return readData(query, 2);
     }
 
@@ -260,7 +262,7 @@ public class DatabaseManager {
         return sizeList.toArray(new String[0]);
     }
     public static String[] getSupplierList() throws SQLException {
-        String query = "SELECT supplier_name\n" + "FROM supplier;";
+        String query = "SELECT supplier_name\n" + "FROM suppliers;";
         supplierList =  getColumn_Janiola(query);
         return supplierList.toArray(new String[0]);
     }
@@ -290,7 +292,7 @@ public class DatabaseManager {
     }
     public static String getSupplierID_Janiola(String name) throws SQLException{
         String query = "SELECT supplier_ID\n" +
-                "FROM supplier\n" +
+                "FROM suppliers\n" +
                 "WHERE supplier_name = \""+name+"\";";
         return getCell_Janiola(query);
     }
@@ -366,7 +368,7 @@ public class DatabaseManager {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String query = """
-                    DELETE FROM supplier
+                    DELETE FROM suppliers
                     WHERE supplier_ID = %s;
                 """;
             statement.executeUpdate(String.format(query, getSupplierID_Janiola(name)));
@@ -414,22 +416,22 @@ public class DatabaseManager {
     }
 
     // Process Raw Lumber
-    public static void supplyRawLumber(String supplier, String type, String input_quantity, String price) throws SQLException {
+    public static void supplyRawLumber(String supplier, String type, int input_quantity, int price) throws SQLException {
         try{
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String addToRaw = """
                     UPDATE rawlumber
-                    SET rawlumber_quantity = rawlumber_quantity + %s
+                    SET rawlumber_quantity = rawlumber_quantity + %d
                     WHERE rawlumber_ID = %s;
                 """;
             statement.executeUpdate(String.format(addToRaw, input_quantity, getRawID_Janiola(type)));
 
             String recordSupplyInfo = """
-                    INSERT INTO supplied_by
-                    VALUES (NOW(), %s, "%s", "%s", %s);
-                    """;
-            statement.executeUpdate(String.format(recordSupplyInfo, input_quantity, supplier, type, price));
+                INSERT INTO supplied_by (supplier_name, supplied_lumber, supplied_date, quantity, price)
+                VALUES ('%s', '%s', NOW(), %d, %d);
+                """;
+            statement.executeUpdate(String.format(recordSupplyInfo, supplier, type, input_quantity, price));
         }
         catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);

@@ -41,12 +41,27 @@ public class HistoryController implements Initializable {
     @FXML
     TableColumn<String[], String> soldQuantityColumn;
     @FXML
+    TableColumn<String[], String> soldPriceColumn;
+    @FXML
     TableColumn<String[], String> soldCustomerColumn;
     @FXML
     TableColumn<String[], String> soldLumberColumn;
+    @FXML
+    TableView<String[]> supplyTable;
+    @FXML
+    TableColumn<String[], String> supplyDateColumn;
+    @FXML
+    TableColumn<String[], String> supplySupplierColumn;
+    @FXML
+    TableColumn<String[], String> supplyLumberColumn;
+    @FXML
+    TableColumn<String[], String> supplyQuantityColumn;
+    @FXML
+    TableColumn<String[], String> supplyPriceColumn;
 
     ObservableList<String[]> processedList;
     ObservableList<String[]> soldList;
+    ObservableList<String[]> supplyList;
 
     // User Account
     @FXML
@@ -78,17 +93,19 @@ public class HistoryController implements Initializable {
 
             soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
-            soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            soldPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
-//            // Add listener to enable/disable edit button based on selection
-//            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//                if (newSelection != null) {
-//                    edit_cut_button.setDisable(false); // Enable the "Edit" button
-//                } else {
-//                    edit_cut_button.setDisable(true); // Disable the "Edit" button
-//                }
-//            });
+            // Initialize table - Supply
+            supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
+            supplyTable.setItems(supplyList);
+
+            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

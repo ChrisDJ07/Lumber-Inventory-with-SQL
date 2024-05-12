@@ -5,13 +5,13 @@ USE WoodDynamics;
 
 CREATE TABLE if NOT EXISTS application_users
 (
-    employee_ID             INT PRIMARY KEY AUTO_INCREMENT,
+   employee_ID             INT PRIMARY KEY AUTO_INCREMENT,
 	employee_userName		CHAR (29) NOT NULL UNIQUE,
-	employee_Password		VARCHAR (199) NOT NULL,
-	employee_Role           VARCHAR (35) NOT NULL
+	employee_Password		VARCHAR (199) NOT NULL
+	# employee_Role           VARCHAR (35) NOT NULL
 );
 
-CREATE TABLE if NOT EXISTS supplier
+CREATE TABLE if NOT EXISTS suppliers
 (
 	supplier_ID 			INT PRIMARY KEY AUTO_INCREMENT,
 	supplier_name			VARCHAR (50) NOT NULL UNIQUE,
@@ -42,7 +42,7 @@ CREATE TABLE if NOT EXISTS cutlumber
 	CONSTRAINT fk_description_of_size FOREIGN KEY (size_ID) REFERENCES size (size_ID)
 );
 
-CREATE TABLE if NOT EXISTS customer
+CREATE TABLE if NOT EXISTS customers
 (
 	customer_ID				INT PRIMARY KEY AUTO_INCREMENT,
 	customer_name			VARCHAR (50) NOT NULL UNIQUE,
@@ -51,10 +51,10 @@ CREATE TABLE if NOT EXISTS customer
  
 CREATE TABLE if NOT EXISTS supplied_by
 (
-    supplied_date			VARCHAR (35) NOT NULL,
-    quantity				INT NOT NULL,
-	supplier				VARCHAR (35) NOT NULL,
+	supplier_name			VARCHAR (35) NOT NULL,
 	supplied_lumber		    VARCHAR (35) NOT NULL,
+	supplied_date			VARCHAR (35) NOT NULL,
+	quantity				INT NOT NULL,
 	price                   INT NOT NULL
 );
 

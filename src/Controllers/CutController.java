@@ -25,11 +25,11 @@ import java.util.ResourceBundle;
 public class CutController implements Initializable{
     // Customer
     @FXML
-    private TableView<?> customerTable;
+    private TableView<String[]> customerTable;
     @FXML
-    private TableColumn<?, ?> customerInfoColumn;
+    private TableColumn<String[], String> customerInfoColumn;
     @FXML
-    private TableColumn<?, ?> customerNameColumn;
+    private TableColumn<String[], String> customerNameColumn;
     @FXML
     private TextField customerSearch;
     @FXML
@@ -54,7 +54,6 @@ public class CutController implements Initializable{
     private Button history_button;
     @FXML
     private Button raw_button;
-
     @FXML
     private Label lastSoldLabel;
 
@@ -83,6 +82,7 @@ public class CutController implements Initializable{
     TableColumn<String[], String> quantityColumn;
 
     ObservableList<String[]> dataList;
+    ObservableList<String[]> customerList;
 
     // User Account
     @FXML
@@ -100,6 +100,7 @@ public class CutController implements Initializable{
         try {
             disableRelevantButtons();
 
+            // Initialize table - Cut Lumber
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
 
@@ -107,6 +108,13 @@ public class CutController implements Initializable{
             sizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             priceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+
+            // Initialize table - Customer
+            customerList = FXCollections.observableArrayList(DatabaseManager.readCustomers());
+            customerTable.setItems(customerList);
+
+            customerNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            customerInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
 
             // Add listener to enable/disable relevant buttons based on selection
             cutTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
