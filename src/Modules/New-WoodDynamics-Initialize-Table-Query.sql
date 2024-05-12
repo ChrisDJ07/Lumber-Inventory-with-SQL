@@ -51,10 +51,10 @@ CREATE TABLE if NOT EXISTS customer
  
 CREATE TABLE if NOT EXISTS supplied_by
 (
-	supplier_ID				VARCHAR (35) NOT NULL,
+    supplied_date			VARCHAR (35) NOT NULL,
+    quantity				INT NOT NULL,
+	supplier				VARCHAR (35) NOT NULL,
 	supplied_lumber		    VARCHAR (35) NOT NULL,
-	supplied_date			VARCHAR (35) NOT NULL,
-	quantity				INT NOT NULL,
 	price                   INT NOT NULL
 );
 
