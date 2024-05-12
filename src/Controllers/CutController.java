@@ -84,10 +84,19 @@ public class CutController implements Initializable{
 
     ObservableList<String[]> dataList;
 
+    // User Account
+    @FXML
+    private Button logout_button;
+    @FXML
+    private Label userNameLabel;
+    @FXML
+    private Label userRoleLabel;
 
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        userNameLabel.setText(Main.getUser());
+        userRoleLabel.setText(Main.getUserRole());
         try {
             disableRelevantButtons();
 
@@ -271,5 +280,11 @@ public class CutController implements Initializable{
         // Reload data from the database
         dataList.addAll(DatabaseManager.readCutLumbers());
         cutTable.refresh();
+    }
+
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Main.logIn();
+        ((Stage) userRoleLabel.getScene().getWindow()).close();
     }
 }

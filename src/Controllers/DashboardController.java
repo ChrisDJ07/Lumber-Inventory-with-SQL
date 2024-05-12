@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +35,6 @@ public class DashboardController implements Initializable {
     @FXML
     private Label totalSpentRaw;
 
-
     @FXML
     private Label lastProcess;
     @FXML
@@ -42,9 +42,20 @@ public class DashboardController implements Initializable {
     @FXML
     private Label lastSupply;
 
+    // User Account
+    @FXML
+    private Button logout_button;
+    @FXML
+    private Label userNameLabel;
+    @FXML
+    private Label userRoleLabel;
+
+    private static String userRole = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        userNameLabel.setText(Main.getUser());
+        userRoleLabel.setText(Main.getUserRole());
         setLabels();
     }
 
@@ -84,6 +95,12 @@ public class DashboardController implements Initializable {
         } catch (SQLException e) {
             alert("Database Error", "There is an error fetching data from the database.");
         }
+    }
+
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Main.logIn();
+        ((Stage) userRoleLabel.getScene().getWindow()).close();
     }
 
     public void alert(String title, String content){

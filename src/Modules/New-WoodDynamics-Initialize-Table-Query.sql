@@ -7,7 +7,8 @@ CREATE TABLE if NOT EXISTS application_users
 (
     employee_ID             INT PRIMARY KEY AUTO_INCREMENT,
 	employee_userName		CHAR (29) NOT NULL UNIQUE,
-	employee_Password		VARCHAR (199) NOT NULL
+	employee_Password		VARCHAR (199) NOT NULL,
+	employee_Role           VARCHAR (35) NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS supplier

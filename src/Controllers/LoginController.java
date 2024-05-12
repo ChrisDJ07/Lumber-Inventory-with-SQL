@@ -4,6 +4,7 @@ import Application.DatabaseManager;
 import Application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,29 +25,31 @@ public class LoginController {
         String password = passwordTF.getText();
 
         /* FOR TESTING */
-        try {
-            Main.showDashboard();
-            ((Stage) usernameTF.getScene().getWindow()).close();
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
+//        try {
+//            Main.showDashboard();
+//            ((Stage) usernameTF.getScene().getWindow()).close();
+//        } catch (Exception error) {
+//            error.printStackTrace();
+//        }
 
         /* THIS IS THE FINAL LOGIN CHECKER */
-//            // Validate credentials (replace this with your actual validation logic)
-//        if (isValidCredentials(username, password)) {
-//            try {
-//                Main.showDashboard();
-//            } catch (Exception error) {
-//                error.printStackTrace();
-//            }
-//        } else {
-//            // Show error message if credentials are invalid
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Login Failed");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Invalid username or password.");
-//            alert.showAndWait();
-//        }
+            // Validate credentials (replace this with your actual validation logic)
+        if (isValidCredentials(username, password)) {
+            try {
+                Main.setUser(username);
+                Main.showDashboard();
+                ((Stage) usernameTF.getScene().getWindow()).close();
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        } else {
+            // Show error message if credentials are invalid
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid username or password.");
+            alert.showAndWait();
+        }
 }
 
     @FXML
@@ -59,7 +62,7 @@ public class LoginController {
         List<String[]> usersList;
         try {
             // Retrieve users list from the database
-            usersList = (List<String[]>) DatabaseManager.readUsers();
+            usersList = DatabaseManager.readUsers();
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false; // Unable to fetch user data, authentication failed
@@ -67,8 +70,8 @@ public class LoginController {
 
         // Check if the provided username and password match any user in the list
         for (String[] userData : usersList) {
-            String userID = userData[0];
-            String storedPassword = userData[1];
+            String userID = userData[1];
+            String storedPassword = userData[2];
             if (userID.equals(username) && storedPassword.equals(password)) {
                 return true; // Authentication successful
             }

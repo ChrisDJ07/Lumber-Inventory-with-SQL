@@ -65,10 +65,20 @@ public class RawController implements Initializable {
     static ObservableList<String[]> supplierList;
     static String[] selectedSupplier;
 
+    // User Account
+    @FXML
+    private Button logout_button;
+    @FXML
+    private Label userNameLabel;
+    @FXML
+    private Label userRoleLabel;
+
 
     /* Initialize tables */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        userNameLabel.setText(Main.getUser());
+        userRoleLabel.setText(Main.getUserRole());
         try {
             lastProcessText.setText(DatabaseManager.getLastProcess());
             lastSupplyText.setText(DatabaseManager.getLastSupply());
@@ -331,5 +341,11 @@ public class RawController implements Initializable {
     @FXML
     void clearSupplierSearch(ActionEvent event) {
         supplierSearch.clear();
+    }
+
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Main.logIn();
+        ((Stage) userRoleLabel.getScene().getWindow()).close();
     }
 }

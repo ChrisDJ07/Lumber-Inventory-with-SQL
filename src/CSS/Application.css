@@ -96,3 +96,16 @@
     -fx-text-fill: rgb(64, 58, 53);
 }
 
+// Log-out button
+#logout_button{
+    -fx-background-color: rgb(64, 58, 53);
+    -fx-font-family:"Railway";
+    -fx-text-fill: white;
+    -fx-border-color:white;
+    -fx-border-width: 1px;
+}
+#logout_button: hover{
+    -fx-background-color: white;
+    -fx-font-family:"Railway";
+    -fx-text-fill: rgb(64, 58, 53);
+}
