@@ -19,7 +19,7 @@ public class DatabaseManager {
     // JDBC URL, username, and password
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -322,6 +322,21 @@ public class DatabaseManager {
                     WHERE rawlumber_ID = %s;
                 """;
             statement.executeUpdate(String.format(query, quantity, getRawID_Janiola(type)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void updateCutLumber(String ID, String type, String unit_price, int quantity, String size) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    UPDATE cutlumber
+                    SET cutlumber_type = %d, cutlumber_unit_price = %d, cutlumber_quantity = %d, cutlumber_size = %d
+                    WHERE cutlumber_ID = %d;
+                """;
+            statement.executeUpdate(String.format(query, Integer.parseInt(getRawID_Janiola(type)), Integer.parseInt(unit_price), quantity, Integer.parseInt(getSizeID_Janiola(size)), Integer.parseInt(ID)));
         }
         catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);

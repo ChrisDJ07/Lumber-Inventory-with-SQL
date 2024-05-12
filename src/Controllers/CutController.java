@@ -2,7 +2,7 @@ package Controllers;
 
 import Application.DatabaseManager;
 import Application.Main;
-import Controllers.pop_ups.EditController;
+import Controllers.pop_ups.EditCut;
 import Controllers.pop_ups.SellController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -196,8 +196,9 @@ public class CutController implements Initializable{
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditCut.fxml"));
             Parent root = loader.load();
-            EditController editController = loader.getController();
-            editController.setData(rowData);
+            EditCut editCut = loader.getController();
+            editCut.setData(cutTable, rowData);
+            editCut.setCutController(this);
 
             Scene scene = new Scene(root);
 
