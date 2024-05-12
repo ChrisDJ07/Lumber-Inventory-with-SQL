@@ -124,6 +124,11 @@ public class CutController implements Initializable{
                     delete_button.setDisable(false);
                 }
             });
+            customerTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    delete_customer_button.setDisable(false);
+                }
+            });
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -279,6 +284,7 @@ public class CutController implements Initializable{
         sell_button.setDisable(true);
         edit_cut_button.setDisable(true);
         delete_button.setDisable(true);
+        delete_customer_button.setDisable(true);
     }
 
     @FXML

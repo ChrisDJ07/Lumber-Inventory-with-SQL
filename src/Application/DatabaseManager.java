@@ -19,7 +19,7 @@ public class DatabaseManager {
     // JDBC URL, username, and password
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -50,7 +50,7 @@ public class DatabaseManager {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String query = """
-                    INSERT INTO cutlumber (cutlumber_type, unit_price, quantity, size_ID)
+                    INSERT INTO cutlumber (cutlumber_type, cutlumber_unit_price, cutlumber_quantity, cutlumber_size)
                     VALUES (%s, %s, %s, %s);
                 """;
             statement.executeUpdate(String.format(query, getRawID_Janiola(type), unit_price, quantity, getSizeID_Janiola(size)));
@@ -78,7 +78,7 @@ public class DatabaseManager {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String query = String.format("""
-                INSERT INTO supplier (supplier_name, supplier_info)
+                INSERT INTO suppliers (supplier_name, supplier_info)
                 VALUES("%s","%s");
                 """, name, info);
             statement.executeUpdate(query);
@@ -92,7 +92,7 @@ public class DatabaseManager {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String insertToSold_To = String.format("""
-                INSERT INTO sold_to (sold_date, sold_quantity, price, customer_name, sold_lumber)
+                INSERT INTO sold_to (sold_date, sold_quantity, price, sold_to_customer, sold_lumber)
                 VALUES(NOW(), %d, %s,'%s', '%s');
                 """, soldQuantity, price, costumer_name, sold_lumber);
             statement.executeUpdate(insertToSold_To);
@@ -206,12 +206,12 @@ public class DatabaseManager {
     // Read cut lumbers from the database
     public static List<String[]> readCutLumbers() throws SQLException {
         String query = """
-                SELECT cutLumber_ID, rawLumber_type, size_dimension, unit_price, quantity
+                SELECT cutLumber_ID, rawLumber_type, size_dimension, cutlumber_unit_price, cutlumber_quantity
                 FROM cutLumber
                 LEFT JOIN rawLumber
                 ON cutLumber.cutLumber_type = rawLumber.rawLumber_ID
                 LEFT JOIN size
-                ON cutLumber.size_ID = size.size_ID""";
+                ON cutLumber.cutlumber_size = size.size_ID""";
         return readData(query, 5);
     }
     public static List<String[]> readProcessedInfo() throws SQLException {
@@ -280,7 +280,7 @@ public class DatabaseManager {
         String query = """
                 SELECT cutlumber_ID
                 FROM cutlumber
-                WHERE cutlumber_type = %s AND size_ID = %s;
+                WHERE cutlumber_type = %s AND cutlumber_size = %s;
                 """;
         return getCell_Janiola(String.format(query, getRawID_Janiola(type), getSizeID_Janiola(size)));
     }
@@ -396,7 +396,7 @@ public class DatabaseManager {
                 System.out.println("Cut lumber exist");
                 String addToCut = """
                         UPDATE cutlumber
-                        SET quantity = quantity + %s
+                        SET cutlumber_quantity = cutlumber_quantity + %s
                         WHERE cutlumber_ID = %s;
                         """;
                 statement.executeUpdate(String.format(addToCut, output_quantity, getCutID_Janiola(type,size)));
@@ -428,10 +428,10 @@ public class DatabaseManager {
             statement.executeUpdate(String.format(addToRaw, input_quantity, getRawID_Janiola(type)));
 
             String recordSupplyInfo = """
-                INSERT INTO supplied_by (supplier_name, supplied_lumber, supplied_date, quantity, price)
-                VALUES ('%s', '%s', NOW(), %d, %d);
+                INSERT INTO supplied_by
+                VALUES (NOW(), %d, '%s', '%s',  %d);
                 """;
-            statement.executeUpdate(String.format(recordSupplyInfo, supplier, type, input_quantity, price));
+            statement.executeUpdate(String.format(recordSupplyInfo, input_quantity, supplier, type, price));
         }
         catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);
@@ -481,7 +481,7 @@ public class DatabaseManager {
     public static int checkCutDuplicate_Janiola(String type, String size) throws SQLException {
         String status = "";
         String query= """
-                SELECT EXISTS (SELECT 1 FROM cutlumber WHERE cutlumber_type = %s AND size_ID = %s);
+                SELECT EXISTS (SELECT 1 FROM cutlumber WHERE cutlumber_type = %s AND cutlumber_size = %s);
                 """;
         try {
             Connection con = getConnection();

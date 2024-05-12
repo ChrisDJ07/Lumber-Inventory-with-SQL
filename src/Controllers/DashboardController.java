@@ -78,14 +78,14 @@ public class DashboardController implements Initializable {
         try {
             // Raw Lumber
             totalRawCount.setText(DatabaseManager.getTotals("rawlumber_quantity","rawlumber"));
-            totalRawSupplied.setText(DatabaseManager.getTotals("quantity", "supplied_by"));
+            totalRawSupplied.setText(DatabaseManager.getTotals("supplied_quantity", "supplied_by"));
             totalRawProcessed.setText(DatabaseManager.getTotals("process_input_quantity", "process_info"));
             // Cut Lumber
-            totalCutCount.setText(DatabaseManager.getTotals("quantity", "cutlumber"));
+            totalCutCount.setText(DatabaseManager.getTotals("cutlumber_quantity", "cutlumber"));
             totalCutSold.setText(DatabaseManager.getTotals("sold_quantity", "sold_to"));
             // Finance
-            totalSpentRaw.setText(DatabaseManager.getTotals("price", "supplied_by"));
-            totalSoldRevenue.setText(DatabaseManager.getTotals("price", "sold_to"));
+            totalSpentRaw.setText(DatabaseManager.getTotals("supplied_price", "supplied_by"));
+            totalSoldRevenue.setText(DatabaseManager.getTotals("sold_price", "sold_to"));
             int profit = Integer.parseInt(totalSoldRevenue.getText())-Integer.parseInt(totalSpentRaw.getText());
             totalProfit.setText(Integer.toString(profit));
             // Last history

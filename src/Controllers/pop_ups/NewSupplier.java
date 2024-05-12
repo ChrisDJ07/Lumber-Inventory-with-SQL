@@ -29,11 +29,11 @@ public class NewSupplier {
         try{
             String supplierName = nameField.getText();
             String supplierContactInfo = supplier_info_field.getText();
-            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_info", supplierContactInfo.trim()) == 1
+            if(DatabaseManager.checkDuplicate_Janiola("suppliers", "supplier_info", supplierContactInfo.trim()) == 1
                     && !supplierContactInfo.trim().isEmpty()){
                 throw new RuntimeException("Supplier info already exists, please enter a different one.");
             }
-            if(DatabaseManager.checkDuplicate_Janiola("supplier", "supplier_name", supplierName.trim()) == 1){
+            if(DatabaseManager.checkDuplicate_Janiola("suppliers", "supplier_name", supplierName.trim()) == 1){
                 throw new RuntimeException("Supplier name already exists, please enter a different one.");
             }
             if(supplierName.trim().isEmpty()){

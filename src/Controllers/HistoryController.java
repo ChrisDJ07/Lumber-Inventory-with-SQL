@@ -93,7 +93,7 @@ public class HistoryController implements Initializable {
 
             soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            soldPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            soldPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
@@ -101,10 +101,10 @@ public class HistoryController implements Initializable {
             supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
             supplyTable.setItems(supplyList);
 
-            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
-            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
-            supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
         } catch (SQLException e) {

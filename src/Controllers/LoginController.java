@@ -25,31 +25,31 @@ public class LoginController {
         String password = passwordTF.getText();
 
         /* FOR TESTING */
-        try {
-            Main.showDashboard();
-            ((Stage) usernameTF.getScene().getWindow()).close();
-        } catch (Exception error) {
-            error.printStackTrace();
-        }
+//        try {
+//            Main.showDashboard();
+//            ((Stage) usernameTF.getScene().getWindow()).close();
+//        } catch (Exception error) {
+//            error.printStackTrace();
+//        }
 
         /* THIS IS THE FINAL LOGIN CHECKER */
             // Validate credentials (replace this with your actual validation logic)
-//        if (isValidCredentials(username, password)) {
-//            try {
-//                Main.setUser(username);
-//                Main.showDashboard();
-//                ((Stage) usernameTF.getScene().getWindow()).close();
-//            } catch (Exception error) {
-//                error.printStackTrace();
-//            }
-//        } else {
-//            // Show error message if credentials are invalid
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Login Failed");
-//            alert.setHeaderText(null);
-//            alert.setContentText("Invalid username or password.");
-//            alert.showAndWait();
-//        }
+        if (isValidCredentials(username, password)) {
+            try {
+                Main.setUser(username);
+                Main.showDashboard();
+                ((Stage) usernameTF.getScene().getWindow()).close();
+            } catch (Exception error) {
+                error.printStackTrace();
+            }
+        } else {
+            // Show error message if credentials are invalid
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid username or password.");
+            alert.showAndWait();
+        }
 }
 
     @FXML
