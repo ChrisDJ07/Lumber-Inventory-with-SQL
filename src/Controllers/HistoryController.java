@@ -41,9 +41,22 @@ public class HistoryController implements Initializable {
     TableColumn<String[], String> soldCustomerColumn;
     @FXML
     TableColumn<String[], String> soldLumberColumn;
+    @FXML
+    TableView<String[]> supplyTable;
+    @FXML
+    TableColumn<String[], String> supplyDateColumn;
+    @FXML
+    TableColumn<String[], String> supplySupplierColumn;
+    @FXML
+    TableColumn<String[], String> supplyLumberColumn;
+    @FXML
+    TableColumn<String[], String> supplyQuantityColumn;
+    @FXML
+    TableColumn<String[], String> supplyPriceColumn;
 
     ObservableList<String[]> processedList;
     ObservableList<String[]> soldList;
+    ObservableList<String[]> supplyList;
 
     // Initialize tables
     @Override
@@ -67,6 +80,16 @@ public class HistoryController implements Initializable {
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+
+            // Initialize table - Supply
+            supplyList = FXCollections.observableArrayList(DatabaseManager.readProcessedInfo());
+            supplyTable.setItems(supplyList);
+
+            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
+            supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
 //            // Add listener to enable/disable edit button based on selection
 //            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
