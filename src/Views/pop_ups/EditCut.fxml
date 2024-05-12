@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="340.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.EditController">
+<AnchorPane prefHeight="340.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.EditCut">
    <children>
       <Label layoutX="23.0" layoutY="14.0" prefHeight="40.0" prefWidth="218.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Edit Lumber">
          <font>
@@ -43,7 +43,7 @@
          </padding>
       </Label>
       <Button layoutX="25.0" layoutY="280.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="61.0" text="Clear" />
-      <Button layoutX="199.0" layoutY="280.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="EDIT" />
+      <Button fx:id="editSubmitButton" layoutX="199.0" layoutY="280.0" mnemonicParsing="false" onAction="#submitEdit" prefHeight="40.0" prefWidth="75.0" text="SUBMIT" />
       <ChoiceBox fx:id="sizeEditCB" layoutX="126.0" layoutY="122.0" prefHeight="31.0" prefWidth="150.0" />
       <Label contentDisplay="CENTER" layoutX="24.0" layoutY="122.0" prefHeight="31.0" prefWidth="103.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="SIZE">
          <font>
