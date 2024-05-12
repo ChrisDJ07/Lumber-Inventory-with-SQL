@@ -50,7 +50,7 @@
             <TableView fx:id="customerTable" layoutX="514.0" layoutY="91.0" prefHeight="222.0" prefWidth="271.0">
                <columns>
                   <TableColumn fx:id="customerNameColumn" prefWidth="136.0" text="Name" />
-                  <TableColumn fx:id="customerInfoColumn" prefWidth="176.800048828125" text="Contact Info" />
+                  <TableColumn fx:id="customerInfoColumn" prefWidth="134.0" text="Contact Info" />
                </columns>
             </TableView>
             <TextField fx:id="customerSearch" layoutX="514.0" layoutY="54.0" prefHeight="26.0" prefWidth="140.0" />

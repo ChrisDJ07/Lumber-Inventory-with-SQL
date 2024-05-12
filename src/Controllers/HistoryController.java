@@ -95,23 +95,14 @@ public class HistoryController implements Initializable {
             soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
 
             // Initialize table - Supply
-            supplyList = FXCollections.observableArrayList(DatabaseManager.readProcessedInfo());
+            supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
             supplyTable.setItems(supplyList);
 
-            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
-            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+            supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
-
-//            // Add listener to enable/disable edit button based on selection
-//            cutTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//                if (newSelection != null) {
-//                    edit_cut_button.setDisable(false); // Enable the "Edit" button
-//                } else {
-//                    edit_cut_button.setDisable(true); // Disable the "Edit" button
-//                }
-//            });
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
