@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,13 +18,13 @@
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
-            <Label layoutX="35.0" layoutY="14.0" prefHeight="62.0" prefWidth="218.0" text="HISTORY">
+            <Label layoutX="34.0" layoutY="6.0" prefHeight="62.0" prefWidth="218.0" text="HISTORY">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <ChoiceBox layoutX="650.0" layoutY="36.0" prefHeight="36.0" prefWidth="110.0" />
-            <TabPane layoutX="35.0" layoutY="82.0" prefHeight="471.0" prefWidth="726.0" tabClosingPolicy="UNAVAILABLE">
+            <ChoiceBox fx:id="filterBox" layoutX="660.0" layoutY="66.0" prefHeight="36.0" prefWidth="100.0" />
+            <TabPane fx:id="tab" layoutX="35.0" layoutY="105.0" prefHeight="448.0" prefWidth="726.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Process Info">
                   <content>
@@ -54,7 +55,8 @@
                                   <TableColumn fx:id="soldDateColumn" prefWidth="75.0" text="Date" />
                                     <TableColumn fx:id="soldCustomerColumn" prefWidth="75.0" text="Customer" />
                                     <TableColumn fx:id="soldLumberColumn" prefWidth="75.0" text="Lumber" />
-                                  <TableColumn fx:id="soldQuantityColumn" prefWidth="75.0" text="Quantity" />
+                                  <TableColumn fx:id="soldSizeColumn" prefWidth="75.0" text="Size" />
+                                    <TableColumn fx:id="soldQuantityColumn" prefWidth="75.0" text="Quantity" />
                                     <TableColumn fx:id="soldPriceColumn" prefWidth="75.0" text="Price" />
                                 </columns>
                                  <columnResizePolicy>
@@ -87,6 +89,8 @@
                   </Tab>
               </tabs>
             </TabPane>
+            <TextField fx:id="searchField" layoutX="35.0" layoutY="71.0" prefHeight="26.0" prefWidth="212.0" />
+            <Button fx:id="clear_button" layoutX="253.0" layoutY="71.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="43.0" text="Clear" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

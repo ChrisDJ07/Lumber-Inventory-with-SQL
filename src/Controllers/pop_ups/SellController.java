@@ -62,7 +62,7 @@ public class SellController implements Initializable  {
             return; // Exit the method if no client is selected
         }
 
-        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, price);
+        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, Integer.toString(Integer.parseInt(price)*quantity), sizeLabel.getText());
 
         // Refresh the data table
         cutController.refreshCutTable();

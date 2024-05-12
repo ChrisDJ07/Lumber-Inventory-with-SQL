@@ -19,7 +19,7 @@ public class DatabaseManager {
     // JDBC URL, username, and password
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -87,21 +87,21 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
-    public static void addSold_To(int ID, int soldQuantity, String costumer_name, String sold_lumber, int currentQuantity, String price) throws SQLException {
+    public static void addSold_To(int ID, int soldQuantity, String costumer_name, String sold_lumber, int currentQuantity, String price, String size) throws SQLException {
         try {
             Connection con = getConnection();
             Statement statement = con.createStatement();
             String insertToSold_To = String.format("""
-                INSERT INTO sold_to (sold_date, sold_quantity, price, sold_to_customer, sold_lumber)
-                VALUES(NOW(), %d, %s,'%s', '%s');
-                """, soldQuantity, price, costumer_name, sold_lumber);
+                INSERT INTO sold_to
+                VALUES(NOW(), %d, %s,'%s', '%s', '%s');
+                """, soldQuantity, price, costumer_name, sold_lumber, size);
             statement.executeUpdate(insertToSold_To);
 
             currentQuantity -= soldQuantity;
 
             String updateSpecificLumberQuantity = String.format("""
                 UPDATE cutlumber
-                SET quantity = %d
+                SET cutlumber_quantity = %d
                 WHERE cutlumber_id = %d
                 """, currentQuantity, ID);
             statement.executeUpdate(updateSpecificLumberQuantity);
@@ -220,7 +220,7 @@ public class DatabaseManager {
     }
     public static List<String[]> readSoldTo() throws SQLException {
         String query = "SELECT * FROM sold_to";
-        return readData(query, 5);
+        return readData(query, 6);
     }
     public static List<String[]> readSuppliedBy() throws SQLException {
         String query = "SELECT * FROM supplied_by";
@@ -593,6 +593,8 @@ public class DatabaseManager {
                     
                     TYPE:   %s
                     
+                    TYPE:   %s
+                    
                     QUANTITY:   %s
                     
                     PRICE:   %s
@@ -608,14 +610,14 @@ public class DatabaseManager {
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(query);
             if (result.next()) {
-                lastSupply = new String[5];
-                for (int i = 0; i < 5; i++) {
+                lastSupply = new String[6];
+                for (int i = 0; i < 6; i++) {
                     lastSupply[i] = result.getString(i+1);
                 }
-                return String.format(supplyText, lastSupply[3], lastSupply[4], lastSupply[1], lastSupply[2]);
+                return String.format(supplyText, lastSupply[3], lastSupply[4], lastSupply[5], lastSupply[1], lastSupply[2]);
             }
             else{
-                return String.format(supplyText, "..", "..", "..", "..");
+                return String.format(supplyText, "..", "..", "..", "..", "..");
             }
         }
         catch (SQLException e){

@@ -5,15 +5,13 @@ import Application.Main;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +20,9 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class HistoryController implements Initializable {
+    @FXML
+    private TabPane tab;
+
     @FXML
     TableView<String[]> processTable;
     @FXML
@@ -47,6 +48,8 @@ public class HistoryController implements Initializable {
     @FXML
     TableColumn<String[], String> soldLumberColumn;
     @FXML
+    TableColumn<String[], String> soldSizeColumn;
+    @FXML
     TableView<String[]> supplyTable;
     @FXML
     TableColumn<String[], String> supplyDateColumn;
@@ -71,15 +74,34 @@ public class HistoryController implements Initializable {
     @FXML
     private Label userRoleLabel;
 
+    // Search
+    @FXML
+    private Button clear_button;
+    @FXML
+    private ChoiceBox<?> filterBox;
+    @FXML
+    private TextField searchField;
+
+
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
+
+        // Listener when changing tab
+        tab.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            if (newTab != null) {
+                clear();
+            }
+        });
+
         try {
             // Initialize table - Processed
             processedList = FXCollections.observableArrayList(DatabaseManager.readProcessedInfo());
             processTable.setItems(processedList);
+            FilteredList<String[]> filteredProcessedList  = new FilteredList<>(processedList);
+            processTable.setItems(filteredProcessedList);
 
             processDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             processInputQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -90,22 +112,68 @@ public class HistoryController implements Initializable {
             // Initialize table - Sold
             soldList = FXCollections.observableArrayList(DatabaseManager.readSoldTo());
             soldTable.setItems(soldList);
+            FilteredList<String[]> filteredSoldList  = new FilteredList<>(soldList);
+            soldTable.setItems(filteredSoldList);
 
             soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             soldPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             soldCustomerColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+            soldSizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[5]));
+
 
             // Initialize table - Supply
             supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
             supplyTable.setItems(supplyList);
+            FilteredList<String[]> filteredSupplyList  = new FilteredList<>(supplyList);
+            supplyTable.setItems(filteredSupplyList);
 
             supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+
+            // Adding filters
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredProcessedList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                );
+                filteredSoldList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                );
+                filteredSupplyList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                );
+            });
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -125,6 +193,14 @@ public class HistoryController implements Initializable {
     @FXML
     private void goToDashBoard(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/Dashboard.fxml"))));
+    }
+
+    @FXML
+    void clearSearch(ActionEvent event) {
+        clear();
+    }
+    public void clear(){
+        searchField.clear();
     }
 
     @FXML
