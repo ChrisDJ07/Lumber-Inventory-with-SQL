@@ -1,7 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.CutController;
+import Controllers.CutLumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -17,9 +17,9 @@ public class NewCustomer {
     @FXML
     private TextField customer_info_field;
 
-    CutController cutController;
+    CutLumber cutController;
 
-    public void setCustomerController(CutController cutController) {
+    public void setCustomerController(CutLumber cutController) {
         this.cutController = cutController;
     }
 
@@ -39,7 +39,7 @@ public class NewCustomer {
                 throw new RuntimeException("Please enter a customer name.");
             }
             DatabaseManager.addCustomer(customerName, customerContactInfo);
-            CutController.refreshTables();
+            CutLumber.refreshCutTable();
 
             ((Stage) nameField.getScene().getWindow()).close();
         } catch (RuntimeException e){

@@ -1,7 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.CutController;
+import Controllers.CutLumber;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -23,10 +23,10 @@ public class EditCut implements Initializable {
     Spinner<Integer> unitsEditSpinner;
 
     TableView<String[]> cutTable;
-    CutController cutController;
+    CutLumber cutLumber;
     String ID;
 
-    // Method to set data received from CutController
+    // Method to set data received from CutLumber
     public void setData(TableView<String[]> cutTable, String[] rowData) {
         // Assuming the rowData array contains the following elements in order:
         // rowData[0]: ID
@@ -43,8 +43,8 @@ public class EditCut implements Initializable {
         unitsEditSpinner.getValueFactory().setValue(Integer.parseInt(rowData[4]));
     }
 
-    public void setCutController(CutController cutController) {
-        this.cutController = cutController;
+    public void setCutController(CutLumber cutLumber) {
+        this.cutLumber = cutLumber;
     }
 
     @FXML
@@ -71,11 +71,11 @@ public class EditCut implements Initializable {
 //        // Assuming the TableView is named cutTable
 //        cutTable.getItems().set(cutTable.getSelectionModel().getSelectedIndex(), rowData);
 
-        DatabaseManager.updateCutLumber(ID, type, price, quantity, size);
+        DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, Integer.parseInt(price), quantity, size);
 
         // Refresh the data table
-        cutController.refreshTables();
-        cutController.disableRelevantButtons();
+        cutLumber.refreshCutTable();
+        cutLumber.disableRelevantButtons();
 
         // Close the FXML window
         Stage stage = (Stage) typeEditCB.getScene().getWindow();
@@ -85,7 +85,7 @@ public class EditCut implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
         valueFactory.setValue(1);
 
         unitsEditSpinner.setValueFactory(valueFactory);

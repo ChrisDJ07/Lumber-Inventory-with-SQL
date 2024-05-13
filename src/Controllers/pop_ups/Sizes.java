@@ -13,7 +13,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class SizesController implements Initializable{
+public class Sizes implements Initializable{
     @FXML
     TableView<String[]> sizeTable = new TableView<>();
     @FXML

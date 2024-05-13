@@ -1,8 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.CutController;
-import Controllers.RawController;
+import Controllers.CutLumber;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,10 +23,10 @@ public class AddCut implements Initializable {
     Spinner<Integer> unitsAddSpinner;
 
     TableView<String[]> cutTable;
-    CutController cutController;
+    CutLumber cutController;
     String ID;
 
-    public void setCutController(CutController cutController) {
+    public void setCutController(CutLumber cutController) {
         this.cutController = cutController;
     }
 
@@ -57,13 +56,13 @@ public class AddCut implements Initializable {
         try{
             int quantity = unitsAddSpinner.getValue();
             int unit_price = Integer.parseInt(priceAddTF.getText());
-            DatabaseManager.addCutLumber_Janiola(typeID,Integer.toString(unit_price),Integer.toString(quantity), sizeID);
+            DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
         }
         catch (Exception e){
             alert("Input Error", "Please enter a valid unit or price.");
         }
 
-        cutController.refreshTables();
+        cutController.refreshCutTable();
         ((Stage) typeAddCB.getScene().getWindow()).close();
     }
 

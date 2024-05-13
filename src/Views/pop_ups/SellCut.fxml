@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="373.0" prefWidth="283.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.SellController">
+<AnchorPane prefHeight="373.0" prefWidth="283.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.SellCut">
    <children>
       <Label layoutX="22.0" layoutY="14.0" prefHeight="40.0" prefWidth="218.0" style="-fx-text-fill: rgb(64, 58, 53);" text="SELL">
          <font>

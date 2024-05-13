@@ -8,13 +8,13 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Dashboard">
    <children>
       <AnchorPane layoutX="198.0" layoutY="350.0" prefHeight="222.0" prefWidth="372.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
             <ImageView fitHeight="114.0" fitWidth="159.0" layoutX="-5.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Cut%20Lumbers.png" />
+                  <Image url="@../Cut Lumbers.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" contentDisplay="TOP" layoutX="146.0" layoutY="54.0" prefHeight="43.0" prefWidth="40.0" text="x">
@@ -47,7 +47,7 @@
          <children>
             <ImageView fitHeight="81.0" fitWidth="121.0" layoutX="9.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Raw%20Lumbers.png" />
+                  <Image url="@../Raw Lumbers.png" />
                </image>
             </ImageView>
             <Label fx:id="totalRawCount" contentDisplay="TOP" layoutX="186.0" layoutY="50.0" prefHeight="54.0" prefWidth="165.0" text="COUNT">
@@ -149,7 +149,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="lastSold" layoutX="23.0" layoutY="345.0" prefHeight="147.0" prefWidth="114.0" text="Label" />
+            <Label fx:id="lastSold" layoutX="23.0" layoutY="340.0" prefHeight="163.0" prefWidth="114.0" text="Label" />
             <Label fx:id="lastSupply" layoutX="139.0" layoutY="345.0" prefHeight="147.0" prefWidth="114.0" text="Label" />
             <Label fx:id="lastProcess" layoutX="270.0" layoutY="345.0" prefHeight="147.0" prefWidth="114.0" text="Label" />
          </children></AnchorPane>

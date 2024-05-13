@@ -1,7 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.RawController;
+import Controllers.RawLumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,16 +15,12 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class NewRaw implements Initializable {
-
     @FXML
     private Button addButton;
-
     @FXML
     private Button clearButton;
-
     @FXML
     private TextField typeField;
-
     @FXML
     private TextField unitField;
 
@@ -43,7 +39,7 @@ public class NewRaw implements Initializable {
                 throw  new IllegalArgumentException("Others");
             }
             DatabaseManager.addRawLumber_Janiola(type, Integer.toString(quantity));
-            RawController.refreshTables();
+            RawLumber.refreshTables();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");

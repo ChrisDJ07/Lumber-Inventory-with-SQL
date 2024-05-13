@@ -1,12 +1,13 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.RawController;
+import Controllers.RawLumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -15,30 +16,25 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SupplyRaw implements Initializable {
-
     @FXML
     private ChoiceBox<String> supplierBox;
-
     @FXML
-    private ChoiceBox<String> typeBox;
-
+    private Label supplyTypeLabel;
     @FXML
     private TextField unitField;
-
     @FXML
     private TextField priceField;
 
-    RawController rawController;
+    RawLumber rawLumber;
 
-    public void setSupplyController(RawController rawController) {
-        this.rawController = rawController;
+    public void setSupplyController(RawLumber rawLumber) {
+        this.rawLumber = rawLumber;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            String[] types = DatabaseManager.getRawLumberList_Janiola();
-            typeBox.getItems().setAll(types);
+            supplyTypeLabel.setText(RawLumber.getSelectedType());
             String[] suppliers = DatabaseManager.getSupplierList();
             supplierBox.getItems().setAll(suppliers);
             unitField.setText("0");
@@ -63,14 +59,11 @@ public class SupplyRaw implements Initializable {
             if(supplierBox.getValue() == null){
                 throw new RuntimeException("Please choose a supplier.");
             }
-            if(typeBox.getValue() ==  null){
-                throw new RuntimeException("Please choose a type.");
-            }
             String supplier = supplierBox.getValue();
-            String type = typeBox.getValue();
+            String type = supplyTypeLabel.getText();
             DatabaseManager.supplyRawLumber(supplier, type, quantity, price);
-            RawController.refreshTables();
-            rawController.setSupplyText(DatabaseManager.getLastSupply());
+            RawLumber.refreshTables();
+            rawLumber.setSupplyText(DatabaseManager.getLastSupply());
 
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
@@ -85,7 +78,6 @@ public class SupplyRaw implements Initializable {
 
     @FXML
     void clearFields(ActionEvent event) {
-        typeBox.setValue(null);
         supplierBox.setValue(null);
         unitField.setText("0");
         priceField.setText("0");

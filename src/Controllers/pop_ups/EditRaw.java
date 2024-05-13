@@ -1,7 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.RawController;
+import Controllers.RawLumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,18 +15,10 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class EditRaw implements Initializable {
-
     @FXML
     private Label typeLabel;
-
     @FXML
     private TextField unitField;
-
-    RawController rawController;
-
-    public void setRawController(RawController rawController) {
-        this.rawController = rawController;
-    }
 
     @FXML
     void editRaw(ActionEvent event) {
@@ -36,8 +28,7 @@ public class EditRaw implements Initializable {
                 throw new NumberFormatException();
             }
             DatabaseManager.updateRawQuantity(typeLabel.getText(), Integer.toString(quantity));
-            RawController.refreshTables();
-            rawController.disableRelevantButtons();
+            RawLumber.refreshTables();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");
@@ -61,7 +52,7 @@ public class EditRaw implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        typeLabel.setText(RawController.getSelectedType());
-        unitField.setText(RawController.getSelectedUnits());
+        typeLabel.setText(RawLumber.getSelectedType());
+        unitField.setText(RawLumber.getSelectedUnits());
     }
 }

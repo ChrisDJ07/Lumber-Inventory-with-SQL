@@ -2,8 +2,6 @@ package Controllers;
 
 import Application.DatabaseManager;
 import Application.Main;
-import Controllers.pop_ups.EditRaw;
-import Controllers.pop_ups.NewSupplier;
 import Controllers.pop_ups.ProcessRaw;
 import Controllers.pop_ups.SupplyRaw;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,8 +23,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class RawController implements Initializable {
-    /*Raw Lumber Section*/
+public class RawLumber implements Initializable {
+/* Raw Lumber Section */
     @FXML
     private Button process_button;
     @FXML
@@ -34,8 +32,10 @@ public class RawController implements Initializable {
     @FXML
     private Button delete_button;
     @FXML
+    private Button supply_button;
+    @FXML
     private TextField searchField;
-
+    // Raw Lumber Table
     @FXML
     TableView<String[]> rawTable = new TableView<>();
     @FXML
@@ -45,17 +45,15 @@ public class RawController implements Initializable {
     static ObservableList<String[]> rawLumberList;
     static String[] selectedRawLumber;
 
-    /*Supplier Section*/
+/* Supplier Section */
+    // Supplier
     @FXML
     private Button delete_supplier_button;
     @FXML
+    private Button edit_supplier_button;
+    @FXML
     private TextField supplierSearch;
-
-    @FXML
-    private Label lastProcessText;
-    @FXML
-    private Label lastSupplyText;
-
+    // Supplier Table
     @FXML
     private TableView<String[]> supplierTable = new TableView<>();
     @FXML
@@ -65,7 +63,13 @@ public class RawController implements Initializable {
     static ObservableList<String[]> supplierList;
     static String[] selectedSupplier;
 
-    // User Account
+/* History Section */
+    @FXML
+    private Label lastProcessText;
+    @FXML
+    private Label lastSupplyText;
+
+/* User Section*/
     @FXML
     private Button logout_button;
     @FXML
@@ -74,7 +78,7 @@ public class RawController implements Initializable {
     private Label userRoleLabel;
 
 
-    /* Initialize tables */
+/* Initialize tables */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userNameLabel.setText(Main.getUser());
@@ -82,7 +86,8 @@ public class RawController implements Initializable {
         try {
             lastProcessText.setText(DatabaseManager.getLastProcess());
             lastSupplyText.setText(DatabaseManager.getLastSupply());
-            disableRelevantButtons();
+            disableRawButtons();
+            disableSupplierButtons();
 
             rawLumberList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
             rawTable.setItems(rawLumberList);
@@ -94,9 +99,12 @@ public class RawController implements Initializable {
             rawTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
                     process_button.setDisable(false);
+                    supply_button.setDisable(false);
                     raw_edit_button.setDisable(false);
                     delete_button.setDisable(false);
                     selectedRawLumber = rawTable.getSelectionModel().getSelectedItem();
+                } else {
+                    disableRawButtons();
                 }
             });
 
@@ -112,15 +120,18 @@ public class RawController implements Initializable {
             supplierTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
                     delete_supplier_button.setDisable(false);
+                    edit_supplier_button.setDisable(false);
                     selectedSupplier = supplierTable.getSelectionModel().getSelectedItem();
+                } else{
+                    disableSupplierButtons();
                 }
             });
 
             searchField.setPromptText("Search...");
             supplierSearch.setPromptText("Search...");
 
-            /*Add listener to text property to filter data as user types*/
-            // Raw Lumbers
+        /*Add listener to text property to filter data as user types*/
+            // Raw Lumber
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredRawList.setPredicate(item -> {
                     if (newValue == null || newValue.isEmpty()) {
@@ -134,7 +145,7 @@ public class RawController implements Initializable {
                     return false;
                 });
             });
-            // Suppliers
+            // Supplier
             supplierSearch.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredSupplierList.setPredicate(item -> {
                     if (newValue == null || newValue.isEmpty()) {
@@ -153,23 +164,21 @@ public class RawController implements Initializable {
         }
     }
 
-    /* Navigate scenes */
+/* Navigate scenes */
     @FXML
     private void goToDashBoard(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/Dashboard.fxml"))));
     }
-
     @FXML
     private void goToCut(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/CutLumber.fxml"))));
     }
-
     @FXML
     private void goToHistory(ActionEvent event) throws IOException {
         Main.loadScene(new Scene(FXMLLoader.load(getClass().getResource("/Views/History.fxml"))));
     }
 
-    /*Open Pop-ups*/
+/*Open Pop-ups*/
     @FXML
     void openNewWindow(ActionEvent event) throws IOException{
         Stage New = new Stage();
@@ -179,11 +188,11 @@ public class RawController implements Initializable {
         Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/NewRaw.fxml"));
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         New.setResizable(false);
-        New.setTitle("New Raw Lumber");
+        New.setTitle("New RawLumber");
         New.setScene(scene);
         New.show();
     }
@@ -191,8 +200,6 @@ public class RawController implements Initializable {
     void openEditWindow(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditRaw.fxml"));
         Parent root = loader.load();
-        EditRaw editController = loader.getController();
-        editController.setRawController(this);
 
         Stage edit = new Stage();
         edit.initOwner(Main.getStage());
@@ -200,11 +207,11 @@ public class RawController implements Initializable {
 
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         edit.setResizable(false);
-        edit.setTitle("Edit Raw Lumber");
+        edit.setTitle("Edit RawLumber");
         edit.setScene(scene);
         edit.show();
     }
@@ -212,8 +219,8 @@ public class RawController implements Initializable {
     void openProcessWindow(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/ProcessRaw.fxml"));
         Parent root = loader.load();
-        ProcessRaw processController = loader.getController();
-        processController.setProcessController(this);
+        ProcessRaw processRawController = loader.getController();
+        processRawController.setProcessController(this);
 
         Stage process = new Stage();
         process.initOwner(Main.getStage());
@@ -221,11 +228,11 @@ public class RawController implements Initializable {
 
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         process.setResizable(false);
-        process.setTitle("Process Raw Lumber");
+        process.setTitle("Process RawLumber");
         process.setScene(scene);
         process.show();
     }
@@ -242,11 +249,11 @@ public class RawController implements Initializable {
 
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         supply.setResizable(false);
-        supply.setTitle("Supply Raw Lumber");
+        supply.setTitle("Supply RawLumber");
         supply.setScene(scene);
         supply.show();
     }
@@ -254,8 +261,6 @@ public class RawController implements Initializable {
     void openNewSupplierWindow(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/NewSupplier.fxml"));
         Parent root = loader.load();
-        NewSupplier supplierController = loader.getController();
-        supplierController.setSupplierController(this);
 
         Stage supply = new Stage();
         supply.initOwner(Main.getStage());
@@ -263,7 +268,26 @@ public class RawController implements Initializable {
 
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        supply.setResizable(false);
+        supply.setTitle("Add Supplier");
+        supply.setScene(scene);
+        supply.show();
+    }
+    @FXML
+    void openEditSupplierWindow(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditSupplier.fxml"));
+        Parent root = loader.load();
+
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
+        Scene scene = new Scene(root);
+
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         supply.setResizable(false);
@@ -272,13 +296,13 @@ public class RawController implements Initializable {
         supply.show();
     }
 
-    /* Delete Functions */
+/* Delete Functions */
     @FXML
     void delete_rawLumber(ActionEvent event) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Raw Lumber Detection");
-        alert.setHeaderText("Are you sure you want to delete this Raw Lumber type?");
-        alert.setContentText("Deleting this will also affect Cut Lumber with this type.");
+        alert.setTitle("RawLumber Lumber Detetion");
+        alert.setHeaderText("Are you sure you want to delete this RawLumber Lumber type?");
+        alert.setContentText("Deleting this will also affect CutLumber Lumber with this type.");
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.showAndWait();
 
@@ -286,7 +310,6 @@ public class RawController implements Initializable {
             DatabaseManager.deleteRawLumber(getSelectedType());
             refreshTables();
         }
-        disableRelevantButtons();
     }
     @FXML
     void deleteSupplier(ActionEvent event) throws SQLException {
@@ -301,10 +324,9 @@ public class RawController implements Initializable {
             DatabaseManager.deleteSupplier(getSelectedSupplier());
             refreshTables();
         }
-        disableRelevantButtons();
     }
 
-    /* Other Functions */
+/* Other Functions */
     public static void refreshTables() {
         try {
             rawLumberList.clear();
@@ -315,6 +337,7 @@ public class RawController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public static String getSelectedType(){
         return selectedRawLumber[0];
     }
@@ -324,18 +347,28 @@ public class RawController implements Initializable {
     public static String getSelectedSupplier(){
         return selectedSupplier[0];
     }
+    public static String getSelectedSupplierInfo(){
+        return selectedSupplier[1];
+    }
+
     public void setProcessText(String text){
         lastProcessText.setText(text);
     }
     public void setSupplyText(String text){
         lastSupplyText.setText(text);
     }
-    public void disableRelevantButtons(){
+
+    public void disableRawButtons(){
         process_button.setDisable(true);
+        supply_button.setDisable(true);
         raw_edit_button.setDisable(true);
         delete_button.setDisable(true);
-        delete_supplier_button.setDisable(true);
     }
+    public void disableSupplierButtons(){
+        delete_supplier_button.setDisable(true);
+        edit_supplier_button.setDisable(true);
+    }
+
     @FXML
     void clearSearch(ActionEvent event) {
         searchField.clear();

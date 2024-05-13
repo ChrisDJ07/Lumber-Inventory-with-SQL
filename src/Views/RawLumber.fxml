@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.RawController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.RawLumber">
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
@@ -37,7 +37,7 @@
             </Label>
             <Button fx:id="raw_new_button" layoutX="248.0" layoutY="509.0" mnemonicParsing="false" onAction="#openNewWindow" prefHeight="40.0" prefWidth="64.0" text="Add" />
             <Button fx:id="delete_button" layoutX="379.0" layoutY="509.0" mnemonicParsing="false" onAction="#delete_rawLumber" prefHeight="40.0" prefWidth="57.0" text="Delete" />
-            <Button fx:id="raw_edit_button" layoutX="319.0" layoutY="509.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="50.0" text="Edit" />
+            <Button fx:id="raw_edit_button" layoutX="320.0" layoutY="509.0" mnemonicParsing="false" onAction="#openEditWindow" prefHeight="40.0" prefWidth="50.0" text="Edit" />
             <Button fx:id="supply_button" layoutX="360.0" layoutY="47.0" mnemonicParsing="false" onAction="#openSupplyWindow" prefHeight="38.0" prefWidth="75.0" text="SUPPLY" />
             <Button fx:id="clear_search_button" layoutX="230.0" layoutY="59.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="50.0" text="Clear" />
             <Line endX="-100.0" endY="538.2000122070312" layoutX="555.0" layoutY="21.0" startX="-100.0" stroke="#c7c6c6" />
@@ -69,6 +69,7 @@
             </Label>
             <Line endX="233.79998779296875" endY="722.4000244140625" layoutX="392.0" layoutY="-159.0" startX="233.79998779296875" startY="538.2000122070312" stroke="#c7c6c6" />
             <Label fx:id="lastProcessText" layoutX="647.0" layoutY="405.0" prefHeight="150.0" prefWidth="124.0" wrapText="true" />
+            <Button fx:id="edit_supplier_button" layoutX="674.0" layoutY="327.0" mnemonicParsing="false" onAction="#openEditSupplierWindow" prefHeight="30.0" prefWidth="39.0" text="Edit" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

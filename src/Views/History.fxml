@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HistoryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-border-radius: 2em; -fx-background-color: rgb(242, 242, 249);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.History">
    <children>
       <AnchorPane layoutX="192.0" layoutY="12.0" prefHeight="575.0" prefWidth="795.0" style="-fx-background-color: rgb(255, 255, 255); -fx-background-radius: 1em; -fx-border-radius: 1em;">
          <children>
