@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="383.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.AddController"> 
+<AnchorPane prefHeight="383.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.AddCut">
    <children>
       <Spinner fx:id="unitsAddSpinner" layoutX="125.0" layoutY="243.0" prefHeight="40.0" prefWidth="150.0" />
       <Label layoutX="23.0" layoutY="14.0" prefHeight="40.0" prefWidth="218.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Add Lumber">

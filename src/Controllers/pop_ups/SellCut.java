@@ -1,7 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.CutController;
+import Controllers.CutLumber;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class SellController implements Initializable  {
+public class SellCut implements Initializable  {
     @FXML
     ChoiceBox<String> clientCB = new ChoiceBox<>();
     @FXML
@@ -23,13 +23,13 @@ public class SellController implements Initializable  {
     Spinner<Integer> unitsSellSpinner;
 
     TableView<String[]> cutTable;
-    CutController cutController;
+    CutLumber cutLumber;
     private static int ID;
     private static String sold_lumber;
     private static int quantity;
     private static String price;
 
-    // Method to set data received from CutController
+    // Method to set data received from CutLumber
     public void setData(TableView<String[]> cutTable, String[] rowData) {
         // Assuming the rowData array contains the following elements in order:
         // rowData[0]: ID
@@ -47,8 +47,8 @@ public class SellController implements Initializable  {
         price = rowData[3];
     }
 
-    public void setCutController(CutController cutController) {
-        this.cutController = cutController;
+    public void setCutController(CutLumber cutLumber) {
+        this.cutLumber = cutLumber;
     }
 
     public void proceedSelling() throws SQLException {
@@ -62,11 +62,11 @@ public class SellController implements Initializable  {
             return; // Exit the method if no client is selected
         }
 
-        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, Integer.toString(Integer.parseInt(price)*quantity), sizeLabel.getText());
+        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, Integer.parseInt(price)*quantity, sizeLabel.getText());
 
         // Refresh the data table
-        cutController.refreshCutTable();
-        cutController.disableRelevantButtons();
+        cutLumber.refreshCutTable();
+        cutLumber.disableRelevantButtons();
 
         // Close the FXML window
         Stage stage = (Stage) clientCB.getScene().getWindow();
@@ -76,7 +76,7 @@ public class SellController implements Initializable  {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
         valueFactory.setValue(1);
 
         try {

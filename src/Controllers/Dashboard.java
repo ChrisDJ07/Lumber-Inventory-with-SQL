@@ -17,7 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class DashboardController implements Initializable {
+public class Dashboard implements Initializable {
     @FXML
     private Label totalCutCount;
     @FXML
@@ -76,11 +76,11 @@ public class DashboardController implements Initializable {
 
     public void setLabels(){
         try {
-            // Raw Lumber
+            // RawLumber Lumber
             totalRawCount.setText(DatabaseManager.getTotals("rawlumber_quantity","rawlumber"));
             totalRawSupplied.setText(DatabaseManager.getTotals("supplied_quantity", "supplied_by"));
             totalRawProcessed.setText(DatabaseManager.getTotals("process_input_quantity", "process_info"));
-            // Cut Lumber
+            // CutLumber Lumber
             totalCutCount.setText(DatabaseManager.getTotals("cutlumber_quantity", "cutlumber"));
             totalCutSold.setText(DatabaseManager.getTotals("sold_quantity", "sold_to"));
             // Finance

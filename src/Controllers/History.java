@@ -19,7 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class HistoryController implements Initializable {
+public class History implements Initializable {
     @FXML
     private TabPane tab;
 

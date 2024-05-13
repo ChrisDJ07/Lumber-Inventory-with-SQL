@@ -68,7 +68,7 @@ CREATE TABLE if NOT EXISTS process_info
 	process_input_quantity			INT NOT NULL,
 	process_output_quantity			INT NOT NULL,
 	process_input_type			    VARCHAR (25) NOT NULL,
-	process_output_size			    VARCHAR (25) NOT NULL
+	process_output_size			    VARCHAR (25) NOT NULL,
 	cutlumber                       INT,
 	CONSTRAINT fk_process_into_cutlumber FOREIGN KEY (cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE SET NULL
 );

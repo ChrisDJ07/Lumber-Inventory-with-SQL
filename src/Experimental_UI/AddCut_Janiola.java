@@ -1,4 +1,4 @@
-package Controllers.pop_ups;
+package Experimental_UI;
 
 import Application.DatabaseManager;
 import javafx.event.ActionEvent;
@@ -61,7 +61,7 @@ public class AddCut_Janiola implements Initializable {
         try{
             int quantity = Integer.parseInt(unitField.getText());
             int unit_price = Integer.parseInt(priceField.getText());
-            DatabaseManager.addCutLumber_Janiola(typeID,Integer.toString(unit_price),Integer.toString(quantity), sizeID);
+            DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
         }
         catch (Exception e){
             alert("Input Error", "Please enter a valid unit or price.");

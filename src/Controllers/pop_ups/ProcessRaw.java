@@ -1,22 +1,18 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
-import Controllers.RawController;
+import Controllers.RawLumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ProcessRaw implements Initializable {
-
     @FXML
     private TextField input_quantity_field;
     @FXML
@@ -29,18 +25,18 @@ public class ProcessRaw implements Initializable {
     private Label quantity_label;
 
     int rawQuantityLimit;
-    RawController rawController;
+    RawLumber rawLumber;
 
-    public void setProcessController(RawController rawController) {
-        this.rawController = rawController;
+    public void setProcessController(RawLumber rawLumber) {
+        this.rawLumber = rawLumber;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        type_label.setText(RawController.getSelectedType());
+        type_label.setText(RawLumber.getSelectedType());
         String[] sizes = null;
         try {
-            rawQuantityLimit = DatabaseManager.getRawQuantity(RawController.getSelectedType());
+            rawQuantityLimit = DatabaseManager.getRawQuantity(RawLumber.getSelectedType());
             quantity_label.setText(Integer.toString(rawQuantityLimit));
             sizes = DatabaseManager.getSizeList();
         } catch (SQLException e) {
@@ -55,7 +51,7 @@ public class ProcessRaw implements Initializable {
             int input_quantity = Integer.parseInt(input_quantity_field.getText());
             int output_quantity = Integer.parseInt(output_quantity_field.getText());
             if(input_quantity<0 || output_quantity<0){
-                throw new NumberFormatException();
+                throw new NumberFormatException("Negative");
             }
             if(input_quantity==0 || output_quantity==0){
                 throw new RuntimeException("zeroUnits");
@@ -66,13 +62,13 @@ public class ProcessRaw implements Initializable {
             if(sizeBox.getValue()==null){
                 throw new RuntimeException("noSize");
             }
-            DatabaseManager.processRawLumber(RawController.getSelectedType(), sizeBox.getValue(), Integer.toString(input_quantity), Integer.toString(output_quantity));
-            RawController.refreshTables();
-            rawController.setProcessText(DatabaseManager.getLastProcess());
+            DatabaseManager.processRawLumber(RawLumber.getSelectedType(), sizeBox.getValue(), input_quantity, output_quantity);
+            RawLumber.refreshTables();
+            rawLumber.setProcessText(DatabaseManager.getLastProcess());
 
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid positive integer for units.");
+            alert("Input Error", "Please enter an integer value for units.");
         } catch (RuntimeException e){
             if(e.getMessage().equals("exceedQuantity")){
                 alert("Input Quantity Exceeded", "Enter a value not greater than "+Integer.toString(rawQuantityLimit)+".");
@@ -80,6 +76,8 @@ public class ProcessRaw implements Initializable {
                 alert("No Size Selected", "Please enter a size.");
             } else if (e.getMessage().equals("zeroUnits")) {
                 alert("Zero Units", "Units cannot be zero.");
+            } else if (e.getMessage().equals("negative")) {
+                alert("Zero Units", "Please enter positive integers for units.");
             }
 
         } catch (SQLException e) {

@@ -3,7 +3,7 @@ package Controllers;
 import Application.DatabaseManager;
 import Application.Main;
 import Controllers.pop_ups.EditCut;
-import Controllers.pop_ups.SellController;
+import Controllers.pop_ups.SellCut;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class CutController implements Initializable{
+public class CutLumber implements Initializable{
     // Customer
     @FXML
     private TableView<String[]> customerTable;
@@ -39,7 +39,7 @@ public class CutController implements Initializable{
     @FXML
     private Button clear_customer_search_button;
 
-    // Cut Lumber
+    // CutLumber Lumber
     @FXML
     private TextField searchField;
     @FXML
@@ -58,7 +58,7 @@ public class CutController implements Initializable{
     private Label lastSoldLabel;
 
 
-    // Cut table
+    // CutLumber table
     @FXML
     private Button add_cut_button;
     @FXML
@@ -100,7 +100,7 @@ public class CutController implements Initializable{
         try {
             disableRelevantButtons();
 
-            // Initialize table - Cut Lumber
+            // Initialize table - CutLumber Lumber
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
 
@@ -161,7 +161,7 @@ public class CutController implements Initializable{
         Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/Sizes.fxml"));
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         sizes.setTitle("Lumber Sizes");
@@ -178,10 +178,10 @@ public class CutController implements Initializable{
         Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/AddCut.fxml"));
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        add.setTitle("Add Cut Lumber");
+        add.setTitle("Add CutLumber Lumber");
         add.setScene(scene);
         add.show();
     }
@@ -202,10 +202,10 @@ public class CutController implements Initializable{
 
             Scene scene = new Scene(root);
 
-            String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+            String css = Main.class.getResource("/Application/Application.css").toExternalForm();
             scene.getStylesheets().add(css);
 
-            edit.setTitle("Edit Cut Lumber");
+            edit.setTitle("Edit CutLumber Lumber");
             edit.setScene(scene);
             edit.show();
     }
@@ -246,16 +246,16 @@ public class CutController implements Initializable{
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/SellCut.fxml"));
             Parent root = loader.load();
-            SellController sellController = loader.getController();
-            sellController.setData(cutTable, rowData);
-            sellController.setCutController(this);
+            SellCut sellCutController = loader.getController();
+            sellCutController.setData(cutTable, rowData);
+            sellCutController.setCutController(this);
 
             Scene scene = new Scene(root);
 
-            String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+            String css = Main.class.getResource("/Application/Application.css").toExternalForm();
             scene.getStylesheets().add(css);
 
-            sell.setTitle("Sell Cut Lumber");
+            sell.setTitle("SellCut CutLumber Lumber");
             sell.setScene(scene);
             sell.show();
         }

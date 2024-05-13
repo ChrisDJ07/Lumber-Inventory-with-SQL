@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AddController implements Initializable {
+public class AddCut implements Initializable {
     @FXML
     ChoiceBox<String> typeAddCB = new ChoiceBox<>();
     @FXML

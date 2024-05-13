@@ -12,28 +12,36 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.List;
 
-public class LoginController {
+public class Login {
     @FXML
     private TextField usernameTF;
-
     @FXML
     private PasswordField passwordTF;
 
     @FXML
     private void login(ActionEvent e) throws SQLException {
+        executeLogin();
+        /*For Testing
+        try {
+            Main.showDashboard();
+            ((Stage) usernameTF.getScene().getWindow()).close();
+        } catch (Exception error) {
+            error.printStackTrace();
+        }*/
+    }
+
+    /**
+     * Press "Enter" ?
+     */
+    @FXML
+    void up(ActionEvent event) throws SQLException {
+        executeLogin();
+    }
+
+    private void executeLogin() throws SQLException {
         String username = usernameTF.getText();
         String password = passwordTF.getText();
-
-        /* FOR TESTING */
-//        try {
-//            Main.showDashboard();
-//            ((Stage) usernameTF.getScene().getWindow()).close();
-//        } catch (Exception error) {
-//            error.printStackTrace();
-//        }
-
         /* THIS IS THE FINAL LOGIN CHECKER */
-            // Validate credentials (replace this with your actual validation logic)
         if (isValidCredentials(username, password)) {
             try {
                 Main.setUser(username);
@@ -50,11 +58,6 @@ public class LoginController {
             alert.setContentText("Invalid username or password.");
             alert.showAndWait();
         }
-}
-
-    @FXML
-    void up(ActionEvent event) {
-        System.out.println("UP");
     }
 
     // Dummy validation method (replace with your actual validation logic)
@@ -76,7 +79,6 @@ public class LoginController {
                 return true; // Authentication successful
             }
         }
-
         return false; // No matching user found, authentication failed
     }
 }
