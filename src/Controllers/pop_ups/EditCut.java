@@ -74,7 +74,7 @@ public class EditCut implements Initializable {
         DatabaseManager.updateCutLumber(ID, type, price, quantity, size);
 
         // Refresh the data table
-        cutController.refreshCutTable();
+        cutController.refreshTables();
         cutController.disableRelevantButtons();
 
         // Close the FXML window

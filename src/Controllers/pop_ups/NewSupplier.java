@@ -14,7 +14,6 @@ public class NewSupplier {
 
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField supplier_info_field;
 
