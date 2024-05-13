@@ -2,8 +2,6 @@ package Controllers;
 
 import Application.DatabaseManager;
 import Application.Main;
-import Controllers.pop_ups.EditRaw;
-import Controllers.pop_ups.NewSupplier;
 import Controllers.pop_ups.ProcessRaw;
 import Controllers.pop_ups.SupplyRaw;
 import javafx.beans.property.SimpleStringProperty;
@@ -112,8 +110,10 @@ public class RawLumber implements Initializable {
 
             supplierList = FXCollections.observableArrayList(DatabaseManager.readSuppliers());
             supplierTable.setItems(supplierList);
+
             FilteredList<String[]> filteredSupplierList  = new FilteredList<>(supplierList);
             supplierTable.setItems(filteredSupplierList);
+
             supplierNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             supplierInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
