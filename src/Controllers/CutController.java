@@ -2,8 +2,7 @@ package Controllers;
 
 import Application.DatabaseManager;
 import Application.Main;
-import Controllers.pop_ups.EditCut;
-import Controllers.pop_ups.SellController;
+import Controllers.pop_ups.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,21 +22,6 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CutController implements Initializable{
-    // Customer
-    @FXML
-    private TableView<String[]> customerTable;
-    @FXML
-    private TableColumn<String[], String> customerInfoColumn;
-    @FXML
-    private TableColumn<String[], String> customerNameColumn;
-    @FXML
-    private TextField customerSearch;
-    @FXML
-    private Button delete_customer_button;
-    @FXML
-    private Button new_customer_button;
-    @FXML
-    private Button clear_customer_search_button;
 
     // Cut Lumber
     @FXML
@@ -57,6 +41,23 @@ public class CutController implements Initializable{
     @FXML
     private Label lastSoldLabel;
 
+
+    // Customer
+    @FXML
+    private TextField customerSearch;
+    @FXML
+    private Button delete_customer_button;
+    @FXML
+    private Button new_customer_button;
+    @FXML
+    private Button clear_customer_search_button;
+
+    @FXML
+    private TableView<String[]> customerTable;
+    @FXML
+    private TableColumn<String[], String> customerInfoColumn;
+    @FXML
+    private TableColumn<String[], String> customerNameColumn;
 
     // Cut table
     @FXML
@@ -81,8 +82,8 @@ public class CutController implements Initializable{
     @FXML
     TableColumn<String[], String> quantityColumn;
 
-    ObservableList<String[]> dataList;
-    ObservableList<String[]> customerList;
+    static ObservableList<String[]> dataList;
+    static ObservableList<String[]> customerList;
 
     // User Account
     @FXML
@@ -113,8 +114,8 @@ public class CutController implements Initializable{
             customerList = FXCollections.observableArrayList(DatabaseManager.readCustomers());
             customerTable.setItems(customerList);
 
-            customerNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
-            customerInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
+            customerNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
+            customerInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
             // Add listener to enable/disable relevant buttons based on selection
             cutTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -175,7 +176,11 @@ public class CutController implements Initializable{
         add.initOwner(Main.getStage());
         add.initModality(Modality.WINDOW_MODAL);
 
-        Parent root = FXMLLoader.load(Main.class.getResource("/Views/pop_ups/AddCut.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/AddCut.fxml"));
+        Parent root = loader.load();
+        AddCut addCut = loader.getController();
+        addCut.setCutController(this);
+
         Scene scene = new Scene(root);
 
         String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
@@ -211,21 +216,20 @@ public class CutController implements Initializable{
     }
 
     @FXML
-    void openDeleteConfirmationWindow(ActionEvent event) {
-        // TODO: There will be a confirmation window (Soon) so far wala pa...
-        // Get the selected item
-        String[] selectedItem = cutTable.getSelectionModel().getSelectedItem();
-            // Remove the selected item from the dataList
-            dataList.remove(selectedItem);
-            // Optionally, you can also delete the selected item from the database using DatabaseManager
-            try {
-                DatabaseManager.deleteCutLumber(selectedItem[0]); // Assuming the first column is the ID
-            } catch (SQLException e) {
-                // Handle SQL exception
-                e.printStackTrace();
-            }
-            cutTable.refresh(); // Refresh the TableView
-            disableRelevantButtons();
+    void openDeleteConfirmationWindow(ActionEvent event) throws SQLException {
+        String[] rowData = cutTable.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cut Lumber Detection");
+        alert.setHeaderText("Are you sure you want to delete this Cut Lumber type?");
+        alert.setContentText("Deleting this will also affect Cut Lumber with this type.");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.OK){
+            DatabaseManager.deleteCutLumber(rowData[0]);
+            refreshTables();
+        }
+        disableRelevantButtons();
     }
 
 
@@ -267,13 +271,44 @@ public class CutController implements Initializable{
     }
 
     @FXML
-    void deleteCustomer(ActionEvent event) {
+    void deleteCustomer(ActionEvent event) throws SQLException {
+        String[] rowData = customerTable.getSelectionModel().getSelectedItem();
+        if (rowData != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Customer Detection");
+            alert.setHeaderText("Are you sure you want to delete this Customer?");
+            alert.setContentText("Deleting this will completely remove it from the database.");
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.showAndWait();
 
+            if(alert.getResult() == ButtonType.OK){
+                DatabaseManager.deleteCustomer(rowData[0]);
+                refreshTables();
+            }
+            disableRelevantButtons();
+        }
     }
 
     @FXML
-    void openNewCustomerWindow(ActionEvent event) {
+    void openNewCustomerWindow(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/NewCustomer.fxml"));
+        Parent root = loader.load();
+        NewCustomer customerController = loader.getController();
+        customerController.setCustomerController(this);
 
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
+        Scene scene = new Scene(root);
+
+        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        supply.setResizable(false);
+        supply.setTitle("Add Customer");
+        supply.setScene(scene);
+        supply.show();
     }
 
     @FXML
@@ -288,13 +323,16 @@ public class CutController implements Initializable{
         delete_customer_button.setDisable(true);
     }
 
-    @FXML
-    public void refreshCutTable() throws SQLException {
-        // Clear the existing data
-        dataList.clear();
-        // Reload data from the database
-        dataList.addAll(DatabaseManager.readCutLumbers());
-        cutTable.refresh();
+    public static void refreshTables() throws SQLException {
+        try {
+            // Clear the existing data
+            dataList.clear();
+            dataList.addAll(DatabaseManager.readCutLumbers());
+            customerList.clear();
+            customerList.addAll(DatabaseManager.readCustomers());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

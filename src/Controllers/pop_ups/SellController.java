@@ -65,7 +65,7 @@ public class SellController implements Initializable  {
         DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, Integer.toString(Integer.parseInt(price)*quantity), sizeLabel.getText());
 
         // Refresh the data table
-        cutController.refreshCutTable();
+        cutController.refreshTables();
         cutController.disableRelevantButtons();
 
         // Close the FXML window

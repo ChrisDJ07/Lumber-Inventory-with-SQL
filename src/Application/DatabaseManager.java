@@ -19,7 +19,7 @@ public class DatabaseManager {
     // JDBC URL, username, and password
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     // Reusable Code for showing errors
     private static void showErrorAlert(String message) {
@@ -79,6 +79,20 @@ public class DatabaseManager {
             Statement statement = con.createStatement();
             String query = String.format("""
                 INSERT INTO suppliers (supplier_name, supplier_info)
+                VALUES("%s","%s");
+                """, name, info);
+            statement.executeUpdate(query);
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void addCustomer(String name, String info) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = String.format("""
+                INSERT INTO customers (customer_name, customer_info)
                 VALUES("%s","%s");
                 """, name, info);
             statement.executeUpdate(query);
@@ -189,11 +203,6 @@ public class DatabaseManager {
         String query = "SELECT * FROM application_users";
         return readData(query, 3);
     }
-    // Read customers from the database
-    public static List<String[]> readCustomers() throws SQLException {
-        String query = "SELECT * FROM customers";
-        return readData(query, 3);
-    }
     // Read raw lumbers from the database
     public static List<String[]> readRawLumbers() throws SQLException {
         String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber";
@@ -242,6 +251,11 @@ public class DatabaseManager {
     // Read suppliers from the database
     public static List<String[]> readSuppliers() throws SQLException {
         String query = "SELECT supplier_name, supplier_info\n" + "FROM suppliers;";
+        return readData(query, 2);
+    }
+    // Read customers from the database
+    public static List<String[]> readCustomers() throws SQLException {
+        String query = "SELECT customer_name, customer_info FROM customers";
         return readData(query, 2);
     }
 
@@ -294,6 +308,12 @@ public class DatabaseManager {
         String query = "SELECT supplier_ID\n" +
                 "FROM suppliers\n" +
                 "WHERE supplier_name = \""+name+"\";";
+        return getCell_Janiola(query);
+    }
+    public static String getCustomerID(String name) throws SQLException{
+        String query = "SELECT customer_ID\n" +
+                "FROM customers\n" +
+                "WHERE customer_name = \""+name+"\";";
         return getCell_Janiola(query);
     }
     // Get the role of current user from the database
@@ -387,6 +407,21 @@ public class DatabaseManager {
                     WHERE supplier_ID = %s;
                 """;
             statement.executeUpdate(String.format(query, getSupplierID_Janiola(name)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    // Delete Supplier
+    public static void deleteCustomer(String name) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    DELETE FROM customers
+                    WHERE customer_ID = %s;
+                """;
+            statement.executeUpdate(String.format(query, getCustomerID(name)));
         }
         catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);

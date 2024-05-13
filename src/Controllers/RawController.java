@@ -102,8 +102,10 @@ public class RawController implements Initializable {
 
             supplierList = FXCollections.observableArrayList(DatabaseManager.readSuppliers());
             supplierTable.setItems(supplierList);
+
             FilteredList<String[]> filteredSupplierList  = new FilteredList<>(supplierList);
             supplierTable.setItems(filteredSupplierList);
+
             supplierNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             supplierInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
@@ -274,7 +276,7 @@ public class RawController implements Initializable {
     @FXML
     void delete_rawLumber(ActionEvent event) throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Raw Lumber Detetion");
+        alert.setTitle("Raw Lumber Detection");
         alert.setHeaderText("Are you sure you want to delete this Raw Lumber type?");
         alert.setContentText("Deleting this will also affect Cut Lumber with this type.");
         alert.initModality(Modality.APPLICATION_MODAL);
