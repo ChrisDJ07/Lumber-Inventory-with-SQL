@@ -78,8 +78,6 @@ public class History implements Initializable {
     @FXML
     private Button clear_button;
     @FXML
-    private ChoiceBox<?> filterBox;
-    @FXML
     private TextField searchField;
 
 

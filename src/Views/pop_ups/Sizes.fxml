@@ -6,9 +6,10 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="217.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.Sizes">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="392.0" prefWidth="217.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.Sizes">
    <children>
       <TableView fx:id="sizeTable" layoutX="16.0" layoutY="54.0" prefHeight="242.0" prefWidth="186.0" style="-fx-background-color: white;">
         <columns>
@@ -23,14 +24,23 @@
             <Font name="System Bold" size="29.0" />
          </font>
       </Label>
-      <Button fx:id="deleteButton" layoutX="138.0" layoutY="18.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="63.0" text="Delete" />
-      <Button fx:id="newButton" layoutX="138.0" layoutY="304.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="63.0" text="ADD" />
-      <TextField layoutX="81.0" layoutY="304.0" prefHeight="26.0" prefWidth="44.0" />
-      <TextField layoutX="14.0" layoutY="304.0" prefHeight="26.0" prefWidth="44.0" />
-      <Label layoutX="65.0" layoutY="306.0" text="x">
+      <Button fx:id="deleteButton" layoutX="138.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteSize" prefHeight="27.0" prefWidth="63.0" text="Delete" />
+      <Button fx:id="addButton" layoutX="138.0" layoutY="350.0" mnemonicParsing="false" onAction="#addSize" prefHeight="27.0" prefWidth="63.0" text="Add" />
+      <TextField fx:id="addY" layoutX="81.0" layoutY="350.0" prefHeight="26.0" prefWidth="44.0" />
+      <TextField fx:id="addX" layoutX="14.0" layoutY="350.0" prefHeight="26.0" prefWidth="44.0" />
+      <Label layoutX="65.0" layoutY="352.0" text="x">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Button fx:id="editButton" layoutX="138.0" layoutY="305.0" mnemonicParsing="false" onAction="#editSize" prefHeight="27.0" prefWidth="63.0" text="Edit" />
+      <TextField fx:id="editY" layoutX="81.0" layoutY="305.0" prefHeight="26.0" prefWidth="44.0" />
+      <TextField fx:id="editX" layoutX="14.0" layoutY="305.0" prefHeight="26.0" prefWidth="44.0" />
+      <Label layoutX="65.0" layoutY="307.0" text="x">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Line endX="83.39997863769531" layoutX="116.0" layoutY="340.0" startX="-100.0" />
    </children>
 </AnchorPane>

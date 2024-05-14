@@ -20,7 +20,7 @@ public class DatabaseManager {
      */
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     /**
      * Reusable Code for showing errors
@@ -139,6 +139,20 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
+    public static void addSize(String dimension) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = String.format("""
+                INSERT INTO size (size_dimension)
+                VALUES("%s");
+                """, dimension);
+            statement.executeUpdate(query);
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
     /**
      * todo: Add Documentation
@@ -152,8 +166,8 @@ public class DatabaseManager {
                  PreparedStatement pstmtUpdate = con.prepareStatement(updateSpecificLumberQuantity)) {
                 pstmtInsert.setInt(1, soldQuantity);
                 pstmtInsert.setInt(2, price);
-                pstmtInsert.setInt(6, getCustomerID(customer_name));
-                pstmtInsert.setInt(7, ID);
+                pstmtInsert.setInt(3, getCustomerID(customer_name));
+                pstmtInsert.setInt(4, ID);
                 pstmtInsert.executeUpdate();
 
                 currentQuantity -= soldQuantity;
@@ -479,13 +493,25 @@ public class DatabaseManager {
      * @param type - type of raw lumber
      * @param quantity - quantity to be set
      */
-    public static void updateRawQuantity(String type, String quantity) throws SQLException {
-        String query = "UPDATE rawlumber SET rawlumber_quantity = ? WHERE rawlumber_ID = ?";
+    public static void updateRaw(String type, int quantity, int ID) throws SQLException {
+        String query = "UPDATE rawlumber SET rawlumber_type = ?, rawlumber_quantity = ? WHERE rawlumber_ID = ?";
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmt = con.prepareStatement(query)) {
-                pstmt.setString(1, quantity);
-                pstmt.setInt(2, getRawID_Janiola(type));
+                pstmt.setString(1, type);
+                pstmt.setInt(2, quantity);
+                pstmt.setInt(3, ID);
+                pstmt.executeUpdate();
+            }
+        }
+    }
+    public static void updateSize(String dimension, int ID) throws SQLException {
+        String query = "UPDATE size SET size_dimension = ? WHERE size_ID = ?";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, dimension);
+                pstmt.setInt(2, ID);
                 pstmt.executeUpdate();
             }
         }
@@ -636,11 +662,27 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
+    // Delete Size
+    // Delete Supplier
+    public static void deleteSize(String size) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    DELETE FROM size
+                    WHERE size_ID = %s;
+                """;
+            statement.executeUpdate(String.format(query, getSizeID_Janiola(size)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
 
 // EDIT FUNCTIONS
     /**
-     * Insert Supplier value in the database
+     * Update Supplier record in the database
      * @param name - name of the supplier
      * @param info - contact info of the supplier
      */
@@ -652,6 +694,26 @@ public class DatabaseManager {
                 pstmt.setString(1, name);
                 pstmt.setString(2, info);
                 pstmt.setInt(3, supplier_ID);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+
+    /**
+     * Update Customer record in the database
+     * @param name - name of the customer
+     * @param info - contact info of the customer
+     */
+    public static void editCustomer_Janiola(String name, String info, int customer_ID) throws SQLException {
+        String query = "UPDATE customers SET customer_name = ?, customer_info = ? WHERE customer_ID = ?";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, name);
+                pstmt.setString(2, info);
+                pstmt.setInt(3, customer_ID);
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -701,6 +763,26 @@ public class DatabaseManager {
         }
         return 0;
     }
+    /**
+     * Same as checkDuplicateForEdit_Janiola() but has for cut lumber
+     */
+    public static int checkDuplicateForEditCut_Janiola(int type, int size, int exemption) throws SQLException {
+        String query = "SELECT EXISTS (SELECT 1 FROM cutlumber WHERE cutlumber_type = ? AND cutlumber_size = ? AND cutlumber_ID != ?)";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setInt(1, type);
+                pstmt.setInt(2, size);
+                pstmt.setInt(3, exemption);
+                try (ResultSet result = pstmt.executeQuery()) {
+                    if (result.next()) {
+                        return result.getInt(1);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 
 
     /**
@@ -736,13 +818,13 @@ public class DatabaseManager {
     public static String getLastProcess() throws SQLException {
         String[] lastProcess = null;
         String processText = """
-                    TYPE:   %s
+                      TYPE: %s
                     
-                    SIZE:   %s
+                      SIZE: %s
                     
-                    INPUT:   %s
+                     INPUT: %s
                     
-                    OUTPUT:   %s
+                    OUTPUT: %s
                     
                     """;
         String query= """
@@ -781,13 +863,13 @@ public class DatabaseManager {
     public static String getLastSupply() throws SQLException {
         String[] lastSupply = null;
         String supplyText = """
-                    SUPPLIER:   %s
+                    SUPPLIER: %s
                     
-                    TYPE:   %s
+                        TYPE: %s
                     
-                    QUANTITY:   %s
+                    QUANTITY: %s
                     
-                    PRICE:   %s
+                       PRICE: %s
                     
                     """;
         String query= """
@@ -824,15 +906,15 @@ public class DatabaseManager {
     public static String getLastSold() throws SQLException {
         String[] lastSold = null;
         String supplyText = """
-                    CLIENT:   %s
+                    CLIENT: %s
                     
-                    TYPE:   %s
+                      TYPE: %s
                     
-                    TYPE:   %s
+                      TYPE: %s
                     
-                    QUANTITY:   %s
+                     UNITS: %s
                     
-                    PRICE:   %s
+                     PRICE: %s
                     
                     """;
         String query= """
@@ -853,8 +935,8 @@ public class DatabaseManager {
             try (PreparedStatement pstmt = con.prepareStatement(query);
                  ResultSet result = pstmt.executeQuery()) {
                 if (result.next()) {
-                    lastSold = new String[8];
-                    for (int i = 0; i < 8; i++) {
+                    lastSold = new String[6];
+                    for (int i = 0; i < 6; i++) {
                         lastSold[i] = result.getString(i+1);
                     }
                     return String.format(supplyText, lastSold[3], lastSold[4], lastSold[5], lastSold[1], lastSold[2]);
@@ -931,5 +1013,104 @@ public class DatabaseManager {
                 return "0";
             }
         }
+    }
+
+    /**
+     * Check whether a given ID is being referenced by a specified table
+     * @param table - table to check
+     * @param column - column to verify
+     * @param ID - given ID
+     * @return - true if it has a reference, false otherwise
+     */
+    public static boolean checkReference (String table, String column, int ID) throws SQLException {
+        String query= "SELECT EXISTS (SELECT 1 FROM "+table+" WHERE "+column+" = ?)";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setInt(1, ID);
+                try (ResultSet result = pstmt.executeQuery()) {
+                    if (result.next()) {
+                        if(result.getInt(1) == 1){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if a specified Raw Lumber has Process or Supply history to decide if it can be deleted or not
+     * @param type - type of Raw Lumber
+     * @return - true if it has Process/Supply history, false otherwise
+     */
+    public static boolean checkRawReference (String type) throws SQLException {
+        return checkReference("process_info", "process_from_rawlumber", getRawID_Janiola(type))
+                || checkReference("supplied_by", "supplied_lumber", getRawID_Janiola(type));
+    }
+
+    /**
+     * Check if a specified Cut Lumber has Sell history to decide if it can be deleted or not
+     * @param ID - ID of Cut Lumber
+     * @return - true if it has Sell history, false otherwise
+     */
+    public static boolean checkCutReference (int ID) throws SQLException {
+        return checkReference("sold_to", "sold_cutlumber", ID)
+                || checkReference("process_info", "process_to_cutlumber", ID);
+    }
+
+    /**
+     * Check if a specified supplier has a Supply history to decide if it can be deleted or not
+     * @param name - name of supplier
+     * @return - true if it has Supply history, false otherwise
+     */
+    public static boolean checkSupplierReference (String name) throws SQLException {
+        return checkReference("supplied_by", "supplied_by", getSupplierID_Janiola(name));
+    }
+
+    /**
+     * Check if a specified customer has a buy history to decide if it can be deleted or not
+     * @param name - name of customer
+     * @return - true if it has buy history, false otherwise
+     */
+    public static boolean checkCustomerReference (String name) throws SQLException {
+        return checkReference("sold_to", "sold_to", getCustomerID(name));
+    }
+
+    /**
+     * Special Function to check if a certain size dimension has a process history
+     * to decide if it can be deleted or not
+     * @param size - dimension
+     * @return true if it has process reference, false otherwise
+     */
+    public static boolean checkSizeReference (String size) throws SQLException {
+        String query= """
+                SELECT EXISTS (
+                SELECT 1
+                FROM process_info
+                LEFT JOIN rawlumber
+                ON process_info.process_from_rawlumber = rawlumber.rawlumber_ID
+                LEFT JOIN cutlumber
+                ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
+                LEFT JOIN size
+                ON cutlumber.cutlumber_size = size.size_ID
+                WHERE size_ID = ?
+                )
+                """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setInt(1, getSizeID_Janiola(size));
+                try (ResultSet result = pstmt.executeQuery()) {
+                    if (result.next()) {
+                        if(result.getInt(1) == 1){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

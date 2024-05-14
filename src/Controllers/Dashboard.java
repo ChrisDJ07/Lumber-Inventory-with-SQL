@@ -93,7 +93,8 @@ public class Dashboard implements Initializable {
             lastSupply.setText(DatabaseManager.getLastSupply());
             lastSold.setText(DatabaseManager.getLastSold());
         } catch (SQLException e) {
-            alert("Database Error", "There is an error fetching data from the database.");
+            e.printStackTrace();
+            //alert("Database Error", "There is an error fetching data from the database.");
         }
     }
 

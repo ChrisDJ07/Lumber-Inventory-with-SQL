@@ -93,6 +93,7 @@ public class RawLumber implements Initializable {
             rawTable.setItems(rawLumberList);
             FilteredList<String[]> filteredRawList = new FilteredList<>(rawLumberList);
             rawTable.setItems(filteredRawList);
+
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
@@ -110,7 +111,6 @@ public class RawLumber implements Initializable {
 
             supplierList = FXCollections.observableArrayList(DatabaseManager.readSuppliers());
             supplierTable.setItems(supplierList);
-
             FilteredList<String[]> filteredSupplierList  = new FilteredList<>(supplierList);
             supplierTable.setItems(filteredSupplierList);
 
@@ -299,13 +299,20 @@ public class RawLumber implements Initializable {
 /* Delete Functions */
     @FXML
     void delete_rawLumber(ActionEvent event) throws SQLException {
+        // check if selected Raw Lumber have any process/supply history
+        if(DatabaseManager.checkRawReference(getSelectedType())){
+            alert("Deletion Error", "This Raw Lumber already has a" +
+                    " Process/Supply transaction and cannot be deleted.");
+            return;
+        }
+        // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("RawLumber Lumber Detetion");
-        alert.setHeaderText("Are you sure you want to delete this RawLumber Lumber type?");
-        alert.setContentText("Deleting this will also affect CutLumbers and associated History of this type.");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete this Raw Lumber type?");
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.showAndWait();
-
+        // Proceed Delete
         if(alert.getResult() == ButtonType.OK){
             DatabaseManager.deleteRawLumber(getSelectedType());
             refreshTables();
@@ -313,13 +320,20 @@ public class RawLumber implements Initializable {
     }
     @FXML
     void deleteSupplier(ActionEvent event) throws SQLException {
+        // check if selected Supplier have any process/supply history
+        if(DatabaseManager.checkSupplierReference(getSelectedSupplier())){
+            alert("Deletion Error", "This Supplier already has a" +
+                    " Supply transaction and cannot be deleted.");
+            return;
+        }
+        // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Supplier Detetion");
         alert.setHeaderText("Are you sure you want to delete this Supplier?");
         alert.setContentText("Deleting this will completely remove it from the database.");
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.showAndWait();
-
+        // Proceed Delete
         if(alert.getResult() == ButtonType.OK){
             DatabaseManager.deleteSupplier(getSelectedSupplier());
             refreshTables();
@@ -338,6 +352,22 @@ public class RawLumber implements Initializable {
         }
     }
 
+    @FXML
+    void logOut(ActionEvent event) throws IOException {
+        Main.logIn();
+        ((Stage) userRoleLabel.getScene().getWindow()).close();
+    }
+
+    public void alert(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
+    }
+
+    // Get Selected
     public static String getSelectedType(){
         return selectedRawLumber[0];
     }
@@ -350,14 +380,14 @@ public class RawLumber implements Initializable {
     public static String getSelectedSupplierInfo(){
         return selectedSupplier[1];
     }
-
+    // Set text
     public void setProcessText(String text){
         lastProcessText.setText(text);
     }
     public void setSupplyText(String text){
         lastSupplyText.setText(text);
     }
-
+    // Disable buttons
     public void disableRawButtons(){
         process_button.setDisable(true);
         supply_button.setDisable(true);
@@ -368,7 +398,7 @@ public class RawLumber implements Initializable {
         delete_supplier_button.setDisable(true);
         edit_supplier_button.setDisable(true);
     }
-
+    // Clear Search
     @FXML
     void clearSearch(ActionEvent event) {
         searchField.clear();
@@ -376,11 +406,5 @@ public class RawLumber implements Initializable {
     @FXML
     void clearSupplierSearch(ActionEvent event) {
         supplierSearch.clear();
-    }
-
-    @FXML
-    void logOut(ActionEvent event) throws IOException {
-        Main.logIn();
-        ((Stage) userRoleLabel.getScene().getWindow()).close();
     }
 }

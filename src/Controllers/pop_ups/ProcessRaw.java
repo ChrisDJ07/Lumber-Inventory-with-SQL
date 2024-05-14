@@ -71,7 +71,7 @@ public class ProcessRaw implements Initializable {
             alert("Input Error", "Please enter an integer value for units.");
         } catch (RuntimeException e){
             if(e.getMessage().equals("exceedQuantity")){
-                alert("Input Quantity Exceeded", "Enter a value not greater than "+Integer.toString(rawQuantityLimit)+".");
+                alert("Input Quantity Exceeded", "Enter a value not greater than "+ rawQuantityLimit +".");
             } else if (e.getMessage().equals("noSize")) {
                 alert("No Size Selected", "Please enter a size.");
             } else if (e.getMessage().equals("zeroUnits")) {

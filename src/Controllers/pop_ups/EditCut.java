@@ -2,6 +2,7 @@ package Controllers.pop_ups;
 
 import Application.DatabaseManager;
 import Controllers.CutLumber;
+import Controllers.RawLumber;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,7 +25,25 @@ public class EditCut implements Initializable {
 
     TableView<String[]> cutTable;
     CutLumber cutLumber;
-    String ID;
+    String ID, originalType, originalSize;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        SpinnerValueFactory<Integer> valueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
+        valueFactory.setValue(1);
+
+        unitsEditSpinner.setValueFactory(valueFactory);
+        unitsEditSpinner.setEditable(true);
+        try {
+            List<String> rawLumberTypes = DatabaseManager.readRawLumberTypes();
+            List<String> sizeTypes = DatabaseManager.readSizeTypes();
+            typeEditCB.getItems().addAll(rawLumberTypes);
+            sizeEditCB.getItems().addAll(sizeTypes);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // Method to set data received from CutLumber
     public void setData(TableView<String[]> cutTable, String[] rowData) {
@@ -34,6 +53,9 @@ public class EditCut implements Initializable {
         // rowData[2]: Size
         // rowData[3]: Price
         // rowData[4]: Quantity
+
+        originalType = rowData[1];
+        originalSize = rowData[2];
 
         // Set the values of the ChoiceBoxes, TextField, and Spinner
         ID = rowData[0];
@@ -55,48 +77,53 @@ public class EditCut implements Initializable {
         String price = priceEditTF.getText();
         int quantity = unitsEditSpinner.getValue();
 
-        // Assuming the rowData array contains the following elements in order:
-        // rowData[0]: ID
-        // rowData[1]: Type
-        // rowData[2]: Size
-        // rowData[3]: Price
-        // rowData[4]: Quantity
-        // Update the values of the rowData array
-//        rowData[1] = type;
-//        rowData[2] = size;
-//        rowData[3] = price;
-//        rowData[4] = String.valueOf(units);
-//
-//        // Update the row in the TableView
-//        // Assuming the TableView is named cutTable
-//        cutTable.getItems().set(cutTable.getSelectionModel().getSelectedIndex(), rowData);
-
-        DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, Integer.parseInt(price), quantity, size);
-
-        // Refresh the data table
-        cutLumber.refreshCutTable();
-        cutLumber.disableRelevantButtons();
-
-        // Close the FXML window
-        Stage stage = (Stage) typeEditCB.getScene().getWindow();
-        stage.close();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
-        valueFactory.setValue(1);
-
-        unitsEditSpinner.setValueFactory(valueFactory);
-        unitsEditSpinner.setEditable(true);
         try {
-            List<String> rawLumberTypes = DatabaseManager.readRawLumberTypes();
-            List<String> sizeTypes = DatabaseManager.readSizeTypes();
-            typeEditCB.getItems().addAll(rawLumberTypes);
-            sizeEditCB.getItems().addAll(sizeTypes);
+            if(DatabaseManager.checkDuplicateForEditCut_Janiola(DatabaseManager.getRawID_Janiola(type),
+                    DatabaseManager.getSizeID_Janiola(size), Integer.parseInt(ID)) == 1){
+                throw new RuntimeException("Cut Lumber already exists, please enter a different combination of type and size.");
+            }
+            if(quantity<0){
+                throw new NumberFormatException();
+            }
+            DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, Integer.parseInt(price), quantity, size);
+            // Refresh the data table
+            CutLumber.refreshCutTable();
+            cutLumber.disableRelevantButtons();
+            // Close the FXML window
+            Stage stage = (Stage) typeEditCB.getScene().getWindow();
+            stage.close();
+        } catch (NumberFormatException e) {
+            alert("Input Error", "Please enter a valid positive integer for units.");
+        } catch (RuntimeException e){
+            alert("Input Error", e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        /*
+        // Assuming the rowData array contains the following elements in order:
+         rowData[0]: ID
+         rowData[1]: Type
+         rowData[2]: Size
+         rowData[3]: Price
+         rowData[4]: Quantity
+         Update the values of the rowData array
+        rowData[1] = type;
+        rowData[2] = size;
+        rowData[3] = price;
+        rowData[4] = String.valueOf(units);
+
+        // Update the row in the TableView
+        // Assuming the TableView is named cutTable
+        cutTable.getItems().set(cutTable.getSelectionModel().getSelectedIndex(), rowData);
+         */
+    }
+
+    public void alert(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

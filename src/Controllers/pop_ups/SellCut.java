@@ -52,25 +52,26 @@ public class SellCut implements Initializable  {
     }
 
     public void proceedSelling() throws SQLException {
-        if (clientCB.getValue() == null) {
-            // Show an alert to prompt the user to select a client
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Client Not Selected");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select a client.");
-            alert.showAndWait();
-            return; // Exit the method if no client is selected
+        try{
+            if (clientCB.getValue() == null) {
+                // Show an alert to prompt the user to select a client
+                alert("Client Not Selected", "Please select a client.");
+                return; // Exit the method if no client is selected
+            }
+            if(unitsSellSpinner.getValue() > quantity){
+                throw new RuntimeException("exceedQuantity");
+            }
+            DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity,
+                    Integer.parseInt(price)*quantity, sizeLabel.getText());
+            // Refresh the data table
+            CutLumber.refreshCutTable();
+            cutLumber.disableRelevantButtons();
+            // Close the FXML window
+            Stage stage = (Stage) clientCB.getScene().getWindow();
+            stage.close();
+        } catch (RuntimeException e){
+            alert("Unit Quantity Exceeded", "Enter a value not greater than "+quantity+".");
         }
-
-        DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity, Integer.parseInt(price)*quantity, sizeLabel.getText());
-
-        // Refresh the data table
-        cutLumber.refreshCutTable();
-        cutLumber.disableRelevantButtons();
-
-        // Close the FXML window
-        Stage stage = (Stage) clientCB.getScene().getWindow();
-        stage.close();
     }
 
     @Override
@@ -88,5 +89,13 @@ public class SellCut implements Initializable  {
 
         unitsSellSpinner.setValueFactory(valueFactory);
         unitsSellSpinner.setEditable(true);
+    }
+
+    public void alert(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

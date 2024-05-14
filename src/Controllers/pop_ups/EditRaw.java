@@ -16,22 +16,39 @@ import java.util.ResourceBundle;
 
 public class EditRaw implements Initializable {
     @FXML
-    private Label typeLabel;
-    @FXML
     private TextField unitField;
+    @FXML
+    private TextField typeField;
+
+    String originalType;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        originalType = RawLumber.getSelectedType();
+        typeField.setText(originalType);
+        unitField.setText(RawLumber.getSelectedUnits());
+    }
 
     @FXML
     void editRaw(ActionEvent event) {
         try {
+            String type = typeField.getText();
+            if(DatabaseManager.checkDuplicateForEdit_Janiola("rawlumber", "rawlumber_type", type.trim(),
+                    "rawlumber_ID", DatabaseManager.getRawID_Janiola(originalType)) == 1
+                    && !type.trim().isEmpty()){
+                throw new RuntimeException("Raw Lumber already exists, please enter a different one.");
+            }
             int quantity = Integer.parseInt(unitField.getText());
             if(quantity<0){
                 throw new NumberFormatException();
             }
-            DatabaseManager.updateRawQuantity(typeLabel.getText(), Integer.toString(quantity));
+            DatabaseManager.updateRaw(type, quantity, DatabaseManager.getRawID_Janiola(originalType));
             RawLumber.refreshTables();
             ((Stage) unitField.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid positive integer for units.");
+        } catch (RuntimeException e){
+            alert("Input Error", e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -40,6 +57,7 @@ public class EditRaw implements Initializable {
     @FXML
     void clearFields(ActionEvent event) {
         unitField.setText("");
+        typeField.setText("");
     }
 
     public void alert(String title, String content){
@@ -48,11 +66,5 @@ public class EditRaw implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        typeLabel.setText(RawLumber.getSelectedType());
-        unitField.setText(RawLumber.getSelectedUnits());
     }
 }

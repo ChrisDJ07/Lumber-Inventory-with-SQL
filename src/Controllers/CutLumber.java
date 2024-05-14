@@ -8,6 +8,7 @@ import Controllers.pop_ups.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +50,8 @@ public class CutLumber implements Initializable{
     private TextField customerSearch;
     @FXML
     private Button delete_customer_button;
+    @FXML
+    private Button edit_customer_button;
     @FXML
     private Button new_customer_button;
     @FXML
@@ -95,6 +98,8 @@ public class CutLumber implements Initializable{
     @FXML
     private Label userRoleLabel;
 
+    static String[] selectedCustomer = null;
+
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,6 +111,8 @@ public class CutLumber implements Initializable{
             // Initialize table - CutLumber Lumber
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
+            FilteredList<String[]> filteredCutList = new FilteredList<>(dataList);
+            cutTable.setItems(filteredCutList);
 
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             sizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
@@ -115,6 +122,8 @@ public class CutLumber implements Initializable{
             // Initialize table - Customer
             customerList = FXCollections.observableArrayList(DatabaseManager.readCustomers());
             customerTable.setItems(customerList);
+            FilteredList<String[]> filteredCustomerList = new FilteredList<>(customerList);
+            customerTable.setItems(filteredCustomerList);
 
             customerNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             customerInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -130,9 +139,41 @@ public class CutLumber implements Initializable{
             customerTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue != null) {
                     delete_customer_button.setDisable(false);
+                    edit_customer_button.setDisable(false);
                 }
             });
 
+            searchField.setPromptText("Search...");
+            customerSearch.setPromptText("Search...");
+        /*Add listener to text property to filter data as user types*/
+            // Raw Lumber
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredCutList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            });
+            // Supplier
+            customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredCustomerList.setPredicate(item -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all items if the filter is empty
+                    }
+                    for (String value : item) {
+                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            });
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -218,8 +259,34 @@ public class CutLumber implements Initializable{
     }
 
     @FXML
-    void openDeleteConfirmationWindow(ActionEvent event) throws SQLException {
+    void openEditCustomerWindow(ActionEvent event) throws IOException {
+        selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditCustomer.fxml"));
+        Parent root = loader.load();
+
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
+        Scene scene = new Scene(root);
+
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        supply.setResizable(false);
+        supply.setTitle("Edit Customer");
+        supply.setScene(scene);
+        supply.show();
+    }
+
+    @FXML
+    void openDeleteConfirmationWindow(ActionEvent event) throws SQLException {// check if selected Raw Lumber have any process/supply history
         String[] rowData = cutTable.getSelectionModel().getSelectedItem();
+        if(DatabaseManager.checkCutReference(Integer.parseInt(rowData[0]))){
+            alert("Deletion Error", "This Cut Lumber already has a" +
+                    " Sell/Process transaction and cannot be deleted.");
+            return;
+        }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Cut Lumber Detection");
         alert.setHeaderText("Are you sure you want to delete this Cut Lumber type?");
@@ -231,7 +298,6 @@ public class CutLumber implements Initializable{
             DatabaseManager.deleteCutLumber(rowData[0]);
             refreshCutTable();
         }
-        disableRelevantButtons();
     }
 
 
@@ -267,14 +333,16 @@ public class CutLumber implements Initializable{
         }
     }
 
-    @FXML
-    void clearCustomerSearch(ActionEvent event) {
-
-    }
 
     @FXML
     void deleteCustomer(ActionEvent event) throws SQLException {
         String[] rowData = customerTable.getSelectionModel().getSelectedItem();
+        // check if selected Customer have any Sold_to history
+        if(DatabaseManager.checkCustomerReference(rowData[0])){
+            alert("Deletion Error", "This Customer already has a" +
+                    " Buy transaction and cannot be deleted.");
+            return;
+        }
         if (rowData != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Customer Detection");
@@ -287,7 +355,6 @@ public class CutLumber implements Initializable{
                 DatabaseManager.deleteCustomer(rowData[0]);
                 refreshCutTable();
             }
-            disableRelevantButtons();
         }
     }
 
@@ -315,14 +382,15 @@ public class CutLumber implements Initializable{
 
     @FXML
     void clearSearch(ActionEvent event) {
-
+        searchField.clear();
+    }
+    @FXML
+    void clearCustomerSearch(ActionEvent event) {
+        customerSearch.clear();
     }
 
-    public void disableRelevantButtons(){
-        sell_button.setDisable(true);
-        edit_cut_button.setDisable(true);
-        delete_button.setDisable(true);
-        delete_customer_button.setDisable(true);
+    public static String[] getSelectedCustomer(){
+        return selectedCustomer;
     }
 
     public static void refreshCutTable() throws SQLException {
@@ -337,9 +405,26 @@ public class CutLumber implements Initializable{
         }
     }
 
+    public void disableRelevantButtons(){
+        sell_button.setDisable(true);
+        edit_cut_button.setDisable(true);
+        delete_button.setDisable(true);
+        delete_customer_button.setDisable(true);
+        edit_customer_button.setDisable(true);
+    }
+
     @FXML
     void logOut(ActionEvent event) throws IOException {
         Main.logIn();
         ((Stage) userRoleLabel.getScene().getWindow()).close();
+    }
+
+    public void alert(String title, String content){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
     }
 }
