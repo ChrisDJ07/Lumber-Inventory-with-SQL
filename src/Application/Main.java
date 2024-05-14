@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * This is the main class for the Application
  * @author Christian Dave J. Janiola
  * @contributors Chriscent Louis June M. Pingol, ---
- * @Created 4/28/24
+ * @created 4/28/24
  **/
 
 public class Main extends Application {

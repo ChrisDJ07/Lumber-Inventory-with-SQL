@@ -20,7 +20,7 @@ public class DatabaseManager {
      */
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     /**
      * Reusable Code for showing errors
@@ -122,6 +122,20 @@ public class DatabaseManager {
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    public static void addCustomer(String name, String info) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = String.format("""
+                INSERT INTO customers (customer_name, customer_info)
+                VALUES("%s","%s");
+                """, name, info);
+            statement.executeUpdate(query);
+        }
+        catch (SQLException e){
             throw new SQLException("Error adding data to the database", e);
         }
     }
@@ -230,11 +244,6 @@ public class DatabaseManager {
         return readData(query, 3);
     }
 
-    public static List<String[]> readCustomers() throws SQLException {
-        String query = "SELECT * FROM customers";
-        return readData(query, 3);
-    }
-
     public static List<String[]> readRawLumbers() throws SQLException {
         String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber";
         return readData(query, 2);
@@ -291,6 +300,11 @@ public class DatabaseManager {
 
     public static List<String[]> readSuppliers() throws SQLException {
         String query = "SELECT supplier_name, supplier_info FROM suppliers";
+        return readData(query, 2);
+    }
+    // Read customers from the database
+    public static List<String[]> readCustomers() throws SQLException {
+        String query = "SELECT customer_name, customer_info FROM customers";
         return readData(query, 2);
     }
 
@@ -480,7 +494,7 @@ public class DatabaseManager {
      * @param size - processed size
      * @param input_quantity - input raw lumber
      * @param output_quantity - output cut lumber
-     * @throws SQLException
+     * @throws SQLException - if there is an error in the SQL query
      */
     public static void processRawLumber(String type, String size, int input_quantity, int output_quantity) throws SQLException {
         String subtractFromRaw = "UPDATE rawlumber SET rawlumber_quantity = rawlumber_quantity - ? WHERE rawlumber_ID = ?";
@@ -589,6 +603,21 @@ public class DatabaseManager {
             }
         }
     }
+    // Delete Supplier
+    public static void deleteCustomer(String name) throws SQLException {
+        try{
+            Connection con = getConnection();
+            Statement statement = con.createStatement();
+            String query = """
+                    DELETE FROM customers
+                    WHERE customer_ID = %s;
+                """;
+            statement.executeUpdate(String.format(query, getCustomerID(name)));
+        }
+        catch (SQLException e){
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
 
 // EDIT FUNCTIONS
@@ -612,7 +641,6 @@ public class DatabaseManager {
         }
     }
 
-
 // CHECK DUPLICATES
     /**
      * General function to check existence of a cell value a table in the database
@@ -620,7 +648,7 @@ public class DatabaseManager {
      * @param column - column to verify
      * @param word - word to authenticate
      * @return - value 1 if it has a duplicate and 0 otherwise
-     */
+     **/
     public static int checkDuplicate_Janiola(String table, String column, String word) throws SQLException {
         String query= "SELECT EXISTS (SELECT 1 FROM " + table + " WHERE " + column + " = ?)";
         try (Connection con = getConnection()) {
@@ -637,7 +665,7 @@ public class DatabaseManager {
         return 0;
     }
     /**
-     * Same as checkDuplicate_Janiola() but has an excemption clause
+     * Same as checkDuplicate_Janiola() but has an exemption clause
      */
     public static int checkDuplicateForEdit_Janiola(String table, String column, String word, String exemptionColumn, int exemption) throws SQLException {
         String query = "SELECT EXISTS (SELECT 1 FROM " + table + " WHERE " + column + " = ? AND " + exemptionColumn + " != ?)";

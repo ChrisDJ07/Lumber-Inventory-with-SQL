@@ -17,7 +17,7 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <TextField layoutX="125.0" layoutY="189.0" prefHeight="40.0" prefWidth="150.0" />
+      <TextField fx:id="priceAddTF" layoutX="125.0" layoutY="189.0" prefHeight="40.0" prefWidth="150.0" />
       <ChoiceBox fx:id="typeAddCB" layoutX="126.0" layoutY="81.0" prefHeight="40.0" prefWidth="150.0" />
       <Label contentDisplay="CENTER" layoutX="23.0" layoutY="81.0" prefHeight="40.0" prefWidth="103.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="TYPE">
          <font>
@@ -44,7 +44,7 @@
          </padding>
       </Label>
       <Button layoutX="23.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="61.0" text="Clear" />
-      <Button layoutX="204.0" layoutY="317.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="75.0" text="ADD" />
+      <Button layoutX="204.0" layoutY="317.0" mnemonicParsing="false" onAction="#createLumber" prefHeight="40.0" prefWidth="75.0" text="ADD" />
       <ChoiceBox fx:id="sizeAddCB" layoutX="126.0" layoutY="135.0" prefHeight="40.0" prefWidth="150.0" />
       <Label contentDisplay="CENTER" layoutX="24.0" layoutY="135.0" prefHeight="40.0" prefWidth="103.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="SIZE">
          <font>
