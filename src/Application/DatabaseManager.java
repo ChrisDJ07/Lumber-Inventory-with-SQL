@@ -130,7 +130,7 @@ public class DatabaseManager {
      * todo: Add Documentation
      */
     public static void addSold_To(int ID, int soldQuantity, String customer_name, String sold_lumber, int currentQuantity, int price, String size) throws SQLException {
-        String insertToSold_To = "INSERT INTO sold_to VALUES(NOW(), ?, ?, ?, ?, ?, ?, ?)";
+        String insertToSold_To = "INSERT INTO sold_to VALUES(NOW(), ?, ?, ?, ?)";
         String updateSpecificLumberQuantity = "UPDATE cutlumber SET cutlumber_quantity = ? WHERE cutlumber_id = ?";
         try (Connection con = getConnection()) {
             assert con != null;
@@ -138,9 +138,6 @@ public class DatabaseManager {
                  PreparedStatement pstmtUpdate = con.prepareStatement(updateSpecificLumberQuantity)) {
                 pstmtInsert.setInt(1, soldQuantity);
                 pstmtInsert.setInt(2, price);
-                pstmtInsert.setString(3, customer_name);
-                pstmtInsert.setString(4, sold_lumber);
-                pstmtInsert.setString(5, size);
                 pstmtInsert.setInt(6, getCustomerID(customer_name));
                 pstmtInsert.setInt(7, ID);
                 pstmtInsert.executeUpdate();
@@ -257,20 +254,44 @@ public class DatabaseManager {
     }
 
     public static List<String[]> readProcessedInfo() throws SQLException {
-        String query = "SELECT process_date, process_input_quantity, process_output_quantity, process_input_type, process_output_size" +
-                       " FROM process_info";
+        String query = """
+                SELECT process_date, process_input_quantity, process_output_quantity, rawlumber_type, size_dimension
+                FROM process_info
+                LEFT JOIN rawlumber
+                ON process_info.process_from_rawlumber = rawlumber.rawlumber_ID
+                LEFT JOIN cutlumber
+                ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
+                LEFT JOIN size
+                ON cutlumber.cutlumber_size = size.size_ID
+                """;
         return readData(query, 5);
     }
 
     public static List<String[]> readSoldTo() throws SQLException {
-        String query = "SELECT sold_date, sold_quantity, sold_price, sold_to_customer, sold_lumber, sold_size" +
-                       " FROM sold_to";
+        String query = """
+                SELECT sold_date, sold_quantity, sold_price, customer_name, rawlumber_type, size_dimension
+                FROM sold_to
+                LEFT JOIN customers
+                ON sold_to.sold_to = customers.customer_ID
+                LEFT JOIN cutlumber
+                ON sold_to.sold_cutlumber = cutlumber.cutlumber_ID
+                LEFT JOIN rawlumber
+                ON cutlumber.cutlumber_type = rawlumber.rawlumber_ID
+                LEFT JOIN size
+                ON cutlumber.cutlumber_size = size.size_ID
+                """;
         return readData(query, 6);
     }
 
     public static List<String[]> readSuppliedBy() throws SQLException {
-        String query = "SELECT supplied_date, supplied_quantity, supplier_name, supplied_lumber, supplied_price\n" +
-                       "FROM supplied_by;";
+        String query = """
+                SELECT supplied_date, supplied_quantity, supplier_name, rawlumber_type, supplied_price
+                FROM supplied_by
+                LEFT JOIN suppliers
+                ON supplied_by.supplied_by = suppliers.supplier_ID
+                LEFT JOIN rawlumber
+                ON supplied_by.supplied_lumber = rawlumber.rawlumber_ID
+                """;
         return readData(query, 5);
     }
 
@@ -485,7 +506,7 @@ public class DatabaseManager {
     public static void processRawLumber(String type, String size, int input_quantity, int output_quantity) throws SQLException {
         String subtractFromRaw = "UPDATE rawlumber SET rawlumber_quantity = rawlumber_quantity - ? WHERE rawlumber_ID = ?";
         String addToCut = "UPDATE cutlumber SET cutlumber_quantity = cutlumber_quantity + ? WHERE cutlumber_ID = ?";
-        String recordProcessInfo = "INSERT INTO process_info VALUES(NOW(), ?, ?, ?, ?, ?)";
+        String recordProcessInfo = "INSERT INTO process_info VALUES(NOW(), ?, ?, ?, ?)";
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmtSubtract = con.prepareStatement(subtractFromRaw);
@@ -506,9 +527,8 @@ public class DatabaseManager {
 
                 pstmtRecord.setInt(1, input_quantity);
                 pstmtRecord.setInt(2, output_quantity);
-                pstmtRecord.setString(3, type);
-                pstmtRecord.setString(4, size);
-                pstmtRecord.setInt(5, getCutID_Janiola(type, size));
+                pstmtRecord.setInt(3, getRawID_Janiola(type));
+                pstmtRecord.setInt(4, getCutID_Janiola(type, size));
                 pstmtRecord.executeUpdate();
             }
         }
@@ -523,7 +543,7 @@ public class DatabaseManager {
      */
     public static void supplyRawLumber(String supplier, String type, int input_quantity, int price) throws SQLException {
         String addToRaw = "UPDATE rawlumber SET rawlumber_quantity = rawlumber_quantity + ? WHERE rawlumber_ID = ?";
-        String recordSupplyInfo = "INSERT INTO supplied_by VALUES (NOW(), ?, ?, ?, ?, ?, ?)";
+        String recordSupplyInfo = "INSERT INTO supplied_by VALUES (NOW(), ?, ?, ?, ?)";
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmtAdd = con.prepareStatement(addToRaw);
@@ -533,11 +553,9 @@ public class DatabaseManager {
                 pstmtAdd.executeUpdate();
 
                 pstmtRecord.setInt(1, input_quantity);
-                pstmtRecord.setString(2, supplier);
-                pstmtRecord.setString(3, type);
-                pstmtRecord.setInt(4, price);
-                pstmtRecord.setInt(5, getSupplierID_Janiola(supplier));
-                pstmtRecord.setInt(6, getRawID_Janiola(type));
+                pstmtRecord.setInt(2, price);
+                pstmtRecord.setInt(3, getSupplierID_Janiola(supplier));
+                pstmtRecord.setInt(4, getRawID_Janiola(type));
                 pstmtRecord.executeUpdate();
             }
         }
@@ -699,8 +717,17 @@ public class DatabaseManager {
                     OUTPUT:   %s
                     
                     """;
-        String query= "SELECT process_date, process_input_quantity, process_output_quantity, process_input_type, process_output_size" +
-                      " FROM process_info ORDER BY process_date DESC LIMIT 1";
+        String query= """
+                SELECT process_date, process_input_quantity, process_output_quantity, rawlumber_type, size_dimension
+                FROM process_info
+                LEFT JOIN rawlumber
+                ON process_info.process_from_rawlumber = rawlumber.rawlumber_ID
+                LEFT JOIN cutlumber
+                ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
+                LEFT JOIN size
+                ON cutlumber.cutlumber_size = size.size_ID
+                ORDER BY process_date DESC LIMIT 1
+                """;
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmt = con.prepareStatement(query);
@@ -735,8 +762,15 @@ public class DatabaseManager {
                     PRICE:   %s
                     
                     """;
-        String query= "SELECT supplied_date, supplied_quantity, supplier_name, supplied_lumber, supplied_price" +
-                      " FROM supplied_by ORDER BY supplied_date DESC LIMIT 1";
+        String query= """
+                SELECT supplied_date, supplied_quantity, supplier_name, rawlumber_type, supplied_price
+                FROM supplied_by
+                LEFT JOIN suppliers
+                ON supplied_by.supplied_by = suppliers.supplier_ID
+                LEFT JOIN rawlumber
+                ON supplied_by.supplied_lumber = rawlumber.rawlumber_ID
+                ORDER BY supplied_date DESC LIMIT 1
+                """;
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmt = con.prepareStatement(query);
@@ -773,7 +807,19 @@ public class DatabaseManager {
                     PRICE:   %s
                     
                     """;
-        String query= "SELECT * FROM sold_to ORDER BY sold_date DESC LIMIT 1";
+        String query= """
+                SELECT sold_date, sold_quantity, sold_price, customer_name, rawlumber_type, size_dimension
+                FROM sold_to
+                LEFT JOIN customers
+                ON sold_to.sold_to = customers.customer_ID
+                LEFT JOIN cutlumber
+                ON sold_to.sold_cutlumber = cutlumber.cutlumber_ID
+                LEFT JOIN rawlumber
+                ON cutlumber.cutlumber_type = rawlumber.rawlumber_ID
+                LEFT JOIN size
+                ON cutlumber.cutlumber_size = size.size_ID
+                ORDER BY sold_date DESC LIMIT 1
+                """;
         try (Connection con = getConnection()) {
             assert con != null;
             try (PreparedStatement pstmt = con.prepareStatement(query);

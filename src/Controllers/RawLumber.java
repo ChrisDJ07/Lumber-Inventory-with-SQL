@@ -302,7 +302,7 @@ public class RawLumber implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("RawLumber Lumber Detetion");
         alert.setHeaderText("Are you sure you want to delete this RawLumber Lumber type?");
-        alert.setContentText("Deleting this will also affect CutLumber Lumber with this type.");
+        alert.setContentText("Deleting this will also affect CutLumbers and associated History of this type.");
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.showAndWait();
 

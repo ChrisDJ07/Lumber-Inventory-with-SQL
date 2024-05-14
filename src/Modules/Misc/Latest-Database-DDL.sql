@@ -53,11 +53,13 @@ CREATE TABLE if NOT EXISTS supplied_by
 (
     supplied_date			VARCHAR (35) NOT NULL,
     supplied_quantity		INT NOT NULL,
+	supplier_name			VARCHAR (35) NOT NULL,
+	supplied_lumber		    VARCHAR (35) NOT NULL,
 	supplied_price          INT NOT NULL,
-	supplied_by             INT NOT NULL,
-	supplied_lumber         INT NOT NULL,
-	CONSTRAINT fk_supplied_from_supplier FOREIGN KEY (supplied_by) REFERENCES suppliers (supplier_ID) ON DELETE CASCADE,
-    CONSTRAINT fk_supplied_rawlumber FOREIGN KEY (supplied_lumber) REFERENCES rawlumber (rawlumber_ID) ON DELETE CASCADE
+	supplier                INT,
+	rawlumber               INT,
+	CONSTRAINT fk_supplied_from_supplier FOREIGN KEY (supplier) REFERENCES suppliers (supplier_ID) ON DELETE SET NULL,
+    CONSTRAINT fk_supplied_rawlumber FOREIGN KEY (rawlumber) REFERENCES rawlumber (rawlumber_ID) ON DELETE SET NULL
 );
 
 CREATE TABLE if NOT EXISTS process_info
@@ -65,10 +67,10 @@ CREATE TABLE if NOT EXISTS process_info
 	process_date			        VARCHAR (35) NOT NULL,
 	process_input_quantity			INT NOT NULL,
 	process_output_quantity			INT NOT NULL,
-	process_from_rawlumber          INT NOT NULL,
-	process_to_cutlumber            INT NOT NULL,
-	CONSTRAINT fk_process_from_rawlumber FOREIGN KEY (process_from_rawlumber) REFERENCES rawlumber (rawlumber_ID) ON DELETE CASCADE
-	CONSTRAINT fk_process_into_cutlumber FOREIGN KEY (process_to_cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE CASCADE
+	process_input_type			    VARCHAR (25) NOT NULL,
+	process_output_size			    VARCHAR (25) NOT NULL,
+	cutlumber                       INT,
+	CONSTRAINT fk_process_into_cutlumber FOREIGN KEY (cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE SET NULL
 );
 
 CREATE TABLE if NOT EXISTS sold_to
@@ -76,8 +78,13 @@ CREATE TABLE if NOT EXISTS sold_to
 	sold_date				VARCHAR (35) NOT NULL,
 	sold_quantity			INT NOT NULL,
 	sold_price              INT NOT NULL,
-	sold_to                 INT NOT NULL,
-    sold_cutlumber          INT NOT NULL,
-    CONSTRAINT fk_sold_to_customer FOREIGN KEY (sold_to) REFERENCES customers (customer_ID) ON DELETE CASCADE,
-    CONSTRAINT fk_sold_cutlumber FOREIGN KEY (sold_cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE CASCADE
+	sold_to_customer		VARCHAR (50) NOT NULL,
+	sold_lumber				VARCHAR (39) NOT NULL,
+	sold_size               VARCHAR (25) NOT NULL,
+	customer                INT,
+    cutlumber               INT,
+    CONSTRAINT fk_sold_to_customer FOREIGN KEY (customer) REFERENCES customers (customer_ID) ON DELETE SET NULL,
+    CONSTRAINT fk_sold_cutlumber FOREIGN KEY (cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE SET NULL
 );
+
+-- Note: You can optionally add PRIMARY KEY or UNIQUE constraints to the columns if needed.
