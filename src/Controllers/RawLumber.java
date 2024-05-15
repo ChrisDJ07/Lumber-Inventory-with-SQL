@@ -93,7 +93,6 @@ public class RawLumber implements Initializable {
             rawTable.setItems(rawLumberList);
             FilteredList<String[]> filteredRawList = new FilteredList<>(rawLumberList);
             rawTable.setItems(filteredRawList);
-
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 

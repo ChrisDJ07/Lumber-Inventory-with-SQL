@@ -24,11 +24,11 @@
             </Label>
             <TabPane fx:id="tab" layoutX="35.0" layoutY="105.0" prefHeight="448.0" prefWidth="726.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Process Info">
+                <Tab fx:id="processTab" text="Process Info">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="processTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="435.0" prefWidth="726.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="processTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="390.0" prefWidth="726.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <columns>
                                     <TableColumn fx:id="processDateColumn" prefWidth="75.0" text="Date" />
                                     <TableColumn fx:id="processInputQuantityColumn" prefWidth="75.0" text="Input Quantity" />
@@ -44,7 +44,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Sold Info">
+                <Tab fx:id="soldTab" text="Sold Info">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -65,7 +65,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab text="Supply Info">
+                  <Tab fx:id="supplyTab" text="Supply Info">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -89,6 +89,8 @@
             </TabPane>
             <TextField fx:id="searchField" layoutX="35.0" layoutY="71.0" prefHeight="26.0" prefWidth="212.0" />
             <Button fx:id="clear_button" layoutX="253.0" layoutY="71.0" mnemonicParsing="false" onAction="#clearSearch" prefHeight="26.0" prefWidth="43.0" text="Clear" />
+            <Button fx:id="edit_button" layoutX="617.0" layoutY="68.0" mnemonicParsing="false" onAction="#openEditHistoryWindows" prefHeight="30.0" prefWidth="66.0" text="EDIT" />
+            <Button fx:id="delete_button" layoutX="694.0" layoutY="68.0" mnemonicParsing="false" onAction="#deleteHistory" prefHeight="30.0" prefWidth="66.0" text="DELETE" />
          </children></AnchorPane>
       <AnchorPane prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgb(64, 58, 53); -fx-background-radius: 0 1em 1em 0; -fx-border-radius: 0 1em 1em 0;">
          <children>

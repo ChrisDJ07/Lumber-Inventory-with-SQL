@@ -41,8 +41,7 @@ public class CutLumber implements Initializable{
     private Button history_button;
     @FXML
     private Button raw_button;
-    @FXML
-    private Label lastSoldLabel;
+
 
 
     // Customer
@@ -98,6 +97,9 @@ public class CutLumber implements Initializable{
     @FXML
     private Label userRoleLabel;
 
+    @FXML
+    private Label lastSoldText = null;
+
     static String[] selectedCustomer = null;
 
     // Initialize tables
@@ -106,6 +108,7 @@ public class CutLumber implements Initializable{
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
         try {
+            lastSoldText.setText(DatabaseManager.getLastSold());
             disableRelevantButtons();
 
             // Initialize table - CutLumber Lumber
@@ -371,7 +374,7 @@ public class CutLumber implements Initializable{
 
         Scene scene = new Scene(root);
 
-        String css = Main.class.getResource("/CSS/Application.css").toExternalForm();
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
         supply.setResizable(false);
@@ -391,6 +394,11 @@ public class CutLumber implements Initializable{
 
     public static String[] getSelectedCustomer(){
         return selectedCustomer;
+    }
+
+    // Set text
+    public void setSoldText(String text){
+        lastSoldText.setText(text);
     }
 
     public static void refreshCutTable() throws SQLException {

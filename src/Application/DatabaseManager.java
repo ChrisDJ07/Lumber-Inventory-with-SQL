@@ -3,6 +3,7 @@ package Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import javax.lang.model.util.Elements;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -678,6 +679,20 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
+    // Delete History
+    public static void deleteHistory(String table, String column,String date) throws SQLException {
+        String query= "DELETE FROM " + table + " WHERE " + column + " = ?";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, date);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error deleting data to the database", e);
+        }
+    }
+
 
 
 // EDIT FUNCTIONS
@@ -714,6 +729,32 @@ public class DatabaseManager {
                 pstmt.setString(1, name);
                 pstmt.setString(2, info);
                 pstmt.setInt(3, customer_ID);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    // Edit History
+    public static void editProcessHistory(String date, int input, int output, String type, String size, String originalDate) throws SQLException {
+        String query = """
+                UPDATE process_info
+                SET process_date = ?,
+                	process_input_quantity = ?,
+                    process_output_quantity = ?,
+                    process_from_rawlumber = ?,
+                    process_to_cutlumber = ?
+                WHERE process_date = ?
+                """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, date);
+                pstmt.setInt(2, input);
+                pstmt.setInt(3, output);
+                pstmt.setInt(4, getRawID_Janiola(type));
+                pstmt.setInt(5,getCutID_Janiola(type, size));
+                pstmt.setString(6, originalDate);
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -817,16 +858,7 @@ public class DatabaseManager {
      */
     public static String getLastProcess() throws SQLException {
         String[] lastProcess = null;
-        String processText = """
-                      TYPE: %s
-                    
-                      SIZE: %s
-                    
-                     INPUT: %s
-                    
-                    OUTPUT: %s
-                    
-                    """;
+        String processText = "%s units of %s was processed into %s units of size %s ";
         String query= """
                 SELECT process_date, process_input_quantity, process_output_quantity, rawlumber_type, size_dimension
                 FROM process_info
@@ -847,7 +879,7 @@ public class DatabaseManager {
                     for (int i = 0; i < 5; i++) {
                         lastProcess[i] = result.getString(i+1);
                     }
-                    return String.format(processText, lastProcess[3], lastProcess[4], lastProcess[1], lastProcess[2]);
+                    return String.format(processText, lastProcess[1], lastProcess[3], lastProcess[2], lastProcess[4]);
                 }
                 else{
                     return String.format(processText, "..", "..", "..", "..");
@@ -862,7 +894,8 @@ public class DatabaseManager {
      */
     public static String getLastSupply() throws SQLException {
         String[] lastSupply = null;
-        String supplyText = """
+        String supplyText = "%s supplied %s units of %s at Php%s total";
+        String supplyText1 = """
                     SUPPLIER: %s
                     
                         TYPE: %s
@@ -890,7 +923,7 @@ public class DatabaseManager {
                     for (int i = 0; i < 5; i++) {
                         lastSupply[i] = result.getString(i+1);
                     }
-                    return String.format(supplyText, lastSupply[2], lastSupply[3], lastSupply[1], lastSupply[4]);
+                    return String.format(supplyText, lastSupply[2], lastSupply[1], lastSupply[3], lastSupply[4]);
                 }
                 else{
                     return String.format(supplyText, "..", "..", "..", "..");
@@ -905,18 +938,7 @@ public class DatabaseManager {
      */
     public static String getLastSold() throws SQLException {
         String[] lastSold = null;
-        String supplyText = """
-                    CLIENT: %s
-                    
-                      TYPE: %s
-                    
-                      TYPE: %s
-                    
-                     UNITS: %s
-                    
-                     PRICE: %s
-                    
-                    """;
+        String supplyText = "%s bought %s units of %s size %s at Php%s total";
         String query= """
                 SELECT sold_date, sold_quantity, sold_price, customer_name, rawlumber_type, size_dimension
                 FROM sold_to
@@ -939,7 +961,7 @@ public class DatabaseManager {
                     for (int i = 0; i < 6; i++) {
                         lastSold[i] = result.getString(i+1);
                     }
-                    return String.format(supplyText, lastSold[3], lastSold[4], lastSold[5], lastSold[1], lastSold[2]);
+                    return String.format(supplyText, lastSold[3], lastSold[1], lastSold[4], lastSold[5], lastSold[2]);
                 }
                 else{
                     return String.format(supplyText, "..", "..", "..", "..", "..");

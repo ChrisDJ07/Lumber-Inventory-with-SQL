@@ -64,6 +64,7 @@ public class SellCut implements Initializable  {
             DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity,
                     Integer.parseInt(price)*quantity, sizeLabel.getText());
             // Refresh the data table
+            cutLumber.setSoldText(DatabaseManager.getLastSold());
             CutLumber.refreshCutTable();
             cutLumber.disableRelevantButtons();
             // Close the FXML window

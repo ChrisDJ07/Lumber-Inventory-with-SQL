@@ -10,8 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +24,11 @@ import java.util.ResourceBundle;
 public class History implements Initializable {
     @FXML
     private TabPane tab;
+
+    @FXML
+    private Button delete_button;
+    @FXML
+    private Button edit_button;
 
     @FXML
     TableView<String[]> processTable;
@@ -62,9 +69,9 @@ public class History implements Initializable {
     @FXML
     TableColumn<String[], String> supplyPriceColumn;
 
-    ObservableList<String[]> processedList;
-    ObservableList<String[]> soldList;
-    ObservableList<String[]> supplyList;
+    static ObservableList<String[]> processedList;
+    static ObservableList<String[]> soldList;
+    static ObservableList<String[]> supplyList;
 
     // User Account
     @FXML
@@ -80,19 +87,28 @@ public class History implements Initializable {
     @FXML
     private TextField searchField;
 
+    // Tabs
+    @FXML
+    private Tab soldTab;
+    @FXML
+    private Tab processTab;
+    @FXML
+    private Tab supplyTab;
+
+    static String[] selectedSoldInfo;
+    static String[] selectedProcessInfo;
+    static String[] selectedSupplyInfo;
+
+    static String currentTab = "";
+
 
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        currentTab = "process";
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
-
-        // Listener when changing tab
-        tab.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if (newTab != null) {
-                clear();
-            }
-        });
+        disableButtons();
 
         try {
             // Initialize table - Processed
@@ -107,6 +123,16 @@ public class History implements Initializable {
             processWoodTypeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             processSizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
 
+            processTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    edit_button.setDisable(false);
+                    delete_button.setDisable(false);
+                    selectedProcessInfo = processTable.getSelectionModel().getSelectedItem();
+                } else {
+                    disableButtons();
+                }
+            });
+
             // Initialize table - Sold
             soldList = FXCollections.observableArrayList(DatabaseManager.readSoldTo());
             soldTable.setItems(soldList);
@@ -120,6 +146,16 @@ public class History implements Initializable {
             soldLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
             soldSizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[5]));
 
+            soldTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    edit_button.setDisable(false);
+                    delete_button.setDisable(false);
+                    selectedSoldInfo = soldTable.getSelectionModel().getSelectedItem();
+                } else {
+                    disableButtons();
+                }
+            });
+
 
             // Initialize table - Supply
             supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
@@ -132,6 +168,16 @@ public class History implements Initializable {
             supplySupplierColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
             supplyLumberColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[3]));
             supplyPriceColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[4]));
+
+            supplyTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    edit_button.setDisable(false);
+                    delete_button.setDisable(false);
+                    selectedSupplyInfo = supplyTable.getSelectionModel().getSelectedItem();
+                } else {
+                    disableButtons();
+                }
+            });
 
             // Adding filters
             searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -173,8 +219,94 @@ public class History implements Initializable {
                 );
             });
 
+            tab.getSelectionModel().selectedItemProperty().addListener((Observable, oldTab, newTab) -> {
+                disableButtons();
+                clear();
+                if (newTab == soldTab) {
+                    currentTab = "sold";
+                    if (selectedSoldInfo != null) {
+                        edit_button.setDisable(false);
+                        delete_button.setDisable(false);
+                    }
+                } else if (newTab == processTab) {
+                    currentTab = "process";
+                    if (selectedProcessInfo != null) {
+                        edit_button.setDisable(false);
+                        delete_button.setDisable(false);
+                    }
+                } else if (newTab == supplyTab) {
+                    currentTab = "supply";
+                    if (selectedSupplyInfo != null) {
+                        edit_button.setDisable(false);
+                        delete_button.setDisable(false);
+                    }
+                }
+            });
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void openEditHistoryWindows(ActionEvent event) throws IOException {
+        String fxmlFile = "";
+        String title = "";
+
+        switch (currentTab) {
+            case "process" -> {
+                fxmlFile = "/Views/pop_ups/EditProcessHistory.fxml";
+                title = "Edit Process History";
+            }
+            case "sold" -> {
+                //fxmlFile = "/Views/pop_ups/EditSoldHistory.fxml";
+                title = "Edit Sold History";
+            }
+            case "supply" -> {
+                //fxmlFile = "/Views/pop_ups/EditSupplyHistory.fxml";
+                title = "Edit Supply History";
+            }
+        }
+
+        if (!fxmlFile.isEmpty()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Stage edit = new Stage();
+            edit.setTitle(title);
+            edit.initOwner(Main.getStage());
+            edit.initModality(Modality.WINDOW_MODAL);
+            edit.setResizable(false);
+
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(Main.class.getResource("/Application/Application.css").toExternalForm());
+            edit.setScene(scene);
+            edit.show();
+        }
+    }
+
+
+    @FXML
+    void deleteHistory(ActionEvent event) throws SQLException {
+        // Confirm Deletion
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("History Detetion");
+        alert.setHeaderText("Are you sure you want to delete this Transaction History?");
+        alert.setContentText("Deleting this will completely remove it from the database.");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.showAndWait();
+        // Proceed Delete
+        if(alert.getResult() == ButtonType.OK){
+            switch (currentTab) {
+                case "process" -> {
+                    DatabaseManager.deleteHistory("process_info", "process_date", selectedProcessInfo[0]);
+                }
+                case "sold" -> {
+                    // todo: sold
+                }
+                case "supply" -> {
+                    // todo: supply
+                }
+            }
+            refreshTables();
         }
     }
 
@@ -201,9 +333,42 @@ public class History implements Initializable {
         searchField.clear();
     }
 
+
     @FXML
     void logOut(ActionEvent event) throws IOException {
         Main.logIn();
         ((Stage) userRoleLabel.getScene().getWindow()).close();
+    }
+
+    public static void refreshTables() throws SQLException {
+        processedList.clear();
+        soldList.clear();
+        supplyList.clear();
+
+        processedList.addAll(DatabaseManager.readProcessedInfo());
+        soldList.setAll(DatabaseManager.readSoldTo());
+        supplyList.addAll(DatabaseManager.readSuppliedBy());
+    }
+
+    public static String[] getSelected(){
+        switch (currentTab) {
+            case "process" -> {
+                return selectedProcessInfo;
+            }
+            case "sold" -> {
+                //fxmlFile = "/Views/pop_ups/EditSoldHistory.fxml";
+                return selectedSoldInfo;
+            }
+            case "supply" -> {
+                //fxmlFile = "/Views/pop_ups/EditSupplyHistory.fxml";
+                return selectedSupplyInfo;
+            }
+        }
+        return null;
+    }
+
+    void disableButtons(){
+        edit_button.setDisable(true);
+        delete_button.setDisable(true);
     }
 }
