@@ -154,6 +154,20 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
+    public static void addAccount(String userName, String password, String role) throws SQLException {
+        String query = "INSERT INTO application_users (employee_userName, employee_Password, employee_Role) VALUES(?, ?, ?)";
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, userName);
+                pstmt.setString(2, password);
+                pstmt.setString(3, role);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
 
     /**
      * todo: Add Documentation

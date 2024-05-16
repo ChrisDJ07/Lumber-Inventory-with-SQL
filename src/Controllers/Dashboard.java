@@ -6,10 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class Dashboard implements Initializable {
 
     // User Account
     @FXML
-    private Button logout_button;
+    private Button add_Account_Button;
     @FXML
     private Label userNameLabel;
     @FXML
@@ -102,6 +104,26 @@ public class Dashboard implements Initializable {
     void logOut(ActionEvent event) throws IOException {
         Main.logIn();
         ((Stage) userRoleLabel.getScene().getWindow()).close();
+    }
+
+    @FXML
+    void openAddAccountWindow(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/AddAccount.fxml"));
+        Parent root = loader.load();
+
+        Stage supply = new Stage();
+        supply.initOwner(Main.getStage());
+        supply.initModality(Modality.WINDOW_MODAL);
+
+        Scene scene = new Scene(root);
+
+        String css = Main.class.getResource("/Application/Application.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        supply.setResizable(false);
+        supply.setTitle("Add Account");
+        supply.setScene(scene);
+        supply.show();
     }
 
     public void alert(String title, String content){

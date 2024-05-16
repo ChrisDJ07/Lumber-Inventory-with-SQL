@@ -48,7 +48,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="soldTable" prefHeight="471.0" prefWidth="726.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="soldTable" layoutX="1.8" prefHeight="471.0" prefWidth="726.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.8" AnchorPane.rightAnchor="-1.7999999999999545" AnchorPane.topAnchor="0.0">
                                 <columns>
                                   <TableColumn fx:id="soldDateColumn" prefWidth="75.0" text="Date" />
                                     <TableColumn fx:id="soldCustomerColumn" prefWidth="75.0" text="Customer" />
