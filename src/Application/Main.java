@@ -34,13 +34,23 @@ public class Main extends Application {
     }
 
     /**
-     * Method to show the dashboard after successful login
+     * Method to show the dashboard after successful login - for Admin users
      */
     public static void showDashboard() throws Exception {
         inventoryStage = new Stage();
         inventoryStage.setResizable(false);
         // Load the dashboard
         loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/Dashboard.fxml"))));
+    }
+
+    /**
+     * Method to show the dashboard after successful login - for non-Admin users
+     */
+    public static void showCutLumber() throws Exception {
+        inventoryStage = new Stage();
+        inventoryStage.setResizable(false);
+        // Load the dashboard
+        loadScene(new Scene(FXMLLoader.load(Main.class.getResource("/Views/CutLumber.fxml"))));
     }
 
     /**

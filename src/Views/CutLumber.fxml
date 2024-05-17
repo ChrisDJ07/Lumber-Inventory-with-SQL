@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -31,7 +30,6 @@
             </TableView>
             <Button fx:id="sell_button" layoutX="401.0" layoutY="64.0" mnemonicParsing="false" onAction="#openSellWindow" prefHeight="37.0" prefWidth="98.0" text="SELL" />
             <TextField fx:id="searchField" layoutX="14.0" layoutY="79.0" prefHeight="26.0" prefWidth="180.0" />
-            <ChoiceBox fx:id="sizeFilter" layoutX="280.0" layoutY="79.0" prefHeight="26.0" prefWidth="74.0" />
             <Label layoutX="15.0" layoutY="11.0" prefHeight="62.0" prefWidth="218.0" text="Cut Lumber">
                <font>
                   <Font name="System Bold" size="36.0" />

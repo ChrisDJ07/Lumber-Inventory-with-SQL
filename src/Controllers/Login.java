@@ -45,10 +45,14 @@ public class Login {
         if (isValidCredentials(username, password)) {
             try {
                 Main.setUser(username);
-                Main.showDashboard();
-                ((Stage) usernameTF.getScene().getWindow()).close();
-            } catch (Exception error) {
-                error.printStackTrace();
+                // Open Windows based on role
+                switch(Main.getUserRole()){
+                    case "Admin" -> Main.showDashboard();
+                    case "Cashier", "Employee" -> Main.showCutLumber();
+                }
+            ((Stage) usernameTF.getScene().getWindow()).close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             // Show error message if credentials are invalid

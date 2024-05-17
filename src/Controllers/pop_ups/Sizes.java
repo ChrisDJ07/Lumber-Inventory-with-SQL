@@ -1,6 +1,7 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
+import Application.Main;
 import Controllers.RawLumber;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -48,6 +49,21 @@ public class Sizes implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         disableSizeButtons();
+        // Hide buttons based on role access
+        switch(Main.getUserRole()){
+            case "Cashier" -> {
+                // hide buttons
+                deleteButton.setVisible(false);
+                editButton.setVisible(false);
+
+            }
+            case "Employee" -> {
+                // hide buttons
+                deleteButton.setVisible(false);
+                editButton.setVisible(false);
+                addButton.setVisible(false);
+            }
+        }
         try {
             dataList = FXCollections.observableArrayList(DatabaseManager.readSizes());
             sizeTable.setItems(dataList);

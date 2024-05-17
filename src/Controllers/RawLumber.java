@@ -35,6 +35,8 @@ public class RawLumber implements Initializable {
     private Button supply_button;
     @FXML
     private TextField searchField;
+    @FXML
+    private Button raw_new_button;
     // Raw Lumber Table
     @FXML
     TableView<String[]> rawTable = new TableView<>();
@@ -45,6 +47,12 @@ public class RawLumber implements Initializable {
     static ObservableList<String[]> rawLumberList;
     static String[] selectedRawLumber;
 
+/* Navigate */
+    @FXML
+    private Button dashBoard_button;
+    @FXML
+    private Button history_button;
+
 /* Supplier Section */
     // Supplier
     @FXML
@@ -53,6 +61,8 @@ public class RawLumber implements Initializable {
     private Button edit_supplier_button;
     @FXML
     private TextField supplierSearch;
+    @FXML
+    private Button new_supplier_button;
     // Supplier Table
     @FXML
     private TableView<String[]> supplierTable = new TableView<>();
@@ -83,6 +93,34 @@ public class RawLumber implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
+        // Hide buttons based on role access
+        switch(userRoleLabel.getText()){
+            case "Cashier" -> {
+                dashBoard_button.setVisible(false);
+                // hide raw buttons
+                raw_new_button.setVisible(false);
+                raw_edit_button.setVisible(false);
+                delete_button.setVisible(false);
+                // hide supplier buttons
+                edit_supplier_button.setVisible(false);
+                delete_supplier_button.setVisible(false);
+
+            }
+            case "Employee" -> {
+                dashBoard_button.setVisible(false);
+                history_button.setVisible(false);
+                // hide raw buttons
+                raw_new_button.setVisible(false);
+                raw_edit_button.setVisible(false);
+                delete_button.setVisible(false);
+                supply_button.setVisible(false);
+                process_button.setVisible(false);
+                // hide supplier buttons
+                new_supplier_button.setVisible(false);
+                edit_supplier_button.setVisible(false);
+                delete_supplier_button.setVisible(false);
+            }
+        }
         try {
             lastProcessText.setText(DatabaseManager.getLastProcess());
             lastSupplyText.setText(DatabaseManager.getLastSupply());

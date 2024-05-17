@@ -30,6 +30,11 @@ public class History implements Initializable {
     @FXML
     private Button edit_button;
 
+    // Navigate
+    @FXML
+    private Button dashBoard_button;
+
+    // Setting table
     @FXML
     TableView<String[]> processTable;
     @FXML
@@ -109,6 +114,13 @@ public class History implements Initializable {
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
         disableButtons();
+        // Hide buttons based on role access
+        if (userRoleLabel.getText().equals("Cashier")) {
+            dashBoard_button.setVisible(false);
+            // hide history buttons
+            edit_button.setVisible(false);
+            delete_button.setVisible(false);
+        }
 
         try {
             // Initialize table - Processed

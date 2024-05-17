@@ -31,8 +31,6 @@ public class CutLumber implements Initializable{
     private TextField searchField;
     @FXML
     private Button clear_search_button;
-    @FXML
-    private ChoiceBox<?> sizeFilter;
 
     // Navigate
     @FXML
@@ -107,6 +105,33 @@ public class CutLumber implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
+        // Hide buttons based on role access
+        switch(userRoleLabel.getText()){
+            case "Cashier" -> {
+                dashBoard_button.setVisible(false);
+                // hide cut buttons
+                add_cut_button.setVisible(false);
+                edit_cut_button.setVisible(false);
+                delete_button.setVisible(false);
+                // hide customer buttons
+                edit_customer_button.setVisible(false);
+                delete_customer_button.setVisible(false);
+
+            }
+            case "Employee" -> {
+                dashBoard_button.setVisible(false);
+                history_button.setVisible(false);
+                // hide cut buttons
+                add_cut_button.setVisible(false);
+                edit_cut_button.setVisible(false);
+                delete_button.setVisible(false);
+                sell_button.setVisible(false);
+                // hide customer buttons
+                edit_customer_button.setVisible(false);
+                delete_customer_button.setVisible(false);
+                new_customer_button.setVisible(false);
+            }
+        }
         try {
             lastSoldText.setText(DatabaseManager.getLastSold());
             disableRelevantButtons();
