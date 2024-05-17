@@ -77,7 +77,7 @@ public class ProcessRaw implements Initializable {
             } else if (e.getMessage().equals("zeroUnits")) {
                 alert("Zero Units", "Units cannot be zero.");
             } else if (e.getMessage().equals("negative")) {
-                alert("Zero Units", "Please enter positive integers for units.");
+                alert("Negative Units", "Please enter positive integers for units.");
             }
 
         } catch (SQLException e) {

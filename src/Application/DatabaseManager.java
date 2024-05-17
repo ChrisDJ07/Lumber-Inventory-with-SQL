@@ -271,7 +271,7 @@ public class DatabaseManager {
     }
 
     public static List<String[]> readRawLumbers() throws SQLException {
-        String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber";
+        String query = "SELECT rawlumber_type, rawlumber_quantity FROM rawLumber ORDER BY rawlumber_type";
         return readData(query, 2);
     }
 
@@ -287,7 +287,8 @@ public class DatabaseManager {
                 LEFT JOIN rawLumber
                 ON cutLumber.cutLumber_type = rawLumber.rawLumber_ID
                 LEFT JOIN size
-                ON cutLumber.cutlumber_size = size.size_ID""";
+                ON cutLumber.cutlumber_size = size.size_ID
+                ORDER BY rawlumber_type, size_dimension""";
         return readData(query, 5);
     }
 
@@ -301,6 +302,7 @@ public class DatabaseManager {
                 ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
                 LEFT JOIN size
                 ON cutlumber.cutlumber_size = size.size_ID
+                ORDER BY process_date DESC
                 """;
         return readData(query, 5);
     }
@@ -317,6 +319,7 @@ public class DatabaseManager {
                 ON cutlumber.cutlumber_type = rawlumber.rawlumber_ID
                 LEFT JOIN size
                 ON cutlumber.cutlumber_size = size.size_ID
+                ORDER BY sold_date DESC
                 """;
         return readData(query, 6);
     }
@@ -329,6 +332,7 @@ public class DatabaseManager {
                 ON supplied_by.supplied_by = suppliers.supplier_ID
                 LEFT JOIN rawlumber
                 ON supplied_by.supplied_lumber = rawlumber.rawlumber_ID
+                ORDER BY supplied_date DESC
                 """;
         return readData(query, 5);
     }
@@ -349,12 +353,12 @@ public class DatabaseManager {
     }
 
     public static List<String[]> readSuppliers() throws SQLException {
-        String query = "SELECT supplier_name, supplier_info FROM suppliers";
+        String query = "SELECT supplier_name, supplier_info FROM suppliers ORDER BY supplier_name";
         return readData(query, 2);
     }
     // Read customers from the database
     public static List<String[]> readCustomers() throws SQLException {
-        String query = "SELECT customer_name, customer_info FROM customers";
+        String query = "SELECT customer_name, customer_info FROM customers ORDER BY customer_name";
         return readData(query, 2);
     }
 

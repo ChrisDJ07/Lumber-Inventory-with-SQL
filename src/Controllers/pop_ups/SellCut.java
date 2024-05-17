@@ -58,6 +58,9 @@ public class SellCut implements Initializable  {
                 alert("Client Not Selected", "Please select a client.");
                 return; // Exit the method if no client is selected
             }
+            if(unitsSellSpinner.getValue() < 0){
+                throw new RuntimeException("Negative");
+            }
             if(unitsSellSpinner.getValue() > quantity){
                 throw new RuntimeException("exceedQuantity");
             }
@@ -70,15 +73,22 @@ public class SellCut implements Initializable  {
             // Close the FXML window
             Stage stage = (Stage) clientCB.getScene().getWindow();
             stage.close();
+        } catch (NumberFormatException e){
+            alert("Input Error", "Please enter a valid integer for units.");
         } catch (RuntimeException e){
-            alert("Unit Quantity Exceeded", "Enter a value not greater than "+quantity+".");
+            if(e.getMessage().equals("exceedQuantity")){
+                alert("Unit Quantity Exceeded", "Enter a value not greater than "+quantity+".");
+            }
+            else if(e.getMessage().equals("Negative")){
+                alert("Negative Input", "Enter a valid positive integer for units.");
+            }
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, 0);
         valueFactory.setValue(1);
 
         try {

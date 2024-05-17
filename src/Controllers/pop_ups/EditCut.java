@@ -82,7 +82,7 @@ public class EditCut implements Initializable {
                     DatabaseManager.getSizeID_Janiola(size), Integer.parseInt(ID)) == 1){
                 throw new RuntimeException("Cut Lumber already exists, please enter a different combination of type and size.");
             }
-            if(quantity<0){
+            if(quantity<0 || Integer.parseInt(price)<0){
                 throw new NumberFormatException();
             }
             DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, Integer.parseInt(price), quantity, size);
