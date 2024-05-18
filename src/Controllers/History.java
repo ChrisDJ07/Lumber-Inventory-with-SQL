@@ -271,11 +271,11 @@ public class History implements Initializable {
                 title = "Edit Process History";
             }
             case "sold" -> {
-                //fxmlFile = "/Views/pop_ups/EditSoldHistory.fxml";
+                fxmlFile = "/Views/pop_ups/EditSoldHistory.fxml";
                 title = "Edit Sold History";
             }
             case "supply" -> {
-                //fxmlFile = "/Views/pop_ups/EditSupplyHistory.fxml";
+                fxmlFile = "/Views/pop_ups/EditSupplyHistory.fxml";
                 title = "Edit Supply History";
             }
         }
@@ -310,12 +310,15 @@ public class History implements Initializable {
             switch (currentTab) {
                 case "process" -> {
                     DatabaseManager.deleteHistory("process_info", "process_date", selectedProcessInfo[0]);
+                    selectedProcessInfo = null;
                 }
                 case "sold" -> {
-                    // todo: sold
+                    DatabaseManager.deleteHistory("sold_to", "sold_date", selectedSoldInfo[0]);
+                    selectedSoldInfo = null;
                 }
                 case "supply" -> {
-                    // todo: supply
+                    DatabaseManager.deleteHistory("supplied_by", "supplied_date", selectedSupplyInfo[0]);
+                    selectedSupplyInfo = null;
                 }
             }
             refreshTables();

@@ -12,7 +12,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class EditProcessHistory implements Initializable {
+public class EditSoldHistory implements Initializable {
     @FXML
     private Label dateLabel;
 
@@ -22,14 +22,16 @@ public class EditProcessHistory implements Initializable {
     private Button editButton;
 
     @FXML
-    private TextField inputField;
+    private TextField quantityField;
     @FXML
-    private TextField outputField;
+    private TextField priceField;
 
     @FXML
-    private ChoiceBox<String> sizeBox;
+    private ChoiceBox<String> lumberBox;
     @FXML
-    private ChoiceBox<String> typeBox;
+    private ChoiceBox<String> soldBox;
+    @FXML
+    private ChoiceBox<String> sizeBox;
 
     String[] selected = null;
     String originalDate;
@@ -40,42 +42,56 @@ public class EditProcessHistory implements Initializable {
         originalDate = selected[0];
         // Set fields/labels
         dateLabel.setText(selected[0]); // will implement edit later
-        inputField.setText(selected[1]);
-        outputField.setText(selected[2]);
+        quantityField.setText(selected[1]);
+        priceField.setText(selected[2]);
         // Initialize boxes
         try {
-            typeBox.getItems().addAll(DatabaseManager.getRawLumberList_Janiola());
+            lumberBox.getItems().addAll(DatabaseManager.getRawLumberList_Janiola());
+            soldBox.getItems().addAll(DatabaseManager.getCustomerList());
             sizeBox.getItems().addAll(DatabaseManager.getSizeList());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         // Set Boxes
-        typeBox.setValue(selected[3]);
-        sizeBox.setValue(selected[4]);
+        lumberBox.setValue(selected[4]);
+        soldBox.setValue(selected[3]);
+        sizeBox.setValue(selected[5]);
     }
 
     @FXML
-    void editProcess(ActionEvent event) throws SQLException {
-        if(DatabaseManager.checkCutDuplicate_Janiola(typeBox.getValue(), sizeBox.getValue()) == 0){
+    void editSold(ActionEvent event) throws SQLException {
+        if(DatabaseManager.checkCutDuplicate_Janiola(lumberBox.getValue(), sizeBox.getValue()) == 0){
             alert("Input Error", "Cut Lumber doesn't exit, please enter another combination of type and size");
             return;
         }
+
+
         try {
-            DatabaseManager.editProcessHistory(dateLabel.getText(), Integer.parseInt(inputField.getText())
-                    , Integer.parseInt(outputField.getText()), typeBox.getValue(), sizeBox.getValue(), originalDate);
+            DatabaseManager.editSoldHistory(
+                    dateLabel.getText(),
+                    Integer.parseInt(quantityField.getText()),
+                    Integer.parseInt(priceField.getText()),
+                    lumberBox.getValue(),
+                    soldBox.getValue(),
+                    sizeBox.getValue(),
+                    originalDate)
+            ;
         } catch (NumberFormatException e) {
-            alert("Input Error", "Input and Output should only contain numbers");
+            alert("Input Error", "Quantity and Price should only contain numbers");
             return;
         }
-        ((Stage) inputField.getScene().getWindow()).close();
+
+
+        ((Stage) quantityField.getScene().getWindow()).close();
         History.refreshTables();
     }
 
     @FXML
     void clearFields(ActionEvent event) {
-        inputField.clear();
-        outputField.clear();
-        typeBox.setValue(null);
+        quantityField.clear();
+        priceField.clear();
+        lumberBox.setValue(null);
+        soldBox.setValue(null);
         sizeBox.setValue(null);
     }
 

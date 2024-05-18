@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="382.0" prefWidth="276.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.EditSupplyHistory">
+   <children>
+      <Label alignment="CENTER" layoutX="29.0" layoutY="3.0" prefHeight="40.0" prefWidth="218.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Edit Supply History">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="supplierBox" layoutX="101.0" layoutY="265.0" prefHeight="40.0" prefWidth="151.0" />
+      <ChoiceBox fx:id="lumberBox" layoutX="101.0" layoutY="211.0" prefHeight="40.0" prefWidth="151.0" />
+      <TextField fx:id="quantityField" layoutX="101.0" layoutY="103.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
+      <TextField fx:id="priceField" layoutX="101.0" layoutY="157.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="103.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Quantity">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="157.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Price">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="211.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Lumber">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="265.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Supplier">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="51.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Date">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="dateLabel" alignment="CENTER" layoutX="93.0" layoutY="51.0" prefHeight="40.0" prefWidth="158.0" text="Date">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="clearButton" layoutX="23.0" layoutY="321.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="40.0" prefWidth="61.0" text="Clear" />
+      <Button fx:id="editButton" layoutX="179.0" layoutY="321.0" mnemonicParsing="false" onAction="#editSupply" prefHeight="40.0" prefWidth="75.0" text="Edit" />
+   </children>
+</AnchorPane>
