@@ -121,7 +121,7 @@ public class Sizes implements Initializable {
         }
         // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Size Detetion");
+        alert.setTitle("Size Deletion");
         alert.setHeaderText("Are you sure you want to delete this Size?");
         alert.setContentText("Deleting this will affect Cut Lumber with this size and remove it from the database.");
         alert.initModality(Modality.APPLICATION_MODAL);

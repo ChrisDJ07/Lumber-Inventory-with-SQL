@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -139,8 +140,10 @@ public class CutLumber implements Initializable{
             // Initialize table - CutLumber Lumber
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
             cutTable.setItems(dataList);
-            FilteredList<String[]> filteredCutList = new FilteredList<>(dataList);
-            cutTable.setItems(filteredCutList);
+            FilteredList<String[]> filteredCutList = new FilteredList<>(dataList, p -> true);
+            SortedList<String[]> sortedCutList = new SortedList<>(filteredCutList);
+            sortedCutList.comparatorProperty().bind(cutTable.comparatorProperty());
+            cutTable.setItems(sortedCutList);
 
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
             sizeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[2]));
@@ -151,7 +154,9 @@ public class CutLumber implements Initializable{
             customerList = FXCollections.observableArrayList(DatabaseManager.readCustomers());
             customerTable.setItems(customerList);
             FilteredList<String[]> filteredCustomerList = new FilteredList<>(customerList);
-            customerTable.setItems(filteredCustomerList);
+            SortedList<String[]> sortedCustomerList = new SortedList<>(filteredCustomerList);
+            sortedCustomerList.comparatorProperty().bind(customerTable.comparatorProperty());
+            customerTable.setItems(sortedCustomerList);
 
             customerNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             customerInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -181,7 +186,7 @@ public class CutLumber implements Initializable{
                         return true; // Show all items if the filter is empty
                     }
                     for (String value : item) {
-                        if (value.toLowerCase().contains(newValue.toLowerCase())) {
+                        if (value != null && value.toLowerCase().contains(newValue.toLowerCase())) {
                             return true;
                         }
                     }
@@ -237,6 +242,7 @@ public class CutLumber implements Initializable{
         scene.getStylesheets().add(css);
 
         sizes.setTitle("Lumber Sizes");
+        sizes.setResizable(false);
         sizes.setScene(scene);
         sizes.show();
     }
@@ -257,7 +263,8 @@ public class CutLumber implements Initializable{
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        add.setTitle("Add CutLumber Lumber");
+        add.setTitle("Add CutLumber");
+        add.setResizable(false);
         add.setScene(scene);
         add.show();
     }
@@ -281,7 +288,8 @@ public class CutLumber implements Initializable{
             String css = Main.class.getResource("/Application/Application.css").toExternalForm();
             scene.getStylesheets().add(css);
 
-            edit.setTitle("Edit CutLumber Lumber");
+            edit.setTitle("Edit CutLumber");
+            edit.setResizable(false);
             edit.setScene(scene);
             edit.show();
     }
@@ -301,8 +309,8 @@ public class CutLumber implements Initializable{
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        supply.setResizable(false);
         supply.setTitle("Edit Customer");
+        supply.setResizable(false);
         supply.setScene(scene);
         supply.show();
     }
@@ -316,7 +324,7 @@ public class CutLumber implements Initializable{
             return;
         }
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Cut Lumber Detection");
+        alert.setTitle("Cut Lumber Deletion");
         alert.setHeaderText("Are you sure you want to delete this Cut Lumber type?");
         alert.setContentText("Deleting this will also affect Cut Lumber with this type.");
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -355,7 +363,8 @@ public class CutLumber implements Initializable{
             String css = Main.class.getResource("/Application/Application.css").toExternalForm();
             scene.getStylesheets().add(css);
 
-            sell.setTitle("SellCut CutLumber Lumber");
+            sell.setTitle("Sell CutLumber");
+            sell.setResizable(false);
             sell.setScene(scene);
             sell.show();
         }
@@ -373,7 +382,7 @@ public class CutLumber implements Initializable{
         }
         if (rowData != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Customer Detection");
+            alert.setTitle("Customer Deletion");
             alert.setHeaderText("Are you sure you want to delete this Customer?");
             alert.setContentText("Deleting this will completely remove it from the database.");
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -402,8 +411,8 @@ public class CutLumber implements Initializable{
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        supply.setResizable(false);
         supply.setTitle("Add Customer");
+        supply.setResizable(false);
         supply.setScene(scene);
         supply.show();
     }

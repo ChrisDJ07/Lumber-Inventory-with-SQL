@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -127,7 +128,9 @@ public class History implements Initializable {
             processedList = FXCollections.observableArrayList(DatabaseManager.readProcessedInfo());
             processTable.setItems(processedList);
             FilteredList<String[]> filteredProcessedList  = new FilteredList<>(processedList);
-            processTable.setItems(filteredProcessedList);
+            SortedList<String[]> sortedProcessedList = new SortedList<>(filteredProcessedList);
+            sortedProcessedList.comparatorProperty().bind(processTable.comparatorProperty());
+            processTable.setItems(sortedProcessedList);
 
             processDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             processInputQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -149,7 +152,9 @@ public class History implements Initializable {
             soldList = FXCollections.observableArrayList(DatabaseManager.readSoldTo());
             soldTable.setItems(soldList);
             FilteredList<String[]> filteredSoldList  = new FilteredList<>(soldList);
-            soldTable.setItems(filteredSoldList);
+            SortedList<String[]> sortedSoldList = new SortedList<>(filteredSoldList);
+            sortedSoldList.comparatorProperty().bind(soldTable.comparatorProperty());
+            soldTable.setItems(sortedSoldList);
 
             soldDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             soldQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -173,7 +178,9 @@ public class History implements Initializable {
             supplyList = FXCollections.observableArrayList(DatabaseManager.readSuppliedBy());
             supplyTable.setItems(supplyList);
             FilteredList<String[]> filteredSupplyList  = new FilteredList<>(supplyList);
-            supplyTable.setItems(filteredSupplyList);
+            SortedList<String[]> sortedSupplyList = new SortedList<>(filteredSupplyList);
+            sortedSupplyList.comparatorProperty().bind(supplyTable.comparatorProperty());
+            supplyTable.setItems(sortedSupplyList);
 
             supplyDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             supplyQuantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -290,6 +297,7 @@ public class History implements Initializable {
 
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add(Main.class.getResource("/Application/Application.css").toExternalForm());
+            edit.setResizable(false);
             edit.setScene(scene);
             edit.show();
         }
@@ -300,7 +308,7 @@ public class History implements Initializable {
     void deleteHistory(ActionEvent event) throws SQLException {
         // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("History Detetion");
+        alert.setTitle("History Deletion");
         alert.setHeaderText("Are you sure you want to delete this Transaction History?");
         alert.setContentText("Deleting this will completely remove it from the database.");
         alert.initModality(Modality.APPLICATION_MODAL);

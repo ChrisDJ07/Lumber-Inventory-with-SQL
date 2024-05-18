@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -130,7 +131,10 @@ public class RawLumber implements Initializable {
             rawLumberList = FXCollections.observableArrayList(DatabaseManager.readRawLumbers());
             rawTable.setItems(rawLumberList);
             FilteredList<String[]> filteredRawList = new FilteredList<>(rawLumberList);
-            rawTable.setItems(filteredRawList);
+            SortedList<String[]> sortedRawList = new SortedList<>(filteredRawList);
+            sortedRawList.comparatorProperty().bind(rawTable.comparatorProperty());
+            rawTable.setItems(sortedRawList);
+
             typeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             quantityColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
 
@@ -149,7 +153,9 @@ public class RawLumber implements Initializable {
             supplierList = FXCollections.observableArrayList(DatabaseManager.readSuppliers());
             supplierTable.setItems(supplierList);
             FilteredList<String[]> filteredSupplierList  = new FilteredList<>(supplierList);
-            supplierTable.setItems(filteredSupplierList);
+            SortedList<String[]> sortedSupplierList = new SortedList<>(filteredSupplierList);
+            sortedSupplierList.comparatorProperty().bind(supplierTable.comparatorProperty());
+            supplierTable.setItems(sortedSupplierList);
 
             supplierNameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[0]));
             supplierInfoColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
@@ -228,8 +234,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        New.setResizable(false);
         New.setTitle("New RawLumber");
+        New.setResizable(false);
         New.setScene(scene);
         New.show();
     }
@@ -247,8 +253,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        edit.setResizable(false);
         edit.setTitle("Edit RawLumber");
+        edit.setResizable(false);
         edit.setScene(scene);
         edit.show();
     }
@@ -268,8 +274,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        process.setResizable(false);
         process.setTitle("Process RawLumber");
+        process.setResizable(false);
         process.setScene(scene);
         process.show();
     }
@@ -289,8 +295,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        supply.setResizable(false);
         supply.setTitle("Supply RawLumber");
+        supply.setResizable(false);
         supply.setScene(scene);
         supply.show();
     }
@@ -308,8 +314,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        supply.setResizable(false);
         supply.setTitle("Add Supplier");
+        supply.setResizable(false);
         supply.setScene(scene);
         supply.show();
     }
@@ -327,8 +333,8 @@ public class RawLumber implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
+        supply.setTitle("Edit Supplier");
         supply.setResizable(false);
-        supply.setTitle("Add Supplier");
         supply.setScene(scene);
         supply.show();
     }
@@ -344,7 +350,7 @@ public class RawLumber implements Initializable {
         }
         // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("RawLumber Lumber Detetion");
+        alert.setTitle("RawLumber Deletion");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure you want to delete this Raw Lumber type?");
         alert.initModality(Modality.APPLICATION_MODAL);
@@ -365,7 +371,7 @@ public class RawLumber implements Initializable {
         }
         // Confirm Deletion
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Supplier Detetion");
+        alert.setTitle("Supplier Deletion");
         alert.setHeaderText("Are you sure you want to delete this Supplier?");
         alert.setContentText("Deleting this will completely remove it from the database.");
         alert.initModality(Modality.APPLICATION_MODAL);
