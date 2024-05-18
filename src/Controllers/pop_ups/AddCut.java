@@ -57,13 +57,12 @@ public class AddCut implements Initializable {
             int quantity = unitsAddSpinner.getValue();
             int unit_price = Integer.parseInt(priceAddTF.getText());
             DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
+            cutController.refreshCutTable();
+            ((Stage) typeAddCB.getScene().getWindow()).close();
         }
         catch (Exception e){
             alert("Input Error", "Please enter a valid unit or price.");
         }
-
-        cutController.refreshCutTable();
-        ((Stage) typeAddCB.getScene().getWindow()).close();
     }
 
     public void alert(String title, String content){

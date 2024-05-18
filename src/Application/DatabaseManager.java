@@ -21,7 +21,7 @@ public class DatabaseManager {
      */
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     /**
      * Reusable Code for showing error
@@ -957,7 +957,7 @@ public class DatabaseManager {
                     return String.format(processText, lastProcess[1], lastProcess[3], lastProcess[2], lastProcess[4]);
                 }
                 else{
-                    return String.format(processText, "..", "..", "..", "..");
+                    return "No Last Process...";
                 }
             }
         }
@@ -1001,7 +1001,7 @@ public class DatabaseManager {
                     return String.format(supplyText, lastSupply[2], lastSupply[1], lastSupply[3], lastSupply[4]);
                 }
                 else{
-                    return String.format(supplyText, "..", "..", "..", "..");
+                    return "No Last Supply...";
                 }
             }
         }
@@ -1039,7 +1039,7 @@ public class DatabaseManager {
                     return String.format(supplyText, lastSold[3], lastSold[1], lastSold[4], lastSold[5], lastSold[2]);
                 }
                 else{
-                    return String.format(supplyText, "..", "..", "..", "..", "..");
+                    return "No Last Sold...";
                 }
             }
         }

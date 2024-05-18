@@ -26,6 +26,7 @@ public class EditCut implements Initializable {
     TableView<String[]> cutTable;
     CutLumber cutLumber;
     String ID, originalType, originalSize;
+    String[] originalData;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,6 +55,8 @@ public class EditCut implements Initializable {
         // rowData[3]: Price
         // rowData[4]: Quantity
 
+        originalData = rowData;
+
         originalType = rowData[1];
         originalSize = rowData[2];
 
@@ -67,6 +70,11 @@ public class EditCut implements Initializable {
 
     public void setCutController(CutLumber cutLumber) {
         this.cutLumber = cutLumber;
+    }
+
+    @FXML
+    void clearFields(){
+
     }
 
     @FXML
