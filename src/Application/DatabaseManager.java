@@ -21,10 +21,10 @@ public class DatabaseManager {
      */
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
+    private static final String PASSWORD = "";
 
     /**
-     * Reusable Code for showing errors
+     * Reusable Code for showing error
      */
     private static void showErrorAlert() {
         Alert alert = new Alert(AlertType.ERROR);
@@ -378,7 +378,7 @@ public class DatabaseManager {
      */
     public static String[] getSizeList() throws SQLException{
         String query = "SELECT size_dimension FROM size";
-        sizeList =  getColumn_Janiola(query);
+        sizeList = getColumn_Janiola(query);
         return sizeList.toArray(new String[0]);
     }
 
@@ -387,13 +387,18 @@ public class DatabaseManager {
      */
     public static String[] getSupplierList() throws SQLException {
         String query = "SELECT supplier_name FROM suppliers";
-        supplierList =  getColumn_Janiola(query);
+        supplierList = getColumn_Janiola(query);
         return supplierList.toArray(new String[0]);
+    }
+    public static String[] getCustomerList() throws SQLException {
+        String query = "SELECT customer_name FROM customers";
+        customerList = getColumn_Janiola(query);
+        return customerList.toArray(new String[0]);
     }
 
     // not used
     public static List<String> getUsersList() {return usersList;}
-    public static List<String> getCustomerList() {return customerList;}
+
     public static List<String> getCutLumberList() {return cutLumberList;}
 
 
@@ -753,7 +758,7 @@ public class DatabaseManager {
             throw new SQLException("Error adding data to the database", e);
         }
     }
-    // Edit History
+    // Edit History - Process
     public static void editProcessHistory(String date, int input, int output, String type, String size, String originalDate) throws SQLException {
         String query = """
                 UPDATE process_info
@@ -771,7 +776,59 @@ public class DatabaseManager {
                 pstmt.setInt(2, input);
                 pstmt.setInt(3, output);
                 pstmt.setInt(4, getRawID_Janiola(type));
-                pstmt.setInt(5,getCutID_Janiola(type, size));
+                pstmt.setInt(5, getCutID_Janiola(type, size));
+                pstmt.setString(6, originalDate);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    // Edit History - Sold
+    public static void editSoldHistory(String date, int quantity, int price, String lumber, String customer, String size, String originalDate) throws SQLException {
+        String query = """
+                UPDATE sold_to
+                SET sold_date = ?,
+                	sold_quantity = ?,
+                    sold_price = ?,
+                    sold_to = ?,
+                    sold_cutlumber = ?
+                WHERE sold_date = ?
+                """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, date);
+                pstmt.setInt(2, quantity);
+                pstmt.setInt(3, price);
+                pstmt.setInt(4, getCustomerID(customer));
+                pstmt.setInt(5, getCutID_Janiola(lumber, size));
+                pstmt.setString(6, originalDate);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error adding data to the database", e);
+        }
+    }
+    // Edit History - Supply
+    public static void editSupplyHistory(String date, int quantity, int price, String lumber, String supplier, String originalDate) throws SQLException {
+        String query = """
+                UPDATE supplied_by
+                SET supplied_date = ?,
+                	supplied_quantity = ?,
+                    supplied_price = ?,
+                    supplied_by = ?,
+                    supplied_lumber = ?
+                WHERE supplied_date = ?
+                """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, date);
+                pstmt.setInt(2, quantity);
+                pstmt.setInt(3, price);
+                pstmt.setInt(4, getSupplierID_Janiola(supplier));
+                pstmt.setInt(5, getRawID_Janiola(lumber));
                 pstmt.setString(6, originalDate);
                 pstmt.executeUpdate();
             }

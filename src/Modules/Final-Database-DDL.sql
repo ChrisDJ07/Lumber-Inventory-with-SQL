@@ -67,7 +67,7 @@ CREATE TABLE if NOT EXISTS process_info
 	process_output_quantity			INT NOT NULL,
 	process_from_rawlumber          INT NOT NULL,
 	process_to_cutlumber            INT NOT NULL,
-	CONSTRAINT fk_process_from_rawlumber FOREIGN KEY (process_from_rawlumber) REFERENCES rawlumber (rawlumber_ID) ON DELETE CASCADE
+	CONSTRAINT fk_process_from_rawlumber FOREIGN KEY (process_from_rawlumber) REFERENCES rawlumber (rawlumber_ID) ON DELETE CASCADE,
 	CONSTRAINT fk_process_into_cutlumber FOREIGN KEY (process_to_cutlumber) REFERENCES cutlumber (cutlumber_ID) ON DELETE CASCADE
 );
 
