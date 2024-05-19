@@ -60,9 +60,9 @@ public class EditProcessHistory implements Initializable {
             alert("Input Error", "Cut Lumber doesn't exit, please enter another combination of type and size");
             return;
         }
-        int input = Integer.parseInt(inputField.getText());
-        int output = Integer.parseInt(outputField.getText());
         try {
+            int input = Integer.parseInt(inputField.getText());
+            int output = Integer.parseInt(outputField.getText());
             if(input<=0 || output<=0){
                 throw new NumberFormatException();
             }

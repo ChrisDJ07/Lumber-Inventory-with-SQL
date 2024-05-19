@@ -1249,7 +1249,6 @@ public class DatabaseManager {
         } catch (SQLException e) {
             throw new SQLException("Error checking price in the database", e);
         }
-        System.out.println("sike");
         return true;
     }
 }

@@ -56,9 +56,9 @@ public class EditSupplyHistory implements Initializable {
 
     @FXML
     void editSupply(ActionEvent event) throws SQLException {
-        int quantity = Integer.parseInt(quantityField.getText());
-        int price = Integer.parseInt(priceField.getText());
         try {
+            int quantity = Integer.parseInt(quantityField.getText());
+            int price = Integer.parseInt(priceField.getText());
             if(quantity<=0 || price<=0){
                 throw new NumberFormatException();
             }

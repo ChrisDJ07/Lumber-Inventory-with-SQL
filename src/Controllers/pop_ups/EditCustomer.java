@@ -22,6 +22,12 @@ public class EditCustomer implements Initializable {
 
     String originalName, originalInfo;
 
+    CutLumber cutLumber;
+
+    public void setCutController(CutLumber cutLumber) {
+        this.cutLumber = cutLumber;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         originalName = CutLumber.getSelectedCustomer()[0];
@@ -49,7 +55,7 @@ public class EditCustomer implements Initializable {
             }
             DatabaseManager.editCustomer_Janiola(customerName, customerContactInfo, DatabaseManager.getCustomerID(originalName));
             CutLumber.refreshCutTable();
-
+            cutLumber.disableCustomerButtons();
             ((Stage) nameField.getScene().getWindow()).close();
         } catch (RuntimeException e){
             alert("Input error", e.getMessage());

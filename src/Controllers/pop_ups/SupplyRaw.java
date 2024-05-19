@@ -50,8 +50,8 @@ public class SupplyRaw implements Initializable {
             int quantity = Integer.parseInt(unitField.getText());
             int price = Integer.parseInt(priceField.getText());
 
-            if (quantity == 0){
-                throw new RuntimeException("Units supplied cannot be zero.");
+            if (quantity == 0 || price == 0){
+                throw new RuntimeException("Units/price supplied cannot be zero.");
             }
             if(quantity<0 || price<0){
                 throw new RuntimeException("Please enter a positive value for units and/or price.");
@@ -69,7 +69,6 @@ public class SupplyRaw implements Initializable {
         } catch (NumberFormatException e) {
             alert("Input Error", "Please enter an integer for units and/or price.");
         } catch (RuntimeException e){
-            System.out.println(e.getMessage());
             alert("Input error", e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);

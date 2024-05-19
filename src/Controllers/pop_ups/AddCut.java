@@ -60,6 +60,14 @@ public class AddCut implements Initializable {
                 alert("Input error", "Price cannot be zero.");
                 return;
             }
+            if(typeID == null || sizeID == null){
+                alert("Input error", "Please enter a Type and Size.");
+                return;
+            }
+            if(DatabaseManager.checkCutDuplicate_Janiola(typeID, sizeID) == 1){
+                alert("Input error", "Cut Lumber already exists.");
+                return;
+            }
             DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
             CutLumber.refreshCutTable();
             ((Stage) typeAddCB.getScene().getWindow()).close();

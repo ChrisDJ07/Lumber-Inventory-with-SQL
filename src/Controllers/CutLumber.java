@@ -136,6 +136,7 @@ public class CutLumber implements Initializable{
         try {
             lastSoldText.setText(DatabaseManager.getLastSold());
             disableRelevantButtons();
+            disableCustomerButtons();
 
             // Initialize table - CutLumber Lumber
             dataList = FXCollections.observableArrayList(DatabaseManager.readCutLumbers());
@@ -299,6 +300,8 @@ public class CutLumber implements Initializable{
         selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Views/pop_ups/EditCustomer.fxml"));
         Parent root = loader.load();
+        EditCustomer edit = loader.getController();
+        edit.setCutController(this);
 
         Stage supply = new Stage();
         supply.initOwner(Main.getStage());
@@ -333,6 +336,7 @@ public class CutLumber implements Initializable{
         if(alert.getResult() == ButtonType.OK){
             DatabaseManager.deleteCutLumber(rowData[0]);
             refreshCutTable();
+            disableRelevantButtons();
         }
     }
 
@@ -391,6 +395,7 @@ public class CutLumber implements Initializable{
             if(alert.getResult() == ButtonType.OK){
                 DatabaseManager.deleteCustomer(rowData[0]);
                 refreshCutTable();
+                disableCustomerButtons();
             }
         }
     }
@@ -451,6 +456,8 @@ public class CutLumber implements Initializable{
         sell_button.setDisable(true);
         edit_cut_button.setDisable(true);
         delete_button.setDisable(true);
+    }
+    public void disableCustomerButtons(){
         delete_customer_button.setDisable(true);
         edit_customer_button.setDisable(true);
     }

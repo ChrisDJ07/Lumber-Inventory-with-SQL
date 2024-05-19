@@ -69,9 +69,9 @@ public class EditSoldHistory implements Initializable {
                     " enter another combination of type and size");
             return;
         }
-        int quantity = Integer.parseInt(quantityField.getText());
-        int price = Integer.parseInt(priceField.getText());
         try {
+            int quantity = Integer.parseInt(quantityField.getText());
+            int price = Integer.parseInt(priceField.getText());
             if(quantity<=0 || price<=0){
                 throw new NumberFormatException();
             }
