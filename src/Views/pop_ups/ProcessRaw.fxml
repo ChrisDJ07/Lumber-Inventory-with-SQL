@@ -50,7 +50,6 @@
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="proceed_button" layoutX="436.0" layoutY="20.0" mnemonicParsing="false" onAction="#proceedProcess" prefHeight="40.0" prefWidth="86.0" text="Proceed" />
       <Polygon fill="#403a35" layoutX="269.0" layoutY="137.0" points="11.60003662109375, -2.3999862670898438, 23.600006103515625, -13.199993133544922, 11.60003662109375, -22.399986267089844" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#403a35" height="11.0" layoutX="258.0" layoutY="119.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="24.0" />
       <Label fx:id="type_label" layoutX="104.0" layoutY="75.0" prefHeight="40.0" prefWidth="138.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Type">
@@ -71,5 +70,6 @@
          </font>
       </Label>
       <Button fx:id="clear_button" layoutX="341.0" layoutY="21.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="40.0" prefWidth="70.0" text="Clear" />
+      <Button fx:id="proceed_button" layoutX="436.0" layoutY="20.0" mnemonicParsing="false" onAction="#proceedProcess" prefHeight="40.0" prefWidth="86.0" text="Proceed" />
    </children>
 </AnchorPane>

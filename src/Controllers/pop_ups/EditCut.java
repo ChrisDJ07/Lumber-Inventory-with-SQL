@@ -21,7 +21,7 @@ public class EditCut implements Initializable {
     @FXML
     TextField priceEditTF;
     @FXML
-    Spinner<Integer> unitsEditSpinner;
+    TextField unitsEditTF;
 
     TableView<String[]> cutTable;
     CutLumber cutLumber;
@@ -34,8 +34,6 @@ public class EditCut implements Initializable {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000000);
         valueFactory.setValue(1);
 
-        unitsEditSpinner.setValueFactory(valueFactory);
-        unitsEditSpinner.setEditable(true);
         try {
             List<String> rawLumberTypes = DatabaseManager.readRawLumberTypes();
             List<String> sizeTypes = DatabaseManager.readSizeTypes();
@@ -65,7 +63,7 @@ public class EditCut implements Initializable {
         typeEditCB.setValue(rowData[1]);
         sizeEditCB.setValue(rowData[2]);
         priceEditTF.setText(rowData[3]);
-        unitsEditSpinner.getValueFactory().setValue(Integer.parseInt(rowData[4]));
+        unitsEditTF.setText(rowData[4]);
     }
 
     public void setCutController(CutLumber cutLumber) {
@@ -74,7 +72,10 @@ public class EditCut implements Initializable {
 
     @FXML
     void clearFields(){
-
+        typeEditCB.setValue(null);
+        sizeEditCB.setValue(null);
+        priceEditTF.clear();
+        unitsEditTF.clear();
     }
 
     @FXML
@@ -83,7 +84,7 @@ public class EditCut implements Initializable {
         String type = typeEditCB.getValue();
         String size = sizeEditCB.getValue();
         String price = priceEditTF.getText();
-        int quantity = unitsEditSpinner.getValue();
+        int quantity = Integer.parseInt(unitsEditTF.getText());
 
         try {
             if(DatabaseManager.checkDuplicateForEditCut_Janiola(DatabaseManager.getRawID_Janiola(type),
