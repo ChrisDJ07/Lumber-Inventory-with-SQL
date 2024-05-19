@@ -1,6 +1,10 @@
 package Controllers.pop_ups;
 
 import Application.DatabaseManager;
+import Application.Main;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class AddAccount implements Initializable {
-
+    // Add New
     @FXML
     private Button addButton;
     @FXML
@@ -33,6 +37,16 @@ public class AddAccount implements Initializable {
     String password1;
     String password2;
 
+    // Account Manager
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private TableView<String[]> accountTable = new TableView<>();
+    @FXML
+    private TableColumn<String[], String> nameColumn;
+    ObservableList<String[]> accountList;
+    String selectedAccount = "";
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addButton.setDisable(true);
@@ -45,6 +59,27 @@ public class AddAccount implements Initializable {
         roleBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             checkInputs();
         });
+
+        // Initialize table
+        deleteButton.setDisable(true);
+        try {
+            accountList = FXCollections.observableArrayList(DatabaseManager.readUsers());
+            accountTable.setItems(accountList);
+            nameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()[1]));
+
+            accountTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    deleteButton.setDisable(false);
+                    selectedAccount = accountTable.getSelectionModel().getSelectedItem()[1];
+                } else{
+                    deleteButton.setDisable(true);
+                }
+            });
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @FXML
@@ -74,6 +109,27 @@ public class AddAccount implements Initializable {
         roleBox.setValue(null);
     }
 
+    @FXML
+    void deleteAccount(ActionEvent event) throws SQLException {
+        if(selectedAccount.equals(Main.getUser())){
+            alert("Deletion Error", "You are currently using this account.");
+        }
+        else{
+            // Confirm Deletion
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Account Deletion");
+            alert.setHeaderText("Are you sure you want to delete this Account?");
+            alert.setContentText("Deleting this will permanently remove it from the database.");
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.showAndWait();
+            // Proceed Delete
+            if(alert.getResult() == ButtonType.OK){
+                DatabaseManager.deleteAccount(selectedAccount);
+                refreshTable();
+            }
+        }
+    }
+
     private void checkInputs() {
         userName = userNameField.getText().trim();
         password1 = passField1.getText().trim();
@@ -81,6 +137,12 @@ public class AddAccount implements Initializable {
 
         boolean allFieldsHaveText = !userName.isEmpty() && !password1.isEmpty() && !password2.isEmpty() && !(roleBox.getValue() == null);
         addButton.setDisable(!allFieldsHaveText);
+    }
+
+    void refreshTable() throws SQLException {
+        accountList.clear();
+        accountList = FXCollections.observableArrayList(DatabaseManager.readUsers());
+        accountTable.setItems(accountList);
     }
 
     public void alert(String title, String content){

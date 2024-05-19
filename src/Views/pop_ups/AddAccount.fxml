@@ -5,11 +5,14 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="327.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.AddAccount">
+<AnchorPane prefHeight="327.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.AddAccount">
    <children>
       <ChoiceBox fx:id="roleBox" layoutX="105.0" layoutY="223.0" prefHeight="40.0" prefWidth="211.0" />
       <PasswordField fx:id="passField2" layoutX="106.0" layoutY="169.0" prefHeight="40.0" prefWidth="211.0" />
@@ -45,5 +48,17 @@
             <Font size="15.0" />
          </font>
       </Label>
+      <Line endX="-100.0" endY="296.9999694824219" layoutX="435.0" layoutY="14.0" startX="-100.0" />
+      <Label alignment="CENTER" layoutX="380.0" layoutY="6.0" prefHeight="27.0" prefWidth="100.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Accounts">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="deleteButton" layoutX="405.0" layoutY="281.0" mnemonicParsing="false" onAction="#deleteAccount" text="Delete" />
+      <TableView fx:id="accountTable" layoutX="351.0" layoutY="48.0" prefHeight="219.0" prefWidth="158.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="156.0" text="User Name" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

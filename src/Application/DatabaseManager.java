@@ -683,11 +683,10 @@ public class DatabaseManager {
             statement.executeUpdate(String.format(query, getCustomerID(name)));
         }
         catch (SQLException e){
-            throw new SQLException("Error adding data to the database", e);
+            throw new SQLException("Error deleting data to the database", e);
         }
     }
     // Delete Size
-    // Delete Supplier
     public static void deleteSize(String size) throws SQLException {
         try{
             Connection con = getConnection();
@@ -699,7 +698,7 @@ public class DatabaseManager {
             statement.executeUpdate(String.format(query, getSizeID_Janiola(size)));
         }
         catch (SQLException e){
-            throw new SQLException("Error adding data to the database", e);
+            throw new SQLException("Error deleting data to the database", e);
         }
     }
     // Delete History
@@ -709,6 +708,22 @@ public class DatabaseManager {
             assert con != null;
             try (PreparedStatement pstmt = con.prepareStatement(query)) {
                 pstmt.setString(1, date);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error deleting data to the database", e);
+        }
+    }
+    // Delete Size
+    public static void deleteAccount(String user) throws SQLException {
+        String query= """
+                DELETE FROM application_users
+                WHERE employee_userName = ?
+                """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, user);
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -1176,38 +1191,40 @@ public class DatabaseManager {
     }
 
     /**
-     * Special Function to check if a certain size dimension has a process history
+     * Special Function to check if a certain size dimension has a process/sold history
      * to decide if it can be deleted or not
      * @param size - dimension
      * @return true if it has process reference, false otherwise
      */
-    public static boolean checkSizeReference (String size) throws SQLException {
-        String query= """
-                SELECT EXISTS (
-                SELECT 1
-                FROM process_info
-                LEFT JOIN rawlumber
-                ON process_info.process_from_rawlumber = rawlumber.rawlumber_ID
-                LEFT JOIN cutlumber
-                ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
-                LEFT JOIN size
-                ON cutlumber.cutlumber_size = size.size_ID
-                WHERE size_ID = ?
-                )
-                """;
-        try (Connection con = getConnection()) {
-            assert con != null;
-            try (PreparedStatement pstmt = con.prepareStatement(query)) {
-                pstmt.setInt(1, getSizeID_Janiola(size));
-                try (ResultSet result = pstmt.executeQuery()) {
-                    if (result.next()) {
-                        if(result.getInt(1) == 1){
-                            return true;
-                        }
-                    }
+    public static boolean checkSizeReference(String size) throws SQLException {
+        String query = """
+            SELECT EXISTS (
+            SELECT 1
+            FROM process_info
+            LEFT JOIN rawlumber ON process_info.process_from_rawlumber = rawlumber.rawlumber_ID
+            LEFT JOIN cutlumber ON process_info.process_to_cutlumber = cutlumber.cutlumber_ID
+            LEFT JOIN size ON cutlumber.cutlumber_size = size.size_ID
+            WHERE size_ID = ?
+            UNION
+            SELECT 1
+            FROM sold_to
+            LEFT JOIN cutlumber ON sold_to.sold_cutlumber = cutlumber.cutlumber_ID
+            LEFT JOIN size ON cutlumber.cutlumber_size = size.size_ID
+            WHERE size_ID = ?
+            )
+            """;
+        try (Connection con = getConnection();
+             PreparedStatement pstmt = con.prepareStatement(query)) {
+            int sizeId = getSizeID_Janiola(size);
+            pstmt.setInt(1, sizeId);
+            pstmt.setInt(2, sizeId);
+            try (ResultSet result = pstmt.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt(1) == 1;
                 }
             }
         }
         return false;
     }
+
 }

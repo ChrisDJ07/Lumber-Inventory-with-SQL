@@ -116,7 +116,7 @@ public class Sizes implements Initializable {
         // check if selected size have any process/supply history
         if(DatabaseManager.checkSizeReference(selectedSize)){
             alert("Deletion Error", "This Size already has a" +
-                    " Process transaction reference and cannot be deleted.");
+                    " Process/Sold transaction reference and cannot be deleted.");
             return;
         }
         // Confirm Deletion

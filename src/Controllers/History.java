@@ -107,10 +107,13 @@ public class History implements Initializable {
 
     static String currentTab = "";
 
+    @FXML
+    private Label versionLabel; // version label
 
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        versionLabel.setText("v.1.0.0");
         currentTab = "process";
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());

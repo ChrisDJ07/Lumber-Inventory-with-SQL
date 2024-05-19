@@ -120,7 +120,7 @@ public class Dashboard implements Initializable {
         String css = Main.class.getResource("/Application/Application.css").toExternalForm();
         scene.getStylesheets().add(css);
 
-        supply.setTitle("Add Account");
+        supply.setTitle("Add and Manage Accounts");
         supply.setResizable(false);
         supply.setScene(scene);
         supply.show();
