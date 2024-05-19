@@ -64,24 +64,29 @@ public class EditSoldHistory implements Initializable {
             alert("Input Error", "Cut Lumber doesn't exit, please enter another combination of type and size");
             return;
         }
-
-
+        if(!DatabaseManager.checkHasPrice(lumberBox.getValue(), sizeBox.getValue())){
+            alert("Input Error", "Cut Lumber doesn't have price set, please set the price first or" +
+                    " enter another combination of type and size");
+            return;
+        }
+        int quantity = Integer.parseInt(quantityField.getText());
+        int price = Integer.parseInt(priceField.getText());
         try {
+            if(quantity<=0 || price<=0){
+                throw new NumberFormatException();
+            }
             DatabaseManager.editSoldHistory(
                     dateLabel.getText(),
-                    Integer.parseInt(quantityField.getText()),
-                    Integer.parseInt(priceField.getText()),
+                    quantity,
+                    price,
                     lumberBox.getValue(),
                     soldBox.getValue(),
                     sizeBox.getValue(),
-                    originalDate)
-            ;
+                    originalDate);
         } catch (NumberFormatException e) {
-            alert("Input Error", "Quantity and Price should only contain numbers");
+            alert("Input Error", "Quantity and Price should contain positive integers");
             return;
         }
-
-
         ((Stage) quantityField.getScene().getWindow()).close();
         History.refreshTables();
     }

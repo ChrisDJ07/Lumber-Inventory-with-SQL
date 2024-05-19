@@ -60,11 +60,16 @@ public class EditProcessHistory implements Initializable {
             alert("Input Error", "Cut Lumber doesn't exit, please enter another combination of type and size");
             return;
         }
+        int input = Integer.parseInt(inputField.getText());
+        int output = Integer.parseInt(outputField.getText());
         try {
-            DatabaseManager.editProcessHistory(dateLabel.getText(), Integer.parseInt(inputField.getText())
-                    , Integer.parseInt(outputField.getText()), typeBox.getValue(), sizeBox.getValue(), originalDate);
+            if(input<=0 || output<=0){
+                throw new NumberFormatException();
+            }
+            DatabaseManager.editProcessHistory(dateLabel.getText(), input
+                    , output, typeBox.getValue(), sizeBox.getValue(), originalDate);
         } catch (NumberFormatException e) {
-            alert("Input Error", "Input and Output should only contain numbers");
+            alert("Input Error", "Input and Output should contain positive integers");
             return;
         }
         ((Stage) inputField.getScene().getWindow()).close();

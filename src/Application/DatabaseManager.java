@@ -1226,5 +1226,30 @@ public class DatabaseManager {
         }
         return false;
     }
-
+    // Check if cut lumber has price
+    public static boolean checkHasPrice(String type, String size) throws SQLException {
+        String query = """
+            SELECT cutlumber_unit_price
+            FROM cutlumber
+            WHERE cutlumber_ID = ?
+            """;
+        try (Connection con = getConnection()) {
+            assert con != null;
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setInt(1, DatabaseManager.getCutID_Janiola(type, size));
+                try (ResultSet result = pstmt.executeQuery()) {
+                    if (result.next()) {
+                        int price = result.getInt(1);
+                        if (result.wasNull()) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error checking price in the database", e);
+        }
+        System.out.println("sike");
+        return true;
+    }
 }

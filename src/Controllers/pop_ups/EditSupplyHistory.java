@@ -56,11 +56,16 @@ public class EditSupplyHistory implements Initializable {
 
     @FXML
     void editSupply(ActionEvent event) throws SQLException {
+        int quantity = Integer.parseInt(quantityField.getText());
+        int price = Integer.parseInt(priceField.getText());
         try {
-            DatabaseManager.editSupplyHistory(dateLabel.getText(), Integer.parseInt(quantityField.getText())
-                    , Integer.parseInt(priceField.getText()), lumberBox.getValue(), supplierBox.getValue(), originalDate);
+            if(quantity<=0 || price<=0){
+                throw new NumberFormatException();
+            }
+            DatabaseManager.editSupplyHistory(dateLabel.getText(), quantity
+                    , price, lumberBox.getValue(), supplierBox.getValue(), originalDate);
         } catch (NumberFormatException e) {
-            alert("Input Error", "Quantity and Price should only contain numbers");
+            alert("Input Error", "Quantity and Price should contain positive integers");
             return;
         }
         ((Stage) quantityField.getScene().getWindow()).close();
