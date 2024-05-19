@@ -59,7 +59,7 @@ public class SellCut implements Initializable  {
                 alert("Client Not Selected", "Please select a client.");
                 return; // Exit the method if no client is selected
             }
-            if(Integer.parseInt(unitsSellTF.getText()) < 0){
+            if(Integer.parseInt(unitsSellTF.getText()) <= 0){
                 throw new RuntimeException("Negative");
             }
             if(Integer.parseInt(unitsSellTF.getText()) > quantity){

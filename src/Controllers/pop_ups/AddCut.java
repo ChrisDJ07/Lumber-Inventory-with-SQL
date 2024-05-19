@@ -53,11 +53,17 @@ public class AddCut implements Initializable {
         try{
             int quantity = Integer.parseInt(unitsAddTF.getText());
             int unit_price = Integer.parseInt(priceAddTF.getText());
+            if(quantity<0 || unit_price<0){
+                throw new NumberFormatException();
+            }
+            if(unit_price == 0){
+                alert("Input error", "Price cannot be zero.");
+                return;
+            }
             DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
-            cutController.refreshCutTable();
+            CutLumber.refreshCutTable();
             ((Stage) typeAddCB.getScene().getWindow()).close();
-        }
-        catch (Exception e){
+        } catch (NumberFormatException e) {
             alert("Input Error", "Please enter a valid unit or price.");
         }
     }

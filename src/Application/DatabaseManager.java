@@ -21,7 +21,7 @@ public class DatabaseManager {
      */
     private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/wooddynamics";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "!DFoYtT7FHFez@rM";
 
     /**
      * Reusable Code for showing error

@@ -83,18 +83,20 @@ public class EditCut implements Initializable {
         // Get the values of the ChoiceBoxes, TextField, and Spinner
         String type = typeEditCB.getValue();
         String size = sizeEditCB.getValue();
-        String price = priceEditTF.getText();
-        int quantity = Integer.parseInt(unitsEditTF.getText());
-
         try {
+            int quantity = Integer.parseInt(unitsEditTF.getText());
+            int inputPrice = Integer.parseInt(priceEditTF.getText());
             if(DatabaseManager.checkDuplicateForEditCut_Janiola(DatabaseManager.getRawID_Janiola(type),
                     DatabaseManager.getSizeID_Janiola(size), Integer.parseInt(ID)) == 1){
                 throw new RuntimeException("Cut Lumber already exists, please enter a different combination of type and size.");
             }
-            if(quantity<0 || Integer.parseInt(price)<0){
+            if(quantity<0 || inputPrice<0){
                 throw new NumberFormatException();
             }
-            DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, Integer.parseInt(price), quantity, size);
+            if(inputPrice == 0){
+                throw new RuntimeException("Price cannot be zero.");
+            }
+            DatabaseManager.updateCutLumber(Integer.parseInt(ID), type, inputPrice, quantity, size);
             // Refresh the data table
             CutLumber.refreshCutTable();
             cutLumber.disableRelevantButtons();
@@ -102,7 +104,7 @@ public class EditCut implements Initializable {
             Stage stage = (Stage) typeEditCB.getScene().getWindow();
             stage.close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter a valid positive integer for units.");
+            alert("Input Error", "Please enter a valid positive integer for units and price.");
         } catch (RuntimeException e){
             alert("Input Error", e.getMessage());
         } catch (SQLException e) {
