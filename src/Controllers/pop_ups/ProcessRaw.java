@@ -68,7 +68,7 @@ public class ProcessRaw implements Initializable {
 
             ((Stage) input_quantity_field.getScene().getWindow()).close();
         } catch (NumberFormatException e) {
-            alert("Input Error", "Please enter an integer value for units.");
+            alert("Input Error", "Please enter valid positive integer value for units.");
         } catch (RuntimeException e){
             if(e.getMessage().equals("exceedQuantity")){
                 alert("Input Quantity Exceeded", "Enter a value not greater than "+ rawQuantityLimit +".");

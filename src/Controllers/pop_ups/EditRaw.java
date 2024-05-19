@@ -33,9 +33,11 @@ public class EditRaw implements Initializable {
     void editRaw(ActionEvent event) {
         try {
             String type = typeField.getText();
+            if(type.trim().isEmpty()){
+                throw new RuntimeException("Please enter a type.");
+            }
             if(DatabaseManager.checkDuplicateForEdit_Janiola("rawlumber", "rawlumber_type", type.trim(),
-                    "rawlumber_ID", DatabaseManager.getRawID_Janiola(originalType)) == 1
-                    && !type.trim().isEmpty()){
+                    "rawlumber_ID", DatabaseManager.getRawID_Janiola(originalType)) == 1){
                 throw new RuntimeException("Raw Lumber already exists, please enter a different one.");
             }
             int quantity = Integer.parseInt(unitField.getText());

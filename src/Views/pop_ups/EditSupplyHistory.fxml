@@ -17,7 +17,7 @@
       <ChoiceBox fx:id="supplierBox" layoutX="101.0" layoutY="265.0" prefHeight="40.0" prefWidth="151.0" />
       <ChoiceBox fx:id="lumberBox" layoutX="101.0" layoutY="211.0" prefHeight="40.0" prefWidth="151.0" />
       <TextField fx:id="quantityField" layoutX="101.0" layoutY="103.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
-      <TextField fx:id="priceField" layoutX="101.0" layoutY="157.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
+      <TextField fx:id="priceField" layoutX="101.0" layoutY="157.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Price" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="22.0" layoutY="103.0" prefHeight="40.0" prefWidth="75.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Quantity">
          <font>
             <Font size="17.0" />
