@@ -93,7 +93,8 @@ public class AddAccount implements Initializable {
                 throw new RuntimeException("Repeated password does not match.");
             }
             DatabaseManager.addAccount(userName, password1, roleBox.getValue());
-            ((Stage) userNameField.getScene().getWindow()).close();
+            refreshTable();
+            clear();
         } catch (RuntimeException e){
             alert("Input Error", e.getMessage());
         } catch (SQLException e) {
@@ -103,10 +104,7 @@ public class AddAccount implements Initializable {
 
     @FXML
     void clearFields(ActionEvent event) {
-        userNameField.clear();
-        passField1.clear();
-        passField2.clear();
-        roleBox.setValue(null);
+        clear();
     }
 
     @FXML
@@ -143,6 +141,13 @@ public class AddAccount implements Initializable {
         accountList.clear();
         accountList = FXCollections.observableArrayList(DatabaseManager.readUsers());
         accountTable.setItems(accountList);
+    }
+
+    void clear(){
+        userNameField.clear();
+        passField1.clear();
+        passField2.clear();
+        roleBox.setValue(null);
     }
 
     public void alert(String title, String content){
