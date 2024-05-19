@@ -1,8 +1,8 @@
 -- Sample data for application_users table
 INSERT INTO application_users (employee_userName, employee_Password, employee_Role) VALUES
-('user1', 'password1', 'Admin'),
-('user2', 'password2', 'Cashier'),
-('user3', 'password3', 'Employee'),
+('admin', 'pass', 'Admin'),
+('cashier', 'pass', 'Cashier'),
+('employee', 'pass', 'Employee'),
 ('user4', 'password4', 'Employee'),
 ('user5', 'password5', 'Employee');
 
@@ -12,23 +12,31 @@ INSERT INTO suppliers (supplier_name, supplier_info) VALUES
 ('John Smith', '09876543210'),
 ('Emily Davis', '09765432109'),
 ('Michael Brown', '09543210987'),
-('Emma Wilson', '09432109876');
+('Emma Wilson', '09432109876'),
+('Mike Black', '09232414244'),
+('Marc Angelo', '09443436321'),
+('Sean Gohqou', '09442526624'),
+('Jack Black', '09636788224'),
+('Honey Anderson', '09295743324');
 
 -- Sample data for rawlumber table
 INSERT INTO rawlumber (rawlumber_type, rawlumber_quantity) VALUES
-('Acacia', 100),
-('Oak', 150),
-('Nara', 200),
+('Acacia', 400),
+('Oak', 250),
+('Narra', 200),
 ('Birch', 250),
-('Pine', 300);
+('Pine', 320),
+('Spruce', 420);
 
 -- Sample data for size table
 INSERT INTO size (size_dimension) VALUES
-('10x10'),
-('15x15'),
-('20x20'),
-('25x25'),
-('30x30');
+('2x2'),
+('2x4'),
+('2x8'),
+('2x12'),
+('4x4'),
+('4x8'),
+('4x12');
 
 -- Sample data for customer table
 INSERT INTO customers (customer_name, customer_info) VALUES
@@ -36,7 +44,12 @@ INSERT INTO customers (customer_name, customer_info) VALUES
 ('Daniel Martinez', '09871234567'),
 ('Olivia Rodriguez', '09123765432'),
 ('William Hernandez', '09234567890'),
-('Isabella Lopez', '09785634120');
+('Isabella Lopez', '09785634120'),
+('Emma Sanchez', '09341267890'),
+('James Rivera', '09876543210'),
+('Mia Gonzales', '09123456789'),
+('Benjamin Torres', '09217654321'),
+('Ava Ramirez', '09781234567');
 
 -- We probably just needs the sample data above to make sure its working
 
