@@ -54,8 +54,7 @@ CREATE TABLE `customers` (
   `customer_name` varchar(50) NOT NULL,
   `customer_info` varchar(75) DEFAULT NULL,
   PRIMARY KEY (`customer_ID`),
-  UNIQUE KEY `customer_name` (`customer_name`),
-  UNIQUE KEY `customer_info` (`customer_info`)
+  UNIQUE KEY `customer_name` (`customer_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

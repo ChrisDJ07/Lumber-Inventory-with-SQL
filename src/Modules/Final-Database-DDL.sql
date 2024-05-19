@@ -46,9 +46,9 @@ CREATE TABLE if NOT EXISTS customers
 (
 	customer_ID				INT PRIMARY KEY AUTO_INCREMENT,
 	customer_name			VARCHAR (50) NOT NULL UNIQUE,
-	customer_info			VARCHAR (75) NULL UNIQUE
+	customer_info			VARCHAR (75) NULL
 );
- 
+
 CREATE TABLE if NOT EXISTS supplied_by
 (
     supplied_date			VARCHAR (35) NOT NULL,

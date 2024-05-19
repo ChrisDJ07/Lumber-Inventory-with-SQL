@@ -113,7 +113,7 @@ public class History implements Initializable {
     // Initialize tables
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        versionLabel.setText("v.1.6.6");
+        versionLabel.setText("v.1.6.8");
         currentTab = "process";
         userNameLabel.setText(Main.getUser());
         userRoleLabel.setText(Main.getUserRole());
