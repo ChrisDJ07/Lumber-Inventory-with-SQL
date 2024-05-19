@@ -9,10 +9,10 @@
 
 <AnchorPane prefHeight="382.0" prefWidth="276.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.EditProcessHistory">
    <children>
-      <ChoiceBox fx:id="sizeBox" layoutX="101.0" layoutY="265.0" prefHeight="40.0" prefWidth="151.0" />
-      <ChoiceBox fx:id="typeBox" layoutX="101.0" layoutY="211.0" prefHeight="40.0" prefWidth="151.0" />
       <TextField fx:id="inputField" layoutX="101.0" layoutY="103.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
       <TextField fx:id="outputField" layoutX="101.0" layoutY="157.0" prefHeight="40.0" prefWidth="151.0" promptText="Input Quantity" />
+      <ChoiceBox fx:id="typeBox" layoutX="101.0" layoutY="211.0" prefHeight="40.0" prefWidth="151.0" />
+      <ChoiceBox fx:id="sizeBox" layoutX="101.0" layoutY="265.0" prefHeight="40.0" prefWidth="151.0" />
       <Label alignment="CENTER" layoutX="29.0" layoutY="3.0" prefHeight="40.0" prefWidth="218.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Edit Process History">
          <font>
             <Font name="System Bold" size="20.0" />

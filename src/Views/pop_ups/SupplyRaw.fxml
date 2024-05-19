@@ -12,6 +12,7 @@
    <children>
       <ChoiceBox fx:id="supplierBox" layoutX="111.0" layoutY="68.0" prefHeight="40.0" prefWidth="206.0" />
       <TextField fx:id="unitField" layoutX="22.0" layoutY="211.0" prefHeight="40.0" prefWidth="126.0" />
+      <TextField fx:id="priceField" layoutX="190.0" layoutY="212.0" prefHeight="40.0" prefWidth="126.0" />
       <Label layoutX="23.0" layoutY="14.0" prefHeight="54.0" prefWidth="273.0" style="-fx-text-fill: rgb(64, 58, 53);" text="Supply Lumber">
          <font>
             <Font name="System Bold" size="36.0" />
@@ -43,7 +44,6 @@
          </padding>
       </Label>
       <Button fx:id="supplyButton" layoutX="227.0" layoutY="263.0" mnemonicParsing="false" onAction="#supplyRaw" prefHeight="40.0" prefWidth="90.0" text="SUPPLY" />
-      <TextField fx:id="priceField" layoutX="190.0" layoutY="212.0" prefHeight="40.0" prefWidth="126.0" />
       <Label contentDisplay="CENTER" layoutX="190.0" layoutY="173.0" prefHeight="40.0" prefWidth="126.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="    PRICE">
          <font>
             <Font size="17.0" />

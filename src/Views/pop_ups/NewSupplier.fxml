@@ -10,6 +10,7 @@
 <AnchorPane prefHeight="211.0" prefWidth="322.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.pop_ups.NewSupplier">
    <children>
       <TextField fx:id="nameField" layoutX="81.0" layoutY="54.0" prefHeight="33.0" prefWidth="228.0" promptText="Required" />
+      <TextField fx:id="supplier_info_field" layoutX="116.0" layoutY="98.0" prefHeight="46.0" prefWidth="193.0" />
       <Label contentDisplay="CENTER" layoutX="14.0" layoutY="54.0" prefHeight="33.0" prefWidth="70.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="NAME">
          <font>
             <Font size="17.0" />
@@ -25,7 +26,6 @@
             <Font name="System Bold" size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="supplier_info_field" layoutX="116.0" layoutY="98.0" prefHeight="46.0" prefWidth="193.0" />
       <Label contentDisplay="CENTER" layoutX="15.0" layoutY="98.0" prefHeight="46.0" prefWidth="102.0" style="-fx-background-color: rgb(64, 58, 53); -fx-text-fill: white;" text="Contact Info" wrapText="true">
          <font>
             <Font size="14.0" />

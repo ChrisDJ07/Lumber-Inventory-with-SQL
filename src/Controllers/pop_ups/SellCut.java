@@ -20,7 +20,7 @@ public class SellCut implements Initializable  {
     @FXML
     Label sizeLabel;
     @FXML
-    Spinner<Integer> unitsSellSpinner;
+    TextField unitsSellTF;
 
     TableView<String[]> cutTable;
     CutLumber cutLumber;
@@ -44,6 +44,7 @@ public class SellCut implements Initializable  {
         ID = Integer.parseInt(rowData[0]);
         sold_lumber = rowData[1];
         quantity = Integer.parseInt(rowData[4]);
+        unitsSellTF.setText(rowData[4]);
         price = rowData[3];
     }
 
@@ -58,13 +59,13 @@ public class SellCut implements Initializable  {
                 alert("Client Not Selected", "Please select a client.");
                 return; // Exit the method if no client is selected
             }
-            if(unitsSellSpinner.getValue() < 0){
+            if(Integer.parseInt(unitsSellTF.getText()) < 0){
                 throw new RuntimeException("Negative");
             }
-            if(unitsSellSpinner.getValue() > quantity){
+            if(Integer.parseInt(unitsSellTF.getText()) > quantity){
                 throw new RuntimeException("exceedQuantity");
             }
-            DatabaseManager.addSold_To(ID, unitsSellSpinner.getValue(), clientCB.getValue(), sold_lumber, quantity,
+            DatabaseManager.addSold_To(ID, Integer.parseInt(unitsSellTF.getText()), clientCB.getValue(), sold_lumber, quantity,
                     Integer.parseInt(price)*quantity, sizeLabel.getText());
             // Refresh the data table
             cutLumber.setSoldText(DatabaseManager.getLastSold());
@@ -97,9 +98,12 @@ public class SellCut implements Initializable  {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        unitsSellSpinner.setValueFactory(valueFactory);
-        unitsSellSpinner.setEditable(true);
+    @FXML
+    void clearInput() {
+        clientCB.setValue(null);
+        unitsSellTF.clear();
     }
 
     public void alert(String title, String content){

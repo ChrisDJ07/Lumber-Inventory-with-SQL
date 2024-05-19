@@ -20,7 +20,7 @@ public class AddCut implements Initializable {
     @FXML
     TextField priceAddTF;
     @FXML
-    Spinner<Integer> unitsAddSpinner;
+    TextField unitsAddTF;
 
     TableView<String[]> cutTable;
     CutLumber cutController;
@@ -35,9 +35,6 @@ public class AddCut implements Initializable {
         SpinnerValueFactory<Integer> valueFactory =
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999);
         valueFactory.setValue(1);
-
-        unitsAddSpinner.setValueFactory(valueFactory);
-        unitsAddSpinner.setEditable(true);
 
         try {
             List<String> rawLumberTypes = DatabaseManager.readRawLumberTypes();
@@ -54,7 +51,7 @@ public class AddCut implements Initializable {
         String typeID = typeAddCB.getValue();
         String sizeID = sizeAddCB.getValue();
         try{
-            int quantity = unitsAddSpinner.getValue();
+            int quantity = Integer.parseInt(unitsAddTF.getText());
             int unit_price = Integer.parseInt(priceAddTF.getText());
             DatabaseManager.addCutLumber_Janiola(typeID, unit_price, quantity, sizeID);
             cutController.refreshCutTable();
@@ -63,6 +60,14 @@ public class AddCut implements Initializable {
         catch (Exception e){
             alert("Input Error", "Please enter a valid unit or price.");
         }
+    }
+
+    @FXML
+    void clearInput() {
+        typeAddCB.setValue(null);
+        sizeAddCB.setValue(null);
+        unitsAddTF.clear();
+        priceAddTF.clear();
     }
 
     public void alert(String title, String content){
